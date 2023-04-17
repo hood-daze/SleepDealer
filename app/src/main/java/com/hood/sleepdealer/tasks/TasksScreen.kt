@@ -80,12 +80,7 @@ fun TasksScreen(
         scaffoldState = scaffoldState,
         topBar = {
             TasksTopAppBar(
-                openDrawer = openDrawer,
-                onFilterAllTasks = { viewModel.setFiltering(ALL_TASKS) },
-                onFilterActiveTasks = { viewModel.setFiltering(ACTIVE_TASKS) },
-                onFilterCompletedTasks = { viewModel.setFiltering(COMPLETED_TASKS) },
-                onClearCompletedTasks = { viewModel.clearCompletedTasks() },
-                onRefresh = { viewModel.refresh() }
+                openDrawer = openDrawer
             )
         },
         modifier = modifier.fillMaxSize(),

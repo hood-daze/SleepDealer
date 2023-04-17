@@ -49,11 +49,6 @@ import com.google.accompanist.appcompattheme.AppCompatTheme
 @Composable
 fun TasksTopAppBar(
     openDrawer: () -> Unit,
-    onFilterAllTasks: () -> Unit,
-    onFilterActiveTasks: () -> Unit,
-    onFilterCompletedTasks: () -> Unit,
-    onClearCompletedTasks: () -> Unit,
-    onRefresh: () -> Unit
 ) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.app_name)) },
@@ -62,78 +57,8 @@ fun TasksTopAppBar(
                 Icon(Icons.Filled.Menu, stringResource(id = R.string.open_drawer))
             }
         },
-        actions = {
-            FilterTasksMenu(onFilterAllTasks, onFilterActiveTasks, onFilterCompletedTasks)
-            MoreTasksMenu(onClearCompletedTasks, onRefresh)
-        },
         modifier = Modifier.fillMaxWidth()
     )
-}
-
-@Composable
-private fun FilterTasksMenu(
-    onFilterAllTasks: () -> Unit,
-    onFilterActiveTasks: () -> Unit,
-    onFilterCompletedTasks: () -> Unit
-) {
-    TopAppBarDropdownMenu(
-        iconContent = {
-            Icon(
-                painterResource(id = R.drawable.ic_filter_list),
-                stringResource(id = R.string.menu_filter)
-            )
-        }
-    ) { closeMenu ->
-        DropdownMenuItem(onClick = { onFilterAllTasks(); closeMenu() }) {
-            Text(text = stringResource(id = R.string.nav_all))
-        }
-        DropdownMenuItem(onClick = { onFilterActiveTasks(); closeMenu() }) {
-            Text(text = stringResource(id = R.string.nav_active))
-        }
-        DropdownMenuItem(onClick = { onFilterCompletedTasks(); closeMenu() }) {
-            Text(text = stringResource(id = R.string.nav_completed))
-        }
-    }
-}
-
-@Composable
-private fun MoreTasksMenu(
-    onClearCompletedTasks: () -> Unit,
-    onRefresh: () -> Unit
-) {
-    TopAppBarDropdownMenu(
-        iconContent = {
-            Icon(Icons.Filled.MoreVert, stringResource(id = R.string.menu_more))
-        }
-    ) { closeMenu ->
-        DropdownMenuItem(onClick = { onClearCompletedTasks(); closeMenu() }) {
-            Text(text = stringResource(id = R.string.menu_clear))
-        }
-        DropdownMenuItem(onClick = { onRefresh(); closeMenu() }) {
-            Text(text = stringResource(id = R.string.refresh))
-        }
-    }
-}
-
-@Composable
-private fun TopAppBarDropdownMenu(
-    iconContent: @Composable () -> Unit,
-    content: @Composable ColumnScope.(() -> Unit) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
-        IconButton(onClick = { expanded = !expanded }) {
-            iconContent()
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.wrapContentSize(Alignment.TopEnd)
-        ) {
-            content { expanded = !expanded }
-        }
-    }
 }
 
 @Composable
@@ -187,7 +112,7 @@ fun AddEditTaskTopAppBar(@StringRes title: Int, onBack: () -> Unit) {
 private fun TasksTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            TasksTopAppBar({}, {}, {}, {}, {}, {})
+            TasksTopAppBar({})
         }
     }
 }
