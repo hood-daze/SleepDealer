@@ -259,10 +259,10 @@ class TasksScreenTest {
                 Surface {
                     SleepsScreen(
                         viewModel = SleepsViewModel(repository, SavedStateHandle()),
-                        userMessage = R.string.successfully_added_task_message,
+                        userMessage = R.string.successfully_added_sleep_message,
                         onUserMessageDisplayed = { },
-                        onAddTask = { },
-                        onTaskClick = { },
+                        onAddSleep = { },
+                        onSleepClick = { },
                         openDrawer = { }
                     )
                 }

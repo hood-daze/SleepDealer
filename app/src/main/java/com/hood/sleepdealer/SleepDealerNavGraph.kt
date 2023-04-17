@@ -72,8 +72,8 @@ fun SleepDealerNavGraph(
                 SleepsScreen(
                     userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                     onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
-                    onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
-                    onTaskClick = { task -> navActions.navigateToTaskDetail(task.id) },
+                    onAddSleep = { navActions.navigateToAddEditTask(R.string.add_task, null) },
+                    onSleepClick = { task -> navActions.navigateToTaskDetail(task.id) },
                     openDrawer = { coroutineScope.launch { drawerState.open() } }
                 )
             }

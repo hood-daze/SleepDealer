@@ -84,7 +84,7 @@ class AppNavigationTest {
         // Start tasks screen.
         composeTestRule.onNodeWithText(activity.getString(R.string.list_title)).performClick()
         // Check that tasks screen was opened.
-        composeTestRule.onNodeWithText(activity.getString(R.string.no_tasks_all))
+        composeTestRule.onNodeWithText(activity.getString(R.string.no_sleeps_all))
             .assertIsDisplayed()
     }
 

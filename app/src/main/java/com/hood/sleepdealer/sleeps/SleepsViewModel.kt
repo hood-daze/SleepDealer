@@ -1,19 +1,3 @@
-/*
- * Copyright 2019 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.hood.sleepdealer.sleeps
 
 import androidx.lifecycle.SavedStateHandle
@@ -25,9 +9,7 @@ import com.hood.sleepdealer.EDIT_RESULT_OK
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.data.SleepRepository
-import com.hood.sleepdealer.sleeps.TasksFilterType.ACTIVE_TASKS
-import com.hood.sleepdealer.sleeps.TasksFilterType.ALL_TASKS
-import com.hood.sleepdealer.sleeps.TasksFilterType.COMPLETED_TASKS
+import com.hood.sleepdealer.sleeps.SleepsType.ALL_TASKS
 import com.hood.sleepdealer.util.Async
 import com.hood.sleepdealer.util.WhileUiSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,10 +26,10 @@ import kotlinx.coroutines.launch
 /**
  * UiState for the sleep list screen.
  */
-data class TasksUiState(
+data class SleepsUiState(
     val items: List<Sleep> = emptyList(),
     val isLoading: Boolean = false,
-    val filteringUiInfo: FilteringUiInfo = FilteringUiInfo(),
+    val uiInfo: UiInfo = UiInfo(),
     val userMessage: Int? = null
 )
 
@@ -63,30 +45,28 @@ class SleepsViewModel @Inject constructor(
     private val _savedFilterType =
         savedStateHandle.getStateFlow(TASKS_FILTER_SAVED_STATE_KEY, ALL_TASKS)
 
-    private val _filterUiInfo = _savedFilterType.map { getFilterUiInfo(it) }.distinctUntilChanged()
+    private val _uiInfo = _savedFilterType.map { getUiInfo() }.distinctUntilChanged()
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
-    private val _filteredTasksAsync =
-        combine(sleepRepository.getTasksStream(), _savedFilterType) { tasks, type ->
-            sleeps(tasks)
-        }
+    private val _sleepsAsync =
+        sleepRepository.getSleepsStream()
             .map { Async.Success(it) }
             .catch<Async<List<Sleep>>> { emit(Async.Error(R.string.loading_tasks_error)) }
 
-    val uiState: StateFlow<TasksUiState> = combine(
-        _filterUiInfo, _isLoading, _userMessage, _filteredTasksAsync
-    ) { filterUiInfo, isLoading, userMessage, tasksAsync ->
-        when (tasksAsync) {
+    val uiState: StateFlow<SleepsUiState> = combine(
+        _uiInfo, _isLoading, _userMessage, _sleepsAsync
+    ) { uiInfo, isLoading, userMessage, sleepsAsync ->
+        when (sleepsAsync) {
             Async.Loading -> {
-                TasksUiState(isLoading = true)
+                SleepsUiState(isLoading = true)
             }
             is Async.Error -> {
-                TasksUiState(userMessage = tasksAsync.errorMessage)
+                SleepsUiState(userMessage = sleepsAsync.errorMessage)
             }
             is Async.Success -> {
-                TasksUiState(
-                    items = tasksAsync.data,
-                    filteringUiInfo = filterUiInfo,
+                SleepsUiState(
+                    items = sleepsAsync.data,
+                    uiInfo = uiInfo,
                     isLoading = isLoading,
                     userMessage = userMessage
                 )
@@ -96,14 +76,14 @@ class SleepsViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = WhileUiSubscribed,
-            initialValue = TasksUiState(isLoading = true)
+            initialValue = SleepsUiState(isLoading = true)
         )
 
 
     fun clearCompletedTasks() {
         viewModelScope.launch {
             sleepRepository.clearCompletedTasks()
-            showSnackbarMessage(R.string.completed_tasks_cleared)
+            showSnackbarMessage(R.string.completed_sleeps_cleared)
             refresh()
         }
     }
@@ -111,9 +91,9 @@ class SleepsViewModel @Inject constructor(
 
     fun showEditResultMessage(result: Int) {
         when (result) {
-            EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_task_message)
-            ADD_EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_added_task_message)
-            DELETE_RESULT_OK -> showSnackbarMessage(R.string.successfully_deleted_task_message)
+            EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_sleep_message)
+            ADD_EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_added_sleep_message)
+            DELETE_RESULT_OK -> showSnackbarMessage(R.string.successfully_deleted_sleep_message)
         }
     }
 
@@ -133,42 +113,18 @@ class SleepsViewModel @Inject constructor(
         }
     }
 
-    private fun sleeps(sleeps: List<Sleep>): List<Sleep> {
-        val sleepsToShow = ArrayList<Sleep>()
-        for (sleep in sleeps) {
-            sleepsToShow.add(sleep)
-        }
-        return sleepsToShow
-    }
-
-    private fun getFilterUiInfo(requestType: TasksFilterType): FilteringUiInfo =
-        when (requestType) {
-            ALL_TASKS -> {
-                FilteringUiInfo(
-                    R.string.label_all, R.string.no_tasks_all,
-                    R.drawable.logo_no_fill
-                )
-            }
-            ACTIVE_TASKS -> {
-                FilteringUiInfo(
-                    R.string.label_active, R.string.no_tasks_active,
-                    R.drawable.ic_check_circle_96dp
-                )
-            }
-            COMPLETED_TASKS -> {
-                FilteringUiInfo(
-                    R.string.label_completed, R.string.no_tasks_completed,
-                    R.drawable.ic_verified_user_96dp
-                )
-            }
-        }
+    private fun getUiInfo(): UiInfo =
+        UiInfo(
+            R.string.label_all, R.string.no_sleeps_all,
+            R.drawable.logo_no_fill
+        )
 }
 
 // Used to save the current filtering in SavedStateHandle.
 const val TASKS_FILTER_SAVED_STATE_KEY = "TASKS_FILTER_SAVED_STATE_KEY"
 
-data class FilteringUiInfo(
+data class UiInfo(
     val currentFilteringLabel: Int = R.string.label_all,
-    val noTasksLabel: Int = R.string.no_tasks_all,
-    val noTaskIconRes: Int = R.drawable.logo_no_fill,
+    val noSleepsLabel: Int = R.string.no_sleeps_all,
+    val noSleepIconRes: Int = R.drawable.logo_no_fill,
 )

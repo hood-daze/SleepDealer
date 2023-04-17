@@ -64,7 +64,7 @@ class FakeSleepRepository : SleepRepository {
         return taskId
     }
 
-    override fun getTasksStream(): Flow<List<Sleep>> = observableTasks
+    override fun getSleepsStream(): Flow<List<Sleep>> = observableTasks
 
     override fun getTaskStream(taskId: String): Flow<Sleep?> {
         return observableTasks.map { tasks ->

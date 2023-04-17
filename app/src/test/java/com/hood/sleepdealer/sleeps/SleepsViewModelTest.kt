@@ -72,7 +72,7 @@ class SleepsViewModelTest {
 
         // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        sleepsViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+        sleepsViewModel.setFiltering(SleepsType.ALL_TASKS)
 
         // Trigger loading of tasks
         sleepsViewModel.refresh()
@@ -94,7 +94,7 @@ class SleepsViewModelTest {
     fun loadActiveTasksFromRepositoryAndLoadIntoView() = runTest {
         // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        sleepsViewModel.setFiltering(TasksFilterType.ACTIVE_TASKS)
+        sleepsViewModel.setFiltering(SleepsType.ACTIVE_TASKS)
 
         // Load tasks
         sleepsViewModel.refresh()
@@ -110,7 +110,7 @@ class SleepsViewModelTest {
     fun loadCompletedTasksFromRepositoryAndLoadIntoView() = runTest {
         // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        sleepsViewModel.setFiltering(TasksFilterType.COMPLETED_TASKS)
+        sleepsViewModel.setFiltering(SleepsType.COMPLETED_TASKS)
 
         // Load tasks
         sleepsViewModel.refresh()
@@ -159,7 +159,7 @@ class SleepsViewModelTest {
 
         // Verify snackbar is updated
         assertThat(sleepsViewModel.uiState.first().userMessage)
-            .isEqualTo(R.string.completed_tasks_cleared)
+            .isEqualTo(R.string.completed_sleeps_cleared)
     }
 
     @Test
@@ -169,7 +169,7 @@ class SleepsViewModelTest {
 
         // The snackbar is updated
         assertThat(sleepsViewModel.uiState.first().userMessage)
-            .isEqualTo(R.string.successfully_saved_task_message)
+            .isEqualTo(R.string.successfully_saved_sleep_message)
     }
 
     @Test
@@ -179,7 +179,7 @@ class SleepsViewModelTest {
 
         // The snackbar is updated
         assertThat(sleepsViewModel.uiState.first().userMessage)
-            .isEqualTo(R.string.successfully_added_task_message)
+            .isEqualTo(R.string.successfully_added_sleep_message)
     }
 
     @Test
@@ -189,7 +189,7 @@ class SleepsViewModelTest {
 
         // The snackbar is updated
         assertThat(sleepsViewModel.uiState.first().userMessage)
-            .isEqualTo(R.string.successfully_deleted_task_message)
+            .isEqualTo(R.string.successfully_deleted_sleep_message)
     }
 
     @Test

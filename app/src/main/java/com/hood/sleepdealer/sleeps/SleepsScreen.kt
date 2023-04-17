@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Checkbox
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -49,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -58,15 +56,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
-import com.hood.sleepdealer.util.TasksTopAppBar
+import com.hood.sleepdealer.util.SleepsTopAppBar
 import com.google.accompanist.appcompattheme.AppCompatTheme
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SleepsScreen(
     @StringRes userMessage: Int,
-    onAddTask: () -> Unit,
-    onTaskClick: (Sleep) -> Unit,
+    onAddSleep: () -> Unit,
+    onSleepClick: (Sleep) -> Unit,
     onUserMessageDisplayed: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
@@ -76,27 +74,27 @@ fun SleepsScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TasksTopAppBar(
+            SleepsTopAppBar(
                 openDrawer = openDrawer
             )
         },
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddTask) {
+            FloatingActionButton(onClick = onAddSleep) {
                 Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))
             }
         }
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        TasksContent(
+        SleepsContent(
             loading = uiState.isLoading,
             sleeps = uiState.items,
-            currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
-            noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
-            noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,
+            currentFilteringLabel = uiState.uiInfo.currentFilteringLabel,
+            noSleepsLabel = uiState.uiInfo.noSleepsLabel,
+            noSleepsIconRes = uiState.uiInfo.noSleepIconRes,
             onRefresh = viewModel::refresh,
-            onTaskClick = onTaskClick,
+            onSleepClick = onSleepClick,
             modifier = Modifier.padding(paddingValues)
         )
 
@@ -121,20 +119,20 @@ fun SleepsScreen(
 }
 
 @Composable
-private fun TasksContent(
+private fun SleepsContent(
     loading: Boolean,
     sleeps: List<Sleep>,
     @StringRes currentFilteringLabel: Int,
-    @StringRes noTasksLabel: Int,
-    @DrawableRes noTasksIconRes: Int,
+    @StringRes noSleepsLabel: Int,
+    @DrawableRes noSleepsIconRes: Int,
     onRefresh: () -> Unit,
-    onTaskClick: (Sleep) -> Unit,
+    onSleepClick: (Sleep) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LoadingContent(
         loading = loading,
         empty = sleeps.isEmpty() && !loading,
-        emptyContent = { TasksEmptyContent(noTasksLabel, noTasksIconRes, modifier) },
+        emptyContent = { TasksEmptyContent(noSleepsLabel, noSleepsIconRes, modifier) },
         onRefresh = onRefresh
     ) {
         Column(
@@ -154,7 +152,7 @@ private fun TasksContent(
                 items(sleeps) { task ->
                     TaskItem(
                         sleep = task,
-                        onTaskClick = onTaskClick,
+                        onTaskClick = onSleepClick,
                     )
                 }
             }
@@ -212,7 +210,7 @@ private fun TasksEmptyContent(
 private fun TasksContentPreview() {
     AppCompatTheme {
         Surface {
-            TasksContent(
+            SleepsContent(
                 loading = false,
                 sleeps = listOf(
                     Sleep(
@@ -247,10 +245,10 @@ private fun TasksContentPreview() {
                     ),
                 ),
                 currentFilteringLabel = R.string.label_all,
-                noTasksLabel = R.string.no_tasks_all,
-                noTasksIconRes = R.drawable.logo_no_fill,
+                noSleepsLabel = R.string.no_sleeps_all,
+                noSleepsIconRes = R.drawable.logo_no_fill,
                 onRefresh = { },
-                onTaskClick = { },
+                onSleepClick = { },
             )
         }
     }
@@ -261,14 +259,14 @@ private fun TasksContentPreview() {
 private fun TasksContentEmptyPreview() {
     AppCompatTheme {
         Surface {
-            TasksContent(
+            SleepsContent(
                 loading = false,
                 sleeps = emptyList(),
                 currentFilteringLabel = R.string.label_all,
-                noTasksLabel = R.string.no_tasks_all,
-                noTasksIconRes = R.drawable.logo_no_fill,
+                noSleepsLabel = R.string.no_sleeps_all,
+                noSleepsIconRes = R.drawable.logo_no_fill,
                 onRefresh = { },
-                onTaskClick = { },
+                onSleepClick = { },
             )
         }
     }
@@ -280,7 +278,7 @@ private fun TasksEmptyContentPreview() {
     AppCompatTheme {
         Surface {
             TasksEmptyContent(
-                noTasksLabel = R.string.no_tasks_all,
+                noTasksLabel = R.string.no_sleeps_all,
                 noTasksIconRes = R.drawable.logo_no_fill
             )
         }

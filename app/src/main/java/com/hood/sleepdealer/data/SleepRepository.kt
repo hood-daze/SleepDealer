@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SleepRepository {
 
-    fun getTasksStream(): Flow<List<Sleep>>
+    fun getSleepsStream(): Flow<List<Sleep>>
 
     suspend fun getTasks(forceUpdate: Boolean = false): List<Sleep>
 

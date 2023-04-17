@@ -17,12 +17,7 @@
 package com.hood.sleepdealer.util
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -32,22 +27,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.hood.sleepdealer.R
 import com.google.accompanist.appcompattheme.AppCompatTheme
 
 @Composable
-fun TasksTopAppBar(
+fun SleepsTopAppBar(
     openDrawer: () -> Unit,
 ) {
     TopAppBar(
@@ -112,7 +100,7 @@ fun AddEditTaskTopAppBar(@StringRes title: Int, onBack: () -> Unit) {
 private fun TasksTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            TasksTopAppBar({})
+            SleepsTopAppBar({})
         }
     }
 }

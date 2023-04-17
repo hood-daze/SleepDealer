@@ -83,7 +83,7 @@ class DefaultSleepRepository @Inject constructor(
         }
     }
 
-    override fun getTasksStream(): Flow<List<Sleep>> {
+    override fun getSleepsStream(): Flow<List<Sleep>> {
         return localDataSource.observeAll().map { tasks ->
             withContext(dispatcher) {
                 tasks.toExternal()
