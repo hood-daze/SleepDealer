@@ -81,7 +81,7 @@ fun SleepsScreen(
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(onClick = onAddSleep) {
-                Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))
+                Icon(Icons.Filled.Add, stringResource(id = R.string.add_sleep))
             }
         }
     ) { paddingValues ->

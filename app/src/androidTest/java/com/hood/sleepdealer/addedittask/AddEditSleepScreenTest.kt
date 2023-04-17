@@ -74,7 +74,7 @@ class AddEditSleepScreenTest {
                 Surface {
                     AddEditTaskScreen(
                         viewModel = AddEditTaskViewModel(repository, SavedStateHandle()),
-                        topBarTitle = R.string.add_task,
+                        topBarTitle = R.string.add_sleep,
                         onTaskUpdate = { },
                         onBack = { },
                     )

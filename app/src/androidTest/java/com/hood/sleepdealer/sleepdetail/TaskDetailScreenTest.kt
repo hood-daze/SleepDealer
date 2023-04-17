@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.taskdetail
+package com.hood.sleepdealer.sleepdetail
 
 import androidx.compose.material.Surface
 import androidx.compose.ui.test.assertIsDisplayed
@@ -102,8 +102,8 @@ class TaskDetailScreenTest {
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
-                    TaskDetailScreen(
-                        viewModel = TaskDetailViewModel(
+                    SleepDetailScreen(
+                        viewModel = SleepDetailViewModel(
                             repository,
                             SavedStateHandle(mapOf("taskId" to activeTaskId))
                         ),

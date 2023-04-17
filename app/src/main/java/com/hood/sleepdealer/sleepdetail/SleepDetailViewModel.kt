@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.taskdetail
+package com.hood.sleepdealer.sleepdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -38,50 +38,50 @@ import kotlinx.coroutines.launch
 /**
  * UiState for the Details screen.
  */
-data class TaskDetailUiState(
+data class SleepDetailUiState(
     val sleep: Sleep? = null,
     val isLoading: Boolean = false,
     val userMessage: Int? = null,
-    val isTaskDeleted: Boolean = false
+    val isSleepDeleted: Boolean = false
 )
 
 /**
  * ViewModel for the Details screen.
  */
 @HiltViewModel
-class TaskDetailViewModel @Inject constructor(
+class SleepDetailViewModel @Inject constructor(
     private val sleepRepository: SleepRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val taskId: String = savedStateHandle[SleepDealerDestinationsArgs.TASK_ID_ARG]!!
+    val sleepId: String = savedStateHandle[SleepDealerDestinationsArgs.TASK_ID_ARG]!!
 
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
     private val _isTaskDeleted = MutableStateFlow(false)
-    private val _taskAsync = sleepRepository.getTaskStream(taskId)
+    private val _taskAsync = sleepRepository.getTaskStream(sleepId)
         .map { handleTask(it) }
         .catch { emit(Async.Error(R.string.loading_task_error)) }
 
-    val uiState: StateFlow<TaskDetailUiState> = combine(
+    val uiState: StateFlow<SleepDetailUiState> = combine(
         _userMessage, _isLoading, _isTaskDeleted, _taskAsync
-    ) { userMessage, isLoading, isTaskDeleted, taskAsync ->
+    ) { userMessage, isLoading, isSleepDeleted, taskAsync ->
         when (taskAsync) {
             Async.Loading -> {
-                TaskDetailUiState(isLoading = true)
+                SleepDetailUiState(isLoading = true)
             }
             is Async.Error -> {
-                TaskDetailUiState(
+                SleepDetailUiState(
                     userMessage = taskAsync.errorMessage,
-                    isTaskDeleted = isTaskDeleted
+                    isSleepDeleted = isSleepDeleted
                 )
             }
             is Async.Success -> {
-                TaskDetailUiState(
+                SleepDetailUiState(
                     sleep = taskAsync.data,
                     isLoading = isLoading,
                     userMessage = userMessage,
-                    isTaskDeleted = isTaskDeleted
+                    isSleepDeleted = isSleepDeleted
                 )
             }
         }
@@ -89,29 +89,18 @@ class TaskDetailViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = WhileUiSubscribed,
-            initialValue = TaskDetailUiState(isLoading = true)
+            initialValue = SleepDetailUiState(isLoading = true)
         )
 
     fun deleteTask() = viewModelScope.launch {
-        sleepRepository.deleteTask(taskId)
+        sleepRepository.deleteTask(sleepId)
         _isTaskDeleted.value = true
-    }
-
-    fun setCompleted(completed: Boolean) = viewModelScope.launch {
-        val task = uiState.value.sleep ?: return@launch
-        if (completed) {
-            sleepRepository.completeTask(task.id)
-            showSnackbarMessage(R.string.task_marked_complete)
-        } else {
-            sleepRepository.activateTask(task.id)
-            showSnackbarMessage(R.string.task_marked_active)
-        }
     }
 
     fun refresh() {
         _isLoading.value = true
         viewModelScope.launch {
-            sleepRepository.refreshTask(taskId)
+            sleepRepository.refreshTask(sleepId)
             _isLoading.value = false
         }
     }

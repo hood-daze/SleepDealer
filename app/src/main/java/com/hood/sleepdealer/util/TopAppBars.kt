@@ -130,7 +130,7 @@ private fun TaskDetailTopAppBarPreview() {
 private fun AddEditTaskTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            AddEditTaskTopAppBar(R.string.add_task) { }
+            AddEditTaskTopAppBar(R.string.add_sleep) { }
         }
     }
 }

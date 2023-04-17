@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.taskdetail
+package com.hood.sleepdealer.sleepdetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -44,20 +43,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.appcompattheme.AppCompatTheme
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.TaskDetailTopAppBar
-import com.google.accompanist.appcompattheme.AppCompatTheme
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun TaskDetailScreen(
+fun SleepDetailScreen(
     onEditTask: (String) -> Unit,
     onBack: () -> Unit,
     onDeleteTask: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TaskDetailViewModel = hiltViewModel(),
+    viewModel: SleepDetailViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     Scaffold(
@@ -67,7 +66,7 @@ fun TaskDetailScreen(
             TaskDetailTopAppBar(onBack = onBack, onDelete = viewModel::deleteTask)
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onEditTask(viewModel.taskId) }) {
+            FloatingActionButton(onClick = { onEditTask(viewModel.sleepId) }) {
                 Icon(Icons.Filled.Edit, stringResource(id = R.string.edit_task))
             }
         }
@@ -79,7 +78,6 @@ fun TaskDetailScreen(
             empty = uiState.sleep == null && !uiState.isLoading,
             sleep = uiState.sleep,
             onRefresh = viewModel::refresh,
-            onTaskCheck = viewModel::setCompleted,
             modifier = Modifier.padding(paddingValues)
         )
 
@@ -93,8 +91,8 @@ fun TaskDetailScreen(
         }
 
         // Check if the sleep is deleted and call onDeleteTask
-        LaunchedEffect(uiState.isTaskDeleted) {
-            if (uiState.isTaskDeleted) {
+        LaunchedEffect(uiState.isSleepDeleted) {
+            if (uiState.isSleepDeleted) {
                 onDeleteTask()
             }
         }
@@ -106,7 +104,6 @@ private fun EditTaskContent(
     loading: Boolean,
     empty: Boolean,
     sleep: Sleep?,
-    onTaskCheck: (Boolean) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -137,7 +134,6 @@ private fun EditTaskContent(
 
             ) {
                 if (sleep != null) {
-                    Checkbox(sleep.isCompleted, onTaskCheck)
                     Column {
                         Text(text = sleep.title, style = MaterialTheme.typography.h6)
                         Text(text = sleep.description, style = MaterialTheme.typography.body1)
@@ -162,7 +158,6 @@ private fun EditTaskContentPreview() {
                     isCompleted = false,
                     id = "ID"
                 ),
-                onTaskCheck = { },
                 onRefresh = { }
             )
         }
@@ -183,7 +178,6 @@ private fun EditTaskContentTaskCompletedPreview() {
                     isCompleted = false,
                     id = "ID"
                 ),
-                onTaskCheck = { },
                 onRefresh = { }
             )
         }
@@ -204,7 +198,6 @@ private fun EditTaskContentEmptyPreview() {
                     isCompleted = false,
                     id = "ID"
                 ),
-                onTaskCheck = { },
                 onRefresh = { }
             )
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.taskdetail
+package com.hood.sleepdealer.sleepdetail
 
 import androidx.lifecycle.SavedStateHandle
 import com.hood.sleepdealer.MainCoroutineRule
@@ -37,7 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Unit tests for the implementation of [TaskDetailViewModel]
+ * Unit tests for the implementation of [SleepDetailViewModel]
  */
 @ExperimentalCoroutinesApi
 class SleepDetailViewModelTest {
@@ -48,7 +48,7 @@ class SleepDetailViewModelTest {
     val mainCoroutineRule = MainCoroutineRule()
 
     // Subject under test
-    private lateinit var taskDetailViewModel: TaskDetailViewModel
+    private lateinit var sleepDetailViewModel: SleepDetailViewModel
 
     // Use a fake repository to be injected into the viewmodel
     private lateinit var tasksRepository: FakeSleepRepository
@@ -59,7 +59,7 @@ class SleepDetailViewModelTest {
         tasksRepository = FakeSleepRepository()
         tasksRepository.addTasks(sleep)
 
-        taskDetailViewModel = TaskDetailViewModel(
+        sleepDetailViewModel = SleepDetailViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
@@ -67,7 +67,7 @@ class SleepDetailViewModelTest {
 
     @Test
     fun getActiveTaskFromRepositoryAndLoadIntoView() = runTest {
-        val uiState = taskDetailViewModel.uiState.first()
+        val uiState = sleepDetailViewModel.uiState.first()
         // Then verify that the view was notified
         assertThat(uiState.sleep?.title).isEqualTo(sleep.title)
         assertThat(uiState.sleep?.description).isEqualTo(sleep.description)
@@ -79,12 +79,12 @@ class SleepDetailViewModelTest {
         assertThat(tasksRepository.savedTasks.value[sleep.id]?.isCompleted).isFalse()
 
         // When the ViewModel is asked to complete the sleep
-        assertThat(taskDetailViewModel.uiState.first().sleep?.id).isEqualTo("0")
-        taskDetailViewModel.setCompleted(true)
+        assertThat(sleepDetailViewModel.uiState.first().sleep?.id).isEqualTo("0")
+        sleepDetailViewModel.setCompleted(true)
 
         // Then the sleep is completed and the snackbar shows the correct message
         assertThat(tasksRepository.savedTasks.value[sleep.id]?.isCompleted).isTrue()
-        assertThat(taskDetailViewModel.uiState.first().userMessage)
+        assertThat(sleepDetailViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_marked_complete)
     }
 
@@ -97,13 +97,13 @@ class SleepDetailViewModelTest {
         assertThat(tasksRepository.savedTasks.value[sleep.id]?.isCompleted).isTrue()
 
         // When the ViewModel is asked to complete the sleep
-        assertThat(taskDetailViewModel.uiState.first().sleep?.id).isEqualTo("0")
-        taskDetailViewModel.setCompleted(false)
+        assertThat(sleepDetailViewModel.uiState.first().sleep?.id).isEqualTo("0")
+        sleepDetailViewModel.setCompleted(false)
 
         // Then the sleep is not completed and the snackbar shows the correct message
         val newTask = tasksRepository.getTask(sleep.id)
         assertTrue((newTask?.isActive) ?: false)
-        assertThat(taskDetailViewModel.uiState.first().userMessage)
+        assertThat(sleepDetailViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_marked_active)
     }
 
@@ -113,22 +113,22 @@ class SleepDetailViewModelTest {
         tasksRepository.setShouldThrowError(true)
 
         // Then the sleep is null and the snackbar shows a loading error message
-        assertThat(taskDetailViewModel.uiState.value.sleep).isNull()
-        assertThat(taskDetailViewModel.uiState.first().userMessage)
+        assertThat(sleepDetailViewModel.uiState.value.sleep).isNull()
+        assertThat(sleepDetailViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.loading_task_error)
     }
 
     @Test
     fun taskDetailViewModel_taskNotFound() = runTest {
         // Given an ID for a non existent sleep
-        taskDetailViewModel = TaskDetailViewModel(
+        sleepDetailViewModel = SleepDetailViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "nonexistent_id"))
         )
 
         // The sleep is null and the snackbar shows a "not found" error message
-        assertThat(taskDetailViewModel.uiState.value.sleep).isNull()
-        assertThat(taskDetailViewModel.uiState.first().userMessage)
+        assertThat(sleepDetailViewModel.uiState.value.sleep).isNull()
+        assertThat(sleepDetailViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_not_found)
     }
 
@@ -137,7 +137,7 @@ class SleepDetailViewModelTest {
         assertThat(tasksRepository.savedTasks.value.containsValue(sleep)).isTrue()
 
         // When the deletion of a sleep is requested
-        taskDetailViewModel.deleteTask()
+        sleepDetailViewModel.deleteTask()
 
         assertThat(tasksRepository.savedTasks.value.containsValue(sleep)).isFalse()
     }
@@ -149,7 +149,7 @@ class SleepDetailViewModelTest {
 
         var isLoading: Boolean? = true
         val job = launch {
-            taskDetailViewModel.uiState.collect {
+            sleepDetailViewModel.uiState.collect {
                 isLoading = it.isLoading
             }
         }

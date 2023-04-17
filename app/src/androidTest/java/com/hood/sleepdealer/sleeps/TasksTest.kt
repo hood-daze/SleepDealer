@@ -116,7 +116,7 @@ class TasksTest {
 
         val taskTitle = "TITLE1"
         // Add active sleep
-        composeTestRule.onNodeWithContentDescription(activity.getString(R.string.add_task))
+        composeTestRule.onNodeWithContentDescription(activity.getString(R.string.add_sleep))
             .performClick()
         findTextField(R.string.title_hint).performTextInput(taskTitle)
         findTextField(R.string.description_hint).performTextInput("DESCRIPTION")
@@ -277,7 +277,7 @@ class TasksTest {
         setContent()
 
         // Click on the "+" button, add details, and save
-        composeTestRule.onNodeWithContentDescription(activity.getString(R.string.add_task))
+        composeTestRule.onNodeWithContentDescription(activity.getString(R.string.add_sleep))
             .performClick()
         findTextField(R.string.title_hint).performTextInput("title")
         findTextField(R.string.description_hint).performTextInput("description")

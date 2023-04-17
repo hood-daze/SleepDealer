@@ -15,12 +15,10 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">Todo</string>
-    <string name="add_task">New Task</string>
+    <string name="app_name">Sleep Dealer</string>
+    <string name="add_sleep">New Task</string>
     <string name="edit_task">Edit Task</string>
     <string name="task_details">Task Details</string>
-    <string name="task_marked_complete">Task marked complete</string>
-    <string name="task_marked_active">Task marked active</string>
     <string name="loading_tasks_error">Error while loading sleeps</string>
     <string name="loading_task_error">Error while loading sleep</string>
     <string name="task_not_found">Task not found</string>

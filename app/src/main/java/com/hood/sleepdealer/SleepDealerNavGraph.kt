@@ -37,7 +37,7 @@ import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
 import com.hood.sleepdealer.addedittask.AddEditTaskScreen
 import com.hood.sleepdealer.profile.ProfileScreen
-import com.hood.sleepdealer.taskdetail.TaskDetailScreen
+import com.hood.sleepdealer.sleepdetail.SleepDetailScreen
 import com.hood.sleepdealer.sleeps.SleepsScreen
 import com.hood.sleepdealer.util.AppModalDrawer
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +72,7 @@ fun SleepDealerNavGraph(
                 SleepsScreen(
                     userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                     onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
-                    onAddSleep = { navActions.navigateToAddEditTask(R.string.add_task, null) },
+                    onAddSleep = { navActions.navigateToAddEditTask(R.string.add_sleep, null) },
                     onSleepClick = { task -> navActions.navigateToTaskDetail(task.id) },
                     openDrawer = { coroutineScope.launch { drawerState.open() } }
                 )
@@ -102,7 +102,7 @@ fun SleepDealerNavGraph(
             )
         }
         composable(SleepDealerDestinations.TASK_DETAIL_ROUTE) {
-            TaskDetailScreen(
+            SleepDetailScreen(
                 onEditTask = { taskId ->
                     navActions.navigateToAddEditTask(R.string.edit_task, taskId)
                 },
