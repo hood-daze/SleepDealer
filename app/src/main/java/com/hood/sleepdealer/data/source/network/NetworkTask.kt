@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer
+package com.hood.sleepdealer.data.source.network
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
+/**
+ * Internal model used to represent a task obtained from the network. This is used inside the data
+ * layer only.
+ *
+ * See ModelMappingExt.kt for mapping functions used to convert this model to other
+ * models.
+ */
+data class NetworkTask(
+    val id: String,
+    val title: String,
+    val shortDescription: String,
+    val priority: Int? = null,
+    val status: TaskStatus = TaskStatus.ACTIVE
+)
 
-class CustomTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
-        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
-    }
+enum class TaskStatus {
+    ACTIVE,
+    COMPLETE
 }

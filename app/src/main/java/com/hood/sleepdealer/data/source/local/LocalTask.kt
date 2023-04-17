@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer
+package com.hood.sleepdealer.data.source.local
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class CustomTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
-        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
-    }
-}
+/**
+ * Internal model used to represent a task stored locally in a Room database. This is used inside
+ * the data layer only.
+ *
+ * See ModelMappingExt.kt for mapping functions used to convert this model to other
+ * models.
+ */
+@Entity(
+    tableName = "task"
+)
+data class LocalTask(
+    @PrimaryKey val id: String,
+    var title: String,
+    var description: String,
+    var isCompleted: Boolean,
+)

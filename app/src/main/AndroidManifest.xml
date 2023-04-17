@@ -15,17 +15,17 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.architecture.blueprints.todoapp">
+    package="com.hood.sleepdealer">
 
     <application
         android:allowBackup="false"
-        android:name=".TodoApplication"
+        android:name="com.hood.sleepdealer.SleepDealerApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.android.architecture.blueprints.todoapp.TodoActivity"
+            android:name="com.hood.sleepdealer.SleepDealerActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:theme="@style/AppTheme.OverlapSystemBar">

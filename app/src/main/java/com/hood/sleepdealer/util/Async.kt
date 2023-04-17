@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer
+package com.hood.sleepdealer.util
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
+/**
+ * A generic class that holds a loading signal or the result of an async operation.
+ */
+sealed class Async<out T> {
+    object Loading : Async<Nothing>()
 
-class CustomTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
-        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
-    }
+    data class Error(val errorMessage: Int) : Async<Nothing>()
+
+    data class Success<out T>(val data: T) : Async<T>()
 }

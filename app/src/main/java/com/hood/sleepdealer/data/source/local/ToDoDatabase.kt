@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer
+package com.hood.sleepdealer.data.source.local
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
+import androidx.room.Database
+import androidx.room.RoomDatabase
 
-class CustomTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
-        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
-    }
+/**
+ * The Room Database that contains the Task table.
+ *
+ * Note that exportSchema should be true in production databases.
+ */
+@Database(entities = [LocalTask::class], version = 1, exportSchema = false)
+abstract class ToDoDatabase : RoomDatabase() {
+
+    abstract fun taskDao(): TaskDao
 }

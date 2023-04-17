@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.android.architecture.blueprints.todoapp.di
+package com.hood.sleepdealer.di
 
-import com.example.android.architecture.blueprints.todoapp.data.FakeTaskRepository
-import com.example.android.architecture.blueprints.todoapp.data.TaskRepository
+import com.hood.sleepdealer.data.FakeTaskRepository
+import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.di.RepositoryModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

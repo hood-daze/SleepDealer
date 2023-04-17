@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.android.architecture.blueprints.todoapp.data.source.network
+package com.hood.sleepdealer.data.source.network
+
+import com.hood.sleepdealer.data.source.network.NetworkDataSource
+import com.hood.sleepdealer.data.source.network.NetworkTask
 
 class FakeNetworkDataSource(
     var tasks: MutableList<NetworkTask>? = mutableListOf()

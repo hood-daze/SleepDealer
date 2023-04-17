@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.android.architecture.blueprints.todoapp.data.source.local
+package com.hood.sleepdealer.data.source.local
 
+import com.hood.sleepdealer.data.source.local.LocalTask
+import com.hood.sleepdealer.data.source.local.TaskDao
 import kotlinx.coroutines.flow.Flow
 
 class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {

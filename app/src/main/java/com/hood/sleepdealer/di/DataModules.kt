@@ -18,28 +18,52 @@ package com.hood.sleepdealer.di
 
 import android.content.Context
 import androidx.room.Room
+import com.hood.sleepdealer.data.DefaultTaskRepository
+import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.source.local.TaskDao
 import com.hood.sleepdealer.data.source.local.ToDoDatabase
-import com.hood.sleepdealer.di.DatabaseModule
+import com.hood.sleepdealer.data.source.network.NetworkDataSource
+import com.hood.sleepdealer.data.source.network.TaskNetworkDataSource
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
 @Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [DatabaseModule::class]
-)
-object DatabaseTestModule {
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Singleton
+    @Binds
+    abstract fun bindTaskRepository(repository: DefaultTaskRepository): TaskRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataSourceModule {
+
+    @Singleton
+    @Binds
+    abstract fun bindNetworkDataSource(dataSource: TaskNetworkDataSource): NetworkDataSource
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
 
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): ToDoDatabase {
-        return Room
-            .inMemoryDatabaseBuilder(context.applicationContext, ToDoDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
+        return Room.databaseBuilder(
+            context.applicationContext,
+            ToDoDatabase::class.java,
+            "Tasks.db"
+        ).build()
     }
+
+    @Provides
+    fun provideTaskDao(database: ToDoDatabase): TaskDao = database.taskDao()
 }
