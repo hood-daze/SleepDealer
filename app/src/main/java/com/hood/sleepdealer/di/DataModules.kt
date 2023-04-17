@@ -18,8 +18,8 @@ package com.hood.sleepdealer.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hood.sleepdealer.data.DefaultTaskRepository
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.DefaultSleepRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.hood.sleepdealer.data.source.local.TaskDao
 import com.hood.sleepdealer.data.source.local.ToDoDatabase
 import com.hood.sleepdealer.data.source.network.NetworkDataSource
@@ -38,7 +38,7 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindTaskRepository(repository: DefaultTaskRepository): TaskRepository
+    abstract fun bindTaskRepository(repository: DefaultSleepRepository): SleepRepository
 }
 
 @Module

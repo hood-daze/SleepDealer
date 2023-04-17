@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.SleepDealerDestinationsArgs
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,14 +47,14 @@ data class AddEditTaskUiState(
  */
 @HiltViewModel
 class AddEditTaskViewModel @Inject constructor(
-    private val taskRepository: TaskRepository,
+    private val sleepRepository: SleepRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val taskId: String? = savedStateHandle[SleepDealerDestinationsArgs.TASK_ID_ARG]
 
     // A MutableStateFlow needs to be created in this ViewModel. The source of truth of the current
-    // editable Task is the ViewModel, we need to mutate the UI state directly in methods such as
+    // editable Sleep is the ViewModel, we need to mutate the UI state directly in methods such as
     // `updateTitle` or `updateDescription`
     private val _uiState = MutableStateFlow(AddEditTaskUiState())
     val uiState: StateFlow<AddEditTaskUiState> = _uiState.asStateFlow()
@@ -100,7 +100,7 @@ class AddEditTaskViewModel @Inject constructor(
     }
 
     private fun createNewTask() = viewModelScope.launch {
-        taskRepository.createTask(uiState.value.title, uiState.value.description)
+        sleepRepository.createTask(uiState.value.title, uiState.value.description)
         _uiState.update {
             it.copy(isTaskSaved = true)
         }
@@ -108,10 +108,10 @@ class AddEditTaskViewModel @Inject constructor(
 
     private fun updateTask() {
         if (taskId == null) {
-            throw RuntimeException("updateTask() was called but task is new.")
+            throw RuntimeException("updateTask() was called but sleep is new.")
         }
         viewModelScope.launch {
-            taskRepository.updateTask(
+            sleepRepository.updateTask(
                 taskId,
                 title = uiState.value.title,
                 description = uiState.value.description,
@@ -127,7 +127,7 @@ class AddEditTaskViewModel @Inject constructor(
             it.copy(isLoading = true)
         }
         viewModelScope.launch {
-            taskRepository.getTask(taskId).let { task ->
+            sleepRepository.getTask(taskId).let { task ->
                 if (task != null) {
                     _uiState.update {
                         it.copy(

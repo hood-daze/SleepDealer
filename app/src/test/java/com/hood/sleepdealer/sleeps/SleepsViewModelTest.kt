@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.lifecycle.SavedStateHandle
 import com.hood.sleepdealer.ADD_EDIT_RESULT_OK
@@ -22,8 +22,8 @@ import com.hood.sleepdealer.DELETE_RESULT_OK
 import com.hood.sleepdealer.EDIT_RESULT_OK
 import com.hood.sleepdealer.MainCoroutineRule
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.FakeTaskRepository
-import com.hood.sleepdealer.data.Task
+import com.hood.sleepdealer.data.FakeSleepRepository
+import com.hood.sleepdealer.data.Sleep
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,16 +37,16 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Unit tests for the implementation of [TasksViewModel]
+ * Unit tests for the implementation of [SleepsViewModel]
  */
 @ExperimentalCoroutinesApi
-class TasksViewModelTest {
+class SleepsViewModelTest {
 
     // Subject under test
-    private lateinit var tasksViewModel: TasksViewModel
+    private lateinit var sleepsViewModel: SleepsViewModel
 
     // Use a fake repository to be injected into the viewmodel
-    private lateinit var tasksRepository: FakeTaskRepository
+    private lateinit var tasksRepository: FakeSleepRepository
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -56,13 +56,13 @@ class TasksViewModelTest {
     @Before
     fun setupViewModel() {
         // We initialise the tasks to 3, with one active and two completed
-        tasksRepository = FakeTaskRepository()
-        val task1 = Task(id = "1", title = "Title1", description = "Desc1")
-        val task2 = Task(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
-        val task3 = Task(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
-        tasksRepository.addTasks(task1, task2, task3)
+        tasksRepository = FakeSleepRepository()
+        val sleep1 = Sleep(id = "1", title = "Title1", description = "Desc1")
+        val sleep2 = Sleep(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
+        val sleep3 = Sleep(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
+        tasksRepository.addTasks(sleep1, sleep2, sleep3)
 
-        tasksViewModel = TasksViewModel(tasksRepository, SavedStateHandle())
+        sleepsViewModel = SleepsViewModel(tasksRepository, SavedStateHandle())
     }
 
     @Test
@@ -70,56 +70,56 @@ class TasksViewModelTest {
         // Set Main dispatcher to not run coroutines eagerly, for just this one test
         Dispatchers.setMain(StandardTestDispatcher())
 
-        // Given an initialized TasksViewModel with initialized tasks
+        // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+        sleepsViewModel.setFiltering(TasksFilterType.ALL_TASKS)
 
         // Trigger loading of tasks
-        tasksViewModel.refresh()
+        sleepsViewModel.refresh()
 
         // Then progress indicator is shown
-        assertThat(tasksViewModel.uiState.first().isLoading).isTrue()
+        assertThat(sleepsViewModel.uiState.first().isLoading).isTrue()
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
         // Then progress indicator is hidden
-        assertThat(tasksViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(tasksViewModel.uiState.first().items).hasSize(3)
+        assertThat(sleepsViewModel.uiState.first().items).hasSize(3)
     }
 
     @Test
     fun loadActiveTasksFromRepositoryAndLoadIntoView() = runTest {
-        // Given an initialized TasksViewModel with initialized tasks
+        // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.ACTIVE_TASKS)
+        sleepsViewModel.setFiltering(TasksFilterType.ACTIVE_TASKS)
 
         // Load tasks
-        tasksViewModel.refresh()
+        sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(tasksViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(tasksViewModel.uiState.first().items).hasSize(1)
+        assertThat(sleepsViewModel.uiState.first().items).hasSize(1)
     }
 
     @Test
     fun loadCompletedTasksFromRepositoryAndLoadIntoView() = runTest {
-        // Given an initialized TasksViewModel with initialized tasks
+        // Given an initialized SleepsViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.COMPLETED_TASKS)
+        sleepsViewModel.setFiltering(TasksFilterType.COMPLETED_TASKS)
 
         // Load tasks
-        tasksViewModel.refresh()
+        sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(tasksViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(tasksViewModel.uiState.first().items).hasSize(2)
+        assertThat(sleepsViewModel.uiState.first().items).hasSize(2)
     }
 
     @Test
@@ -128,101 +128,101 @@ class TasksViewModelTest {
         tasksRepository.setShouldThrowError(true)
 
         // Load tasks
-        tasksViewModel.refresh()
+        sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(tasksViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
 
         // And the list of items is empty
-        assertThat(tasksViewModel.uiState.first().items).isEmpty()
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().items).isEmpty()
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.loading_tasks_error)
     }
 
     @Test
     fun clearCompletedTasks_clearsTasks() = runTest {
         // When completed tasks are cleared
-        tasksViewModel.clearCompletedTasks()
+        sleepsViewModel.clearCompletedTasks()
 
         // Fetch tasks
-        tasksViewModel.refresh()
+        sleepsViewModel.refresh()
 
         // Fetch tasks
-        val allTasks = tasksViewModel.uiState.first().items
+        val allTasks = sleepsViewModel.uiState.first().items
         val completedTasks = allTasks?.filter { it.isCompleted }
 
         // Verify there are no completed tasks left
         assertThat(completedTasks).isEmpty()
 
-        // Verify active task is not cleared
+        // Verify active sleep is not cleared
         assertThat(allTasks).hasSize(1)
 
         // Verify snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.completed_tasks_cleared)
     }
 
     @Test
     fun showEditResultMessages_editOk_snackbarUpdated() = runTest {
         // When the viewmodel receives a result from another destination
-        tasksViewModel.showEditResultMessage(EDIT_RESULT_OK)
+        sleepsViewModel.showEditResultMessage(EDIT_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.successfully_saved_task_message)
     }
 
     @Test
     fun showEditResultMessages_addOk_snackbarUpdated() = runTest {
         // When the viewmodel receives a result from another destination
-        tasksViewModel.showEditResultMessage(ADD_EDIT_RESULT_OK)
+        sleepsViewModel.showEditResultMessage(ADD_EDIT_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.successfully_added_task_message)
     }
 
     @Test
     fun showEditResultMessages_deleteOk_snackbarUpdated() = runTest {
         // When the viewmodel receives a result from another destination
-        tasksViewModel.showEditResultMessage(DELETE_RESULT_OK)
+        sleepsViewModel.showEditResultMessage(DELETE_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.successfully_deleted_task_message)
     }
 
     @Test
     fun completeTask_dataAndSnackbarUpdated() = runTest {
-        // With a repository that has an active task
-        val task = Task(id = "id", title = "Title", description = "Description")
-        tasksRepository.addTasks(task)
+        // With a repository that has an active sleep
+        val sleep = Sleep(id = "id", title = "Title", description = "Description")
+        tasksRepository.addTasks(sleep)
 
-        // Complete task
-        tasksViewModel.completeTask(task, true)
+        // Complete sleep
+        sleepsViewModel.completeTask(sleep, true)
 
-        // Verify the task is completed
-        assertThat(tasksRepository.savedTasks.value[task.id]?.isCompleted).isTrue()
+        // Verify the sleep is completed
+        assertThat(tasksRepository.savedTasks.value[sleep.id]?.isCompleted).isTrue()
 
         // The snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_marked_complete)
     }
 
     @Test
     fun activateTask_dataAndSnackbarUpdated() = runTest {
-        // With a repository that has a completed task
-        val task = Task(id = "id", title = "Title", description = "Description", isCompleted = true)
-        tasksRepository.addTasks(task)
+        // With a repository that has a completed sleep
+        val sleep = Sleep(id = "id", title = "Title", description = "Description", isCompleted = true)
+        tasksRepository.addTasks(sleep)
 
-        // Activate task
-        tasksViewModel.completeTask(task, false)
+        // Activate sleep
+        sleepsViewModel.completeTask(sleep, false)
 
-        // Verify the task is active
-        assertThat(tasksRepository.savedTasks.value[task.id]?.isActive).isTrue()
+        // Verify the sleep is active
+        assertThat(tasksRepository.savedTasks.value[sleep.id]?.isActive).isTrue()
 
         // The snackbar is updated
-        assertThat(tasksViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_marked_active)
     }
 }

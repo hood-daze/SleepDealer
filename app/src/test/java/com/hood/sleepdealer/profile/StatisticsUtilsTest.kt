@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.statistics
+package com.hood.sleepdealer.profile
 
-import com.hood.sleepdealer.data.Task
-import com.hood.sleepdealer.statistics.getActiveAndCompletedStats
+import com.hood.sleepdealer.data.Sleep
+import com.hood.sleepdealer.profile.getActiveAndCompletedStats
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -29,16 +29,16 @@ class StatisticsUtilsTest {
 
     @Test
     fun getActiveAndCompletedStats_noCompleted() {
-        val tasks = listOf(
-            Task(
+        val sleeps = listOf(
+            Sleep(
                 id = "id",
                 title = "title",
                 description = "desc",
                 isCompleted = false,
             )
         )
-        // When the list of tasks is computed with an active task
-        val result = getActiveAndCompletedStats(tasks)
+        // When the list of tasks is computed with an active sleep
+        val result = getActiveAndCompletedStats(sleeps)
 
         // Then the percentages are 100 and 0
         assertThat(result.activeTasksPercent, `is`(100f))
@@ -47,16 +47,16 @@ class StatisticsUtilsTest {
 
     @Test
     fun getActiveAndCompletedStats_noActive() {
-        val tasks = listOf(
-            Task(
+        val sleeps = listOf(
+            Sleep(
                 id = "id",
                 title = "title",
                 description = "desc",
                 isCompleted = true,
             )
         )
-        // When the list of tasks is computed with a completed task
-        val result = getActiveAndCompletedStats(tasks)
+        // When the list of tasks is computed with a completed sleep
+        val result = getActiveAndCompletedStats(sleeps)
 
         // Then the percentages are 0 and 100
         assertThat(result.activeTasksPercent, `is`(0f))
@@ -66,15 +66,15 @@ class StatisticsUtilsTest {
     @Test
     fun getActiveAndCompletedStats_both() {
         // Given 3 completed tasks and 2 active tasks
-        val tasks = listOf(
-            Task(id = "1", title = "title", description = "desc", isCompleted = true),
-            Task(id = "2", title = "title", description = "desc", isCompleted = true),
-            Task(id = "3", title = "title", description = "desc", isCompleted = true),
-            Task(id = "4", title = "title", description = "desc", isCompleted = false),
-            Task(id = "5", title = "title", description = "desc", isCompleted = false),
+        val sleeps = listOf(
+            Sleep(id = "1", title = "title", description = "desc", isCompleted = true),
+            Sleep(id = "2", title = "title", description = "desc", isCompleted = true),
+            Sleep(id = "3", title = "title", description = "desc", isCompleted = true),
+            Sleep(id = "4", title = "title", description = "desc", isCompleted = false),
+            Sleep(id = "5", title = "title", description = "desc", isCompleted = false),
         )
         // When the list of tasks is computed
-        val result = getActiveAndCompletedStats(tasks)
+        val result = getActiveAndCompletedStats(sleeps)
 
         // Then the result is 40-60
         assertThat(result.activeTasksPercent, `is`(40f))

@@ -32,7 +32,7 @@ import com.hood.sleepdealer.SleepDealerScreens.TASK_DETAIL_SCREEN
 private object SleepDealerScreens {
     const val TASKS_SCREEN = "tasks"
     const val STATISTICS_SCREEN = "statistics"
-    const val TASK_DETAIL_SCREEN = "task"
+    const val TASK_DETAIL_SCREEN = "sleep"
     const val ADD_EDIT_TASK_SCREEN = "addEditTask"
 }
 

@@ -21,17 +21,17 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface to the data layer.
  */
-interface TaskRepository {
+interface SleepRepository {
 
-    fun getTasksStream(): Flow<List<Task>>
+    fun getTasksStream(): Flow<List<Sleep>>
 
-    suspend fun getTasks(forceUpdate: Boolean = false): List<Task>
+    suspend fun getTasks(forceUpdate: Boolean = false): List<Sleep>
 
     suspend fun refresh()
 
-    fun getTaskStream(taskId: String): Flow<Task?>
+    fun getTaskStream(taskId: String): Flow<Sleep?>
 
-    suspend fun getTask(taskId: String, forceUpdate: Boolean = false): Task?
+    suspend fun getTask(taskId: String, forceUpdate: Boolean = false): Sleep?
 
     suspend fun refreshTask(taskId: String)
 

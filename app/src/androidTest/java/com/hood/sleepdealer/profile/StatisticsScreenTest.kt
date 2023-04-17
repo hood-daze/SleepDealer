@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.statistics
+package com.hood.sleepdealer.profile
 
 import androidx.compose.material.Surface
 import androidx.compose.ui.test.assertIsDisplayed
@@ -24,7 +24,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.hood.sleepdealer.HiltTestActivity
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -53,7 +53,7 @@ class StatisticsScreenTest {
     private val activity get() = composeTestRule.activity
 
     @Inject
-    lateinit var repository: TaskRepository
+    lateinit var repository: SleepRepository
 
     @Before
     fun setup() {
@@ -73,9 +73,9 @@ class StatisticsScreenTest {
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
-                    StatisticsScreen(
+                    ProfileScreen(
                         openDrawer = { },
-                        viewModel = StatisticsViewModel(repository)
+                        viewModel = ProfileViewModel(repository)
                     )
                 }
             }

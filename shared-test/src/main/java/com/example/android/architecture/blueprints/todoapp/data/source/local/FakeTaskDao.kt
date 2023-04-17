@@ -34,7 +34,7 @@ class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {
         tasks = initialTasks
     }
 
-    override suspend fun getAll() = tasks ?: throw Exception("Task list is null")
+    override suspend fun getAll() = tasks ?: throw Exception("Sleep list is null")
 
     override suspend fun getById(taskId: String): LocalTask? = _tasks?.get(taskId)
 

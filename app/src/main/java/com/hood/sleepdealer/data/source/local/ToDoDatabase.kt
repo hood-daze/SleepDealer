@@ -20,7 +20,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 /**
- * The Room Database that contains the Task table.
+ * The Room Database that contains the Sleep table.
  *
  * Note that exportSchema should be true in production databases.
  */

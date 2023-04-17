@@ -22,7 +22,7 @@ import com.hood.sleepdealer.data.source.network.NetworkTask
 class FakeNetworkDataSource(
     var tasks: MutableList<NetworkTask>? = mutableListOf()
 ) : NetworkDataSource {
-    override suspend fun loadTasks() = tasks ?: throw Exception("Task list is null")
+    override suspend fun loadTasks() = tasks ?: throw Exception("Sleep list is null")
 
     override suspend fun saveTasks(tasks: List<NetworkTask>) {
         this.tasks = tasks.toMutableList()

@@ -31,19 +31,19 @@ import org.junit.Test
  * Unit tests for the implementation of the in-memory repository with cache.
  */
 @ExperimentalCoroutinesApi
-class DefaultTaskRepositoryTest {
+class DefaultSleepRepositoryTest {
 
-    private val task1 = Task(id = "1", title = "Title1", description = "Description1")
-    private val task2 = Task(id = "2", title = "Title2", description = "Description2")
-    private val task3 = Task(id = "3", title = "Title3", description = "Description3")
+    private val sleep1 = Sleep(id = "1", title = "Title1", description = "Description1")
+    private val sleep2 = Sleep(id = "2", title = "Title2", description = "Description2")
+    private val sleep3 = Sleep(id = "3", title = "Title3", description = "Description3")
 
     private val newTaskTitle = "Title new"
     private val newTaskDescription = "Description new"
-    private val newTask = Task(id = "new", title = newTaskTitle, description = newTaskDescription)
-    private val newTasks = listOf(newTask)
+    private val newSleep = Sleep(id = "new", title = newTaskTitle, description = newTaskDescription)
+    private val newTasks = listOf(newSleep)
 
-    private val networkTasks = listOf(task1, task2).toNetwork()
-    private val localTasks = listOf(task3.toLocal())
+    private val networkTasks = listOf(sleep1, sleep2).toNetwork()
+    private val localTasks = listOf(sleep3.toLocal())
 
     // Test dependencies
     private lateinit var networkDataSource: FakeNetworkDataSource
@@ -53,7 +53,7 @@ class DefaultTaskRepositoryTest {
     private var testScope = TestScope(testDispatcher)
 
     // Class under test
-    private lateinit var taskRepository: DefaultTaskRepository
+    private lateinit var taskRepository: DefaultSleepRepository
 
     @ExperimentalCoroutinesApi
     @Before
@@ -61,7 +61,7 @@ class DefaultTaskRepositoryTest {
         networkDataSource = FakeNetworkDataSource(networkTasks.toMutableList())
         localDataSource = FakeTaskDao(localTasks)
         // Get a reference to the class under test
-        taskRepository = DefaultTaskRepository(
+        taskRepository = DefaultSleepRepository(
             networkDataSource = networkDataSource,
             localDataSource = localDataSource,
             dispatcher = testDispatcher,
@@ -105,10 +105,10 @@ class DefaultTaskRepositoryTest {
 
     @Test
     fun saveTask_savesToLocalAndRemote() = testScope.runTest {
-        // When a task is saved to the tasks repository
-        val newTaskId = taskRepository.createTask(newTask.title, newTask.description)
+        // When a sleep is saved to the tasks repository
+        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
 
-        // Then the remote and local sources contain the new task
+        // Then the remote and local sources contain the new sleep
         assertThat(networkDataSource.tasks?.map { it.id }?.contains(newTaskId))
         assertThat(localDataSource.tasks?.map { it.id }?.contains(newTaskId))
     }
@@ -176,8 +176,8 @@ class DefaultTaskRepositoryTest {
 
     @Test
     fun completeTask_completesTaskToServiceAPIUpdatesCache() = testScope.runTest {
-        // Save a task
-        val newTaskId = taskRepository.createTask(newTask.title, newTask.description)
+        // Save a sleep
+        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
 
         // Make sure it's active
         assertThat(taskRepository.getTask(newTaskId)?.isCompleted).isFalse()
@@ -191,8 +191,8 @@ class DefaultTaskRepositoryTest {
 
     @Test
     fun completeTask_activeTaskToServiceAPIUpdatesCache() = testScope.runTest {
-        // Save a task
-        val newTaskId = taskRepository.createTask(newTask.title, newTask.description)
+        // Save a sleep
+        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
         taskRepository.completeTask(newTaskId)
 
         // Make sure it's completed
@@ -207,15 +207,15 @@ class DefaultTaskRepositoryTest {
 
     @Test
     fun getTask_repositoryCachesAfterFirstApiCall() = testScope.runTest {
-        // Obtain a task from the local data source
-        localDataSource = FakeTaskDao(mutableListOf(task1.toLocal()))
-        val initial = taskRepository.getTask(task1.id)
+        // Obtain a sleep from the local data source
+        localDataSource = FakeTaskDao(mutableListOf(sleep1.toLocal()))
+        val initial = taskRepository.getTask(sleep1.id)
 
         // Change the tasks on the remote
         networkDataSource.tasks = newTasks.toNetwork().toMutableList()
 
-        // Obtain the same task again
-        val second = taskRepository.getTask(task1.id)
+        // Obtain the same sleep again
+        val second = taskRepository.getTask(sleep1.id)
 
         // Initial and second tasks should match because we didn't force a refresh
         assertThat(second).isEqualTo(initial)
@@ -224,32 +224,32 @@ class DefaultTaskRepositoryTest {
     @Test
     fun getTask_forceRefresh() = testScope.runTest {
         // Trigger the repository to load data, which loads from remote and caches
-        networkDataSource.tasks = mutableListOf(task1.toNetwork())
-        val task1FirstTime = taskRepository.getTask(task1.id, forceUpdate = true)
-        assertThat(task1FirstTime?.id).isEqualTo(task1.id)
+        networkDataSource.tasks = mutableListOf(sleep1.toNetwork())
+        val task1FirstTime = taskRepository.getTask(sleep1.id, forceUpdate = true)
+        assertThat(task1FirstTime?.id).isEqualTo(sleep1.id)
 
-        // Configure the remote data source to return a different task
-        networkDataSource.tasks = mutableListOf(task2.toNetwork())
+        // Configure the remote data source to return a different sleep
+        networkDataSource.tasks = mutableListOf(sleep2.toNetwork())
 
         // Force refresh
-        val task1SecondTime = taskRepository.getTask(task1.id, true)
-        val task2SecondTime = taskRepository.getTask(task2.id, true)
+        val task1SecondTime = taskRepository.getTask(sleep1.id, true)
+        val task2SecondTime = taskRepository.getTask(sleep2.id, true)
 
-        // Only task2 works because task1 does not exist on the remote
+        // Only sleep2 works because sleep1 does not exist on the remote
         assertThat(task1SecondTime).isNull()
-        assertThat(task2SecondTime?.id).isEqualTo(task2.id)
+        assertThat(task2SecondTime?.id).isEqualTo(sleep2.id)
     }
 
     @Test
     fun clearCompletedTasks() = testScope.runTest {
-        val completedTask = task1.copy(isCompleted = true)
-        localDataSource.tasks = listOf(completedTask.toLocal(), task2.toLocal())
+        val completedTask = sleep1.copy(isCompleted = true)
+        localDataSource.tasks = listOf(completedTask.toLocal(), sleep2.toLocal())
         taskRepository.clearCompletedTasks()
 
         val tasks = taskRepository.getTasks(true)
 
         assertThat(tasks).hasSize(1)
-        assertThat(tasks).contains(task2)
+        assertThat(tasks).contains(sleep2)
         assertThat(tasks).doesNotContain(completedTask)
     }
 
@@ -272,14 +272,14 @@ class DefaultTaskRepositoryTest {
     fun deleteSingleTask() = testScope.runTest {
         val initialTasksSize = taskRepository.getTasks(true).size
 
-        // Delete first task
-        taskRepository.deleteTask(task1.id)
+        // Delete first sleep
+        taskRepository.deleteTask(sleep1.id)
 
         // Fetch data again
         val afterDeleteTasks = taskRepository.getTasks(true)
 
-        // Verify only one task was deleted
+        // Verify only one sleep was deleted
         assertThat(afterDeleteTasks.size).isEqualTo(initialTasksSize - 1)
-        assertThat(afterDeleteTasks).doesNotContain(task1)
+        assertThat(afterDeleteTasks).doesNotContain(sleep1)
     }
 }

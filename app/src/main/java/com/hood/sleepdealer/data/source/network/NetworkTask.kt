@@ -17,7 +17,7 @@
 package com.hood.sleepdealer.data.source.network
 
 /**
- * Internal model used to represent a task obtained from the network. This is used inside the data
+ * Internal model used to represent a sleep obtained from the network. This is used inside the data
  * layer only.
  *
  * See ModelMappingExt.kt for mapping functions used to convert this model to other

@@ -95,7 +95,7 @@ private fun AppDrawer(
         )
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_statistics),
-            label = stringResource(id = R.string.statistics_title),
+            label = "プロフィール",
             isSelected = currentRoute == SleepDealerDestinations.STATISTICS_ROUTE,
             action = {
                 navigateToStatistics()

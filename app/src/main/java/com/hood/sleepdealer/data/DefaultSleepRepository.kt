@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Default implementation of [TaskRepository]. Single entry point for managing tasks' data.
+ * Default implementation of [SleepRepository]. Single entry point for managing tasks' data.
  *
  * @param networkDataSource - The network data source
  * @param localDataSource - The local data source
@@ -41,12 +41,12 @@ import kotlinx.coroutines.withContext
  * as sending data to the network.
  */
 @Singleton
-class DefaultTaskRepository @Inject constructor(
+class DefaultSleepRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val localDataSource: TaskDao,
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher,
     @ApplicationScope private val scope: CoroutineScope,
-) : TaskRepository {
+) : SleepRepository {
 
     override suspend fun createTask(title: String, description: String): String {
         // ID creation might be a complex operation so it's executed using the supplied
@@ -54,27 +54,27 @@ class DefaultTaskRepository @Inject constructor(
         val taskId = withContext(dispatcher) {
             UUID.randomUUID().toString()
         }
-        val task = Task(
+        val sleep = Sleep(
             title = title,
             description = description,
             id = taskId,
         )
-        localDataSource.upsert(task.toLocal())
+        localDataSource.upsert(sleep.toLocal())
         saveTasksToNetwork()
         return taskId
     }
 
     override suspend fun updateTask(taskId: String, title: String, description: String) {
-        val task = getTask(taskId)?.copy(
+        val sleep = getTask(taskId)?.copy(
             title = title,
             description = description
-        ) ?: throw Exception("Task (id $taskId) not found")
+        ) ?: throw Exception("Sleep (id $taskId) not found")
 
-        localDataSource.upsert(task.toLocal())
+        localDataSource.upsert(sleep.toLocal())
         saveTasksToNetwork()
     }
 
-    override suspend fun getTasks(forceUpdate: Boolean): List<Task> {
+    override suspend fun getTasks(forceUpdate: Boolean): List<Sleep> {
         if (forceUpdate) {
             refresh()
         }
@@ -83,7 +83,7 @@ class DefaultTaskRepository @Inject constructor(
         }
     }
 
-    override fun getTasksStream(): Flow<List<Task>> {
+    override fun getTasksStream(): Flow<List<Sleep>> {
         return localDataSource.observeAll().map { tasks ->
             withContext(dispatcher) {
                 tasks.toExternal()
@@ -95,17 +95,17 @@ class DefaultTaskRepository @Inject constructor(
         refresh()
     }
 
-    override fun getTaskStream(taskId: String): Flow<Task?> {
+    override fun getTaskStream(taskId: String): Flow<Sleep?> {
         return localDataSource.observeById(taskId).map { it.toExternal() }
     }
 
     /**
-     * Get a Task with the given ID. Will return null if the task cannot be found.
+     * Get a Sleep with the given ID. Will return null if the sleep cannot be found.
      *
-     * @param taskId - The ID of the task
-     * @param forceUpdate - true if the task should be updated from the network data source first.
+     * @param taskId - The ID of the sleep
+     * @param forceUpdate - true if the sleep should be updated from the network data source first.
      */
-    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Task? {
+    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Sleep? {
         if (forceUpdate) {
             refresh()
         }

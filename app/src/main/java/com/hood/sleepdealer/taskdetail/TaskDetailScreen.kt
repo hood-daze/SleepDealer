@@ -45,7 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.Task
+import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.TaskDetailTopAppBar
 import com.google.accompanist.appcompattheme.AppCompatTheme
@@ -76,8 +76,8 @@ fun TaskDetailScreen(
 
         EditTaskContent(
             loading = uiState.isLoading,
-            empty = uiState.task == null && !uiState.isLoading,
-            task = uiState.task,
+            empty = uiState.sleep == null && !uiState.isLoading,
+            sleep = uiState.sleep,
             onRefresh = viewModel::refresh,
             onTaskCheck = viewModel::setCompleted,
             modifier = Modifier.padding(paddingValues)
@@ -92,7 +92,7 @@ fun TaskDetailScreen(
             }
         }
 
-        // Check if the task is deleted and call onDeleteTask
+        // Check if the sleep is deleted and call onDeleteTask
         LaunchedEffect(uiState.isTaskDeleted) {
             if (uiState.isTaskDeleted) {
                 onDeleteTask()
@@ -105,7 +105,7 @@ fun TaskDetailScreen(
 private fun EditTaskContent(
     loading: Boolean,
     empty: Boolean,
-    task: Task?,
+    sleep: Sleep?,
     onTaskCheck: (Boolean) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
@@ -136,11 +136,11 @@ private fun EditTaskContent(
                     .then(screenPadding),
 
             ) {
-                if (task != null) {
-                    Checkbox(task.isCompleted, onTaskCheck)
+                if (sleep != null) {
+                    Checkbox(sleep.isCompleted, onTaskCheck)
                     Column {
-                        Text(text = task.title, style = MaterialTheme.typography.h6)
-                        Text(text = task.description, style = MaterialTheme.typography.body1)
+                        Text(text = sleep.title, style = MaterialTheme.typography.h6)
+                        Text(text = sleep.description, style = MaterialTheme.typography.body1)
                     }
                 }
             }
@@ -156,7 +156,7 @@ private fun EditTaskContentPreview() {
             EditTaskContent(
                 loading = false,
                 empty = false,
-                Task(
+                Sleep(
                     title = "Title",
                     description = "Description",
                     isCompleted = false,
@@ -177,7 +177,7 @@ private fun EditTaskContentTaskCompletedPreview() {
             EditTaskContent(
                 loading = false,
                 empty = false,
-                Task(
+                Sleep(
                     title = "Title",
                     description = "Description",
                     isCompleted = false,
@@ -198,7 +198,7 @@ private fun EditTaskContentEmptyPreview() {
             EditTaskContent(
                 loading = false,
                 empty = true,
-                Task(
+                Sleep(
                     title = "Title",
                     description = "Description",
                     isCompleted = false,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.test.assertIsDisplayed
@@ -30,7 +30,7 @@ import androidx.test.filters.LargeTest
 import com.hood.sleepdealer.HiltTestActivity
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.SleepDealerNavGraph
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -62,7 +62,7 @@ class AppNavigationTest {
     private val activity get() = composeTestRule.activity
 
     @Inject
-    lateinit var taskRepository: TaskRepository
+    lateinit var sleepRepository: SleepRepository
 
     @Before
     fun init() {
@@ -130,22 +130,22 @@ class AppNavigationTest {
     @Test
     fun taskDetailScreen_doubleUIBackButton() = runTest {
         val taskName = "UI <- button"
-        taskRepository.createTask(taskName, "Description")
+        sleepRepository.createTask(taskName, "Description")
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskName).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskName).performClick()
 
-        // Click on the edit task button
+        // Click on the edit sleep button
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.edit_task))
             .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.edit_task))
             .performClick()
 
-        // Confirm that if we click "<-" once, we end up back at the task details page
+        // Confirm that if we click "<-" once, we end up back at the sleep details page
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_back))
             .performClick()
         composeTestRule.onNodeWithText(taskName).assertIsDisplayed()
@@ -159,18 +159,18 @@ class AppNavigationTest {
     @Test
     fun taskDetailScreen_doubleBackButton() = runTest {
         val taskName = "Back button"
-        taskRepository.createTask(taskName, "Description")
+        sleepRepository.createTask(taskName, "Description")
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(taskName).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskName).performClick()
-        // Click on the edit task button
+        // Click on the edit sleep button
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.edit_task))
             .performClick()
 
-        // Confirm that if we click back once, we end up back at the task details page
+        // Confirm that if we click back once, we end up back at the sleep details page
         pressBack()
         composeTestRule.onNodeWithText(taskName).assertIsDisplayed()
 

@@ -16,9 +16,8 @@
 
 package com.hood.sleepdealer.di
 
-import com.hood.sleepdealer.data.FakeTaskRepository
-import com.hood.sleepdealer.data.TaskRepository
-import com.hood.sleepdealer.di.RepositoryModule
+import com.hood.sleepdealer.data.FakeSleepRepository
+import com.hood.sleepdealer.data.SleepRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -34,7 +33,7 @@ object RepositoryTestModule {
 
     @Singleton
     @Provides
-    fun provideTasksRepository(): TaskRepository {
-        return FakeTaskRepository()
+    fun provideTasksRepository(): SleepRepository {
+        return FakeSleepRepository()
     }
 }

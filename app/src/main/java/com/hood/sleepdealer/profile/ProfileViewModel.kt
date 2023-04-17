@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.profile
+
+import androidx.lifecycle.ViewModel
+import com.hood.sleepdealer.data.SleepRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
- * Used with the filter spinner in the tasks list.
+ * ViewModel for the statistics screen.
  */
-enum class TasksFilterType {
-    /**
-     * Do not filter tasks.
-     */
-    ALL_TASKS,
-
-    /**
-     * Filters only the active (not completed yet) tasks.
-     */
-    ACTIVE_TASKS,
-
-    /**
-     * Filters only the completed tasks.
-     */
-    COMPLETED_TASKS
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val sleepRepository: SleepRepository
+) : ViewModel() {
 }

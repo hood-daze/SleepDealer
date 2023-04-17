@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.statistics
+package com.hood.sleepdealer.profile
 
 import com.hood.sleepdealer.MainCoroutineRule
-import com.hood.sleepdealer.data.FakeTaskRepository
-import com.hood.sleepdealer.data.Task
+import com.hood.sleepdealer.data.FakeSleepRepository
+import com.hood.sleepdealer.data.Sleep
 import com.google.common.truth.Truth.assertThat
-import com.hood.sleepdealer.statistics.StatisticsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -34,16 +33,16 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Unit tests for the implementation of [StatisticsViewModel]
+ * Unit tests for the implementation of [ProfileViewModel]
  */
 @ExperimentalCoroutinesApi
-class StatisticsViewModelTest {
+class ProfileViewModelTest {
 
     // Subject under test
-    private lateinit var statisticsViewModel: StatisticsViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
     // Use a fake repository to be injected into the viewmodel
-    private lateinit var tasksRepository: FakeTaskRepository
+    private lateinit var tasksRepository: FakeSleepRepository
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -52,30 +51,30 @@ class StatisticsViewModelTest {
 
     @Before
     fun setupStatisticsViewModel() {
-        tasksRepository = FakeTaskRepository()
-        statisticsViewModel = StatisticsViewModel(tasksRepository)
+        tasksRepository = FakeSleepRepository()
+        profileViewModel = ProfileViewModel(tasksRepository)
     }
 
     @Test
     fun loadEmptyTasksFromRepository_EmptyResults() = runTest {
-        // Given an initialized StatisticsViewModel with no tasks
+        // Given an initialized ProfileViewModel with no tasks
 
         // Then the results are empty
-        val uiState = statisticsViewModel.uiState.first()
+        val uiState = profileViewModel.uiState.first()
         assertThat(uiState.isEmpty).isTrue()
     }
 
     @Test
     fun loadNonEmptyTasksFromRepository_NonEmptyResults() = runTest {
         // We initialise the tasks to 3, with one active and two completed
-        val task1 = Task(id = "1", title = "Title1", description = "Desc1")
-        val task2 = Task(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
-        val task3 = Task(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
-        val task4 = Task(id = "4", title = "Title4", description = "Desc4", isCompleted = true)
-        tasksRepository.addTasks(task1, task2, task3, task4)
+        val sleep1 = Sleep(id = "1", title = "Title1", description = "Desc1")
+        val sleep2 = Sleep(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
+        val sleep3 = Sleep(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
+        val sleep4 = Sleep(id = "4", title = "Title4", description = "Desc4", isCompleted = true)
+        tasksRepository.addTasks(sleep1, sleep2, sleep3, sleep4)
 
         // Then the results are not empty
-        val uiState = statisticsViewModel.uiState.first()
+        val uiState = profileViewModel.uiState.first()
         assertThat(uiState.isEmpty).isFalse()
         assertThat(uiState.activeTasksPercent).isEqualTo(25f)
         assertThat(uiState.completedTasksPercent).isEqualTo(75f)
@@ -89,7 +88,7 @@ class StatisticsViewModelTest {
 
         var isLoading: Boolean? = true
         val job = launch {
-            statisticsViewModel.uiState.collect {
+            profileViewModel.uiState.collect {
                 isLoading = it.isLoading
             }
         }

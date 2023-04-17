@@ -23,29 +23,29 @@ import com.hood.sleepdealer.data.source.network.TaskStatus
 /**
  * Data model mapping extension functions. There are three model types:
  *
- * - Task: External model exposed to other layers in the architecture.
+ * - Sleep: External model exposed to other layers in the architecture.
  * Obtained using `toExternal`.
  *
- * - NetworkTask: Internal model used to represent a task from the network. Obtained using
+ * - NetworkTask: Internal model used to represent a sleep from the network. Obtained using
  * `toNetwork`.
  *
- * - LocalTask: Internal model used to represent a task stored locally in a database. Obtained
+ * - LocalTask: Internal model used to represent a sleep stored locally in a database. Obtained
  * using `toLocal`.
  *
  */
 
 // External to local
-fun Task.toLocal() = LocalTask(
+fun Sleep.toLocal() = LocalTask(
     id = id,
     title = title,
     description = description,
     isCompleted = isCompleted,
 )
 
-fun List<Task>.toLocal() = map(Task::toLocal)
+fun List<Sleep>.toLocal() = map(Sleep::toLocal)
 
 // Local to External
-fun LocalTask.toExternal() = Task(
+fun LocalTask.toExternal() = Sleep(
     id = id,
     title = title,
     description = description,
@@ -80,10 +80,10 @@ fun LocalTask.toNetwork() = NetworkTask(
 fun List<LocalTask>.toNetwork() = map(LocalTask::toNetwork)
 
 // External to Network
-fun Task.toNetwork() = toLocal().toNetwork()
+fun Sleep.toNetwork() = toLocal().toNetwork()
 
 @JvmName("externalToNetwork")
-fun List<Task>.toNetwork() = map(Task::toNetwork)
+fun List<Sleep>.toNetwork() = map(Sleep::toNetwork)
 
 // Network to External
 fun NetworkTask.toExternal() = toLocal().toExternal()

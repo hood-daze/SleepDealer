@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Surface
@@ -29,7 +29,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.hood.sleepdealer.HiltTestActivity
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -42,7 +42,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration test for the Task List screen.
+ * Integration test for the Sleep List screen.
  */
 // TODO - Move to the sharedTest folder when https://issuetracker.google.com/224974381 is fixed
 @RunWith(AndroidJUnit4::class)
@@ -61,7 +61,7 @@ class TasksScreenTest {
     private val activity get() = composeTestRule.activity
 
     @Inject
-    lateinit var repository: TaskRepository
+    lateinit var repository: SleepRepository
 
     @Before
     fun init() {
@@ -70,13 +70,13 @@ class TasksScreenTest {
 
     @Test
     fun displayTask_whenRepositoryHasData() = runTest {
-        // GIVEN - One task already in the repository
+        // GIVEN - One sleep already in the repository
         repository.createTask("TITLE1", "DESCRIPTION1")
 
         // WHEN - On startup
         setContent()
 
-        // THEN - Verify task is displayed on screen
+        // THEN - Verify sleep is displayed on screen
         composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
     }
 
@@ -119,10 +119,10 @@ class TasksScreenTest {
 
         setContent()
 
-        // Mark the task as complete
+        // Mark the sleep as complete
         composeTestRule.onNode(isToggleable()).performClick()
 
-        // Verify task is shown as complete
+        // Verify sleep is shown as complete
         openFilterAndSelectOption(R.string.nav_all)
         composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
         openFilterAndSelectOption(R.string.nav_active)
@@ -139,10 +139,10 @@ class TasksScreenTest {
 
         setContent()
 
-        // Mark the task as active
+        // Mark the sleep as active
         composeTestRule.onNode(isToggleable()).performClick()
 
-        // Verify task is shown as active
+        // Verify sleep is shown as active
         openFilterAndSelectOption(R.string.nav_all)
         composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
         openFilterAndSelectOption(R.string.nav_active)
@@ -153,7 +153,7 @@ class TasksScreenTest {
 
     @Test
     fun showAllTasks() = runTest {
-        // Add one active task and one completed task
+        // Add one active sleep and one completed sleep
         repository.apply {
             createTask("TITLE1", "DESCRIPTION1")
             createTask("TITLE2", "DESCRIPTION2").also { completeTask(it) }
@@ -169,7 +169,7 @@ class TasksScreenTest {
 
     @Test
     fun showActiveTasks() = runTest {
-        // Add 2 active tasks and one completed task
+        // Add 2 active tasks and one completed sleep
         repository.apply {
             createTask("TITLE1", "DESCRIPTION1")
             createTask("TITLE2", "DESCRIPTION2")
@@ -178,7 +178,7 @@ class TasksScreenTest {
 
         setContent()
 
-        // Verify that the active tasks (but not the completed task) are shown
+        // Verify that the active tasks (but not the completed sleep) are shown
         openFilterAndSelectOption(R.string.nav_active)
         composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
         composeTestRule.onNodeWithText("TITLE2").assertIsDisplayed()
@@ -187,7 +187,7 @@ class TasksScreenTest {
 
     @Test
     fun showCompletedTasks() = runTest {
-        // Add one active task and 2 completed tasks
+        // Add one active sleep and 2 completed tasks
         repository.apply {
             createTask("TITLE1", "DESCRIPTION1")
             createTask("TITLE2", "DESCRIPTION2").also { completeTask(it) }
@@ -196,7 +196,7 @@ class TasksScreenTest {
 
         setContent()
 
-        // Verify that the completed tasks (but not the active task) are shown
+        // Verify that the completed tasks (but not the active sleep) are shown
         openFilterAndSelectOption(R.string.nav_completed)
         composeTestRule.onNodeWithText("TITLE1").assertDoesNotExist()
         composeTestRule.onNodeWithText("TITLE2").assertIsDisplayed()
@@ -205,7 +205,7 @@ class TasksScreenTest {
 
     @Test
     fun clearCompletedTasks() = runTest {
-        // Add one active task and one completed task
+        // Add one active sleep and one completed sleep
         repository.apply {
             createTask("TITLE1", "DESCRIPTION1")
             createTask("TITLE2", "DESCRIPTION2").also { completeTask(it) }
@@ -220,7 +220,7 @@ class TasksScreenTest {
         composeTestRule.onNodeWithText(activity.getString(R.string.menu_clear)).performClick()
 
         openFilterAndSelectOption(R.string.nav_all)
-        // Verify that only the active task is shown
+        // Verify that only the active sleep is shown
         composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
         composeTestRule.onNodeWithText("TITLE2").assertDoesNotExist()
     }
@@ -257,8 +257,8 @@ class TasksScreenTest {
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
-                    TasksScreen(
-                        viewModel = TasksViewModel(repository, SavedStateHandle()),
+                    SleepsScreen(
+                        viewModel = SleepsViewModel(repository, SavedStateHandle()),
                         userMessage = R.string.successfully_added_task_message,
                         onUserMessageDisplayed = { },
                         onAddTask = { },

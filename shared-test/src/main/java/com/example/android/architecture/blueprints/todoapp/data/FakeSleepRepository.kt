@@ -17,8 +17,6 @@
 package com.hood.sleepdealer.data
 
 import androidx.annotation.VisibleForTesting
-import com.hood.sleepdealer.data.Task
-import com.hood.sleepdealer.data.TaskRepository
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,14 +29,14 @@ import kotlinx.coroutines.flow.update
 /**
  * Implementation of a tasks repository with static access to the data for easy testing.
  */
-class FakeTaskRepository : TaskRepository {
+class FakeSleepRepository : SleepRepository {
 
     private var shouldThrowError = false
 
-    private val _savedTasks = MutableStateFlow(LinkedHashMap<String, Task>())
-    val savedTasks: StateFlow<LinkedHashMap<String, Task>> = _savedTasks.asStateFlow()
+    private val _savedTasks = MutableStateFlow(LinkedHashMap<String, Sleep>())
+    val savedTasks: StateFlow<LinkedHashMap<String, Sleep>> = _savedTasks.asStateFlow()
 
-    private val observableTasks: Flow<List<Task>> = savedTasks.map {
+    private val observableTasks: Flow<List<Sleep>> = savedTasks.map {
         if (shouldThrowError) {
             throw Exception("Test exception")
         } else {
@@ -60,28 +58,28 @@ class FakeTaskRepository : TaskRepository {
 
     override suspend fun createTask(title: String, description: String): String {
         val taskId = generateTaskId()
-        Task(title = title, description = description, id = taskId).also {
+        Sleep(title = title, description = description, id = taskId).also {
             saveTask(it)
         }
         return taskId
     }
 
-    override fun getTasksStream(): Flow<List<Task>> = observableTasks
+    override fun getTasksStream(): Flow<List<Sleep>> = observableTasks
 
-    override fun getTaskStream(taskId: String): Flow<Task?> {
+    override fun getTaskStream(taskId: String): Flow<Sleep?> {
         return observableTasks.map { tasks ->
             return@map tasks.firstOrNull { it.id == taskId }
         }
     }
 
-    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Task? {
+    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Sleep? {
         if (shouldThrowError) {
             throw Exception("Test exception")
         }
         return savedTasks.value[taskId]
     }
 
-    override suspend fun getTasks(forceUpdate: Boolean): List<Task> {
+    override suspend fun getTasks(forceUpdate: Boolean): List<Sleep> {
         if (shouldThrowError) {
             throw Exception("Test exception")
         }
@@ -89,18 +87,18 @@ class FakeTaskRepository : TaskRepository {
     }
 
     override suspend fun updateTask(taskId: String, title: String, description: String) {
-        val updatedTask = _savedTasks.value[taskId]?.copy(
+        val updatedSleep = _savedTasks.value[taskId]?.copy(
             title = title,
             description = description
-        ) ?: throw Exception("Task (id $taskId) not found")
+        ) ?: throw Exception("Sleep (id $taskId) not found")
 
-        saveTask(updatedTask)
+        saveTask(updatedSleep)
     }
 
-    private fun saveTask(task: Task) {
+    private fun saveTask(sleep: Sleep) {
         _savedTasks.update { tasks ->
-            val newTasks = LinkedHashMap<String, Task>(tasks)
-            newTasks[task.id] = task
+            val newTasks = LinkedHashMap<String, Sleep>(tasks)
+            newTasks[sleep.id] = sleep
             newTasks
         }
     }
@@ -121,13 +119,13 @@ class FakeTaskRepository : TaskRepository {
         _savedTasks.update { tasks ->
             tasks.filterValues {
                 !it.isCompleted
-            } as LinkedHashMap<String, Task>
+            } as LinkedHashMap<String, Sleep>
         }
     }
 
     override suspend fun deleteTask(taskId: String) {
         _savedTasks.update { tasks ->
-            val newTasks = LinkedHashMap<String, Task>(tasks)
+            val newTasks = LinkedHashMap<String, Sleep>(tasks)
             newTasks.remove(taskId)
             newTasks
         }
@@ -142,10 +140,10 @@ class FakeTaskRepository : TaskRepository {
     private fun generateTaskId() = UUID.randomUUID().toString()
 
     @VisibleForTesting
-    fun addTasks(vararg tasks: Task) {
+    fun addTasks(vararg sleeps: Sleep) {
         _savedTasks.update { oldTasks ->
-            val newTasks = LinkedHashMap<String, Task>(oldTasks)
-            for (task in tasks) {
+            val newTasks = LinkedHashMap<String, Sleep>(oldTasks)
+            for (task in sleeps) {
                 newTasks[task.id] = task
             }
             newTasks

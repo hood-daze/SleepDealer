@@ -20,8 +20,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.hood.sleepdealer.MainCoroutineRule
 import com.hood.sleepdealer.R.string
 import com.hood.sleepdealer.SleepDealerDestinationsArgs
-import com.hood.sleepdealer.data.FakeTaskRepository
-import com.hood.sleepdealer.data.Task
+import com.hood.sleepdealer.data.FakeSleepRepository
+import com.hood.sleepdealer.data.Sleep
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,8 +43,8 @@ class AddEditTaskViewModelTest {
     private lateinit var addEditTaskViewModel: AddEditTaskViewModel
 
     // Use a fake repository to be injected into the viewmodel
-    private lateinit var tasksRepository: FakeTaskRepository
-    private val task = Task(title = "Title1", description = "Description1", id = "0")
+    private lateinit var tasksRepository: FakeSleepRepository
+    private val sleep = Sleep(title = "Title1", description = "Description1", id = "0")
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -54,8 +54,8 @@ class AddEditTaskViewModelTest {
     @Before
     fun setupViewModel() {
         // We initialise the repository with no tasks
-        tasksRepository = FakeTaskRepository().apply {
-            addTasks(task)
+        tasksRepository = FakeSleepRepository().apply {
+            addTasks(sleep)
         }
     }
 
@@ -66,8 +66,8 @@ class AddEditTaskViewModelTest {
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
 
-        val newTitle = "New Task Title"
-        val newDescription = "Some Task Description"
+        val newTitle = "New Sleep Title"
+        val newDescription = "Some Sleep Description"
         addEditTaskViewModel.apply {
             updateTitle(newTitle)
             updateDescription(newDescription)
@@ -76,7 +76,7 @@ class AddEditTaskViewModelTest {
 
         val newTask = tasksRepository.savedTasks.value.values.first()
 
-        // Then a task is saved in the repository and the view updated
+        // Then a sleep is saved in the repository and the view updated
         assertThat(newTask.title).isEqualTo(newTitle)
         assertThat(newTask.description).isEqualTo(newDescription)
     }
@@ -108,13 +108,13 @@ class AddEditTaskViewModelTest {
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
 
-        // Add task to repository
-        tasksRepository.addTasks(task)
+        // Add sleep to repository
+        tasksRepository.addTasks(sleep)
 
-        // Verify a task is loaded
+        // Verify a sleep is loaded
         val uiState = addEditTaskViewModel.uiState.value
-        assertThat(uiState.title).isEqualTo(task.title)
-        assertThat(uiState.description).isEqualTo(task.description)
+        assertThat(uiState.title).isEqualTo(sleep.title)
+        assertThat(uiState.description).isEqualTo(sleep.description)
         assertThat(uiState.isLoading).isFalse()
     }
 
@@ -125,7 +125,7 @@ class AddEditTaskViewModelTest {
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
 
-        saveTaskAndAssertUserMessage("", "Some Task Description")
+        saveTaskAndAssertUserMessage("", "Some Sleep Description")
     }
 
     @Test
@@ -154,7 +154,7 @@ class AddEditTaskViewModelTest {
             updateDescription(description)
         }
 
-        // When saving an incomplete task
+        // When saving an incomplete sleep
         addEditTaskViewModel.saveTask()
 
         assertThat(

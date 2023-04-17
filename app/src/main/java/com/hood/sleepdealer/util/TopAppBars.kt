@@ -64,7 +64,7 @@ fun TasksTopAppBar(
 @Composable
 fun StatisticsTopAppBar(openDrawer: () -> Unit) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.statistics_title)) },
+        title = { Text(text = "プロフィール") },
         navigationIcon = {
             IconButton(onClick = openDrawer) {
                 Icon(Icons.Filled.Menu, stringResource(id = R.string.open_drawer))

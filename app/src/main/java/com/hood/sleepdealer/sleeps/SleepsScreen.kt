@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -56,24 +56,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.Task
-import com.hood.sleepdealer.tasks.TasksFilterType.ACTIVE_TASKS
-import com.hood.sleepdealer.tasks.TasksFilterType.ALL_TASKS
-import com.hood.sleepdealer.tasks.TasksFilterType.COMPLETED_TASKS
+import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.TasksTopAppBar
 import com.google.accompanist.appcompattheme.AppCompatTheme
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun TasksScreen(
+fun SleepsScreen(
     @StringRes userMessage: Int,
     onAddTask: () -> Unit,
-    onTaskClick: (Task) -> Unit,
+    onTaskClick: (Sleep) -> Unit,
     onUserMessageDisplayed: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TasksViewModel = hiltViewModel(),
+    viewModel: SleepsViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     Scaffold(
@@ -94,13 +91,12 @@ fun TasksScreen(
 
         TasksContent(
             loading = uiState.isLoading,
-            tasks = uiState.items,
+            sleeps = uiState.items,
             currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
             noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
             noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,
             onRefresh = viewModel::refresh,
             onTaskClick = onTaskClick,
-            onTaskCheckedChange = viewModel::completeTask,
             modifier = Modifier.padding(paddingValues)
         )
 
@@ -127,18 +123,17 @@ fun TasksScreen(
 @Composable
 private fun TasksContent(
     loading: Boolean,
-    tasks: List<Task>,
+    sleeps: List<Sleep>,
     @StringRes currentFilteringLabel: Int,
     @StringRes noTasksLabel: Int,
     @DrawableRes noTasksIconRes: Int,
     onRefresh: () -> Unit,
-    onTaskClick: (Task) -> Unit,
-    onTaskCheckedChange: (Task, Boolean) -> Unit,
+    onTaskClick: (Sleep) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LoadingContent(
         loading = loading,
-        empty = tasks.isEmpty() && !loading,
+        empty = sleeps.isEmpty() && !loading,
         emptyContent = { TasksEmptyContent(noTasksLabel, noTasksIconRes, modifier) },
         onRefresh = onRefresh
     ) {
@@ -156,11 +151,10 @@ private fun TasksContent(
                 style = MaterialTheme.typography.h6
             )
             LazyColumn {
-                items(tasks) { task ->
+                items(sleeps) { task ->
                     TaskItem(
-                        task = task,
+                        sleep = task,
                         onTaskClick = onTaskClick,
-                        onCheckedChange = { onTaskCheckedChange(task, it) }
                     )
                 }
             }
@@ -170,9 +164,8 @@ private fun TasksContent(
 
 @Composable
 private fun TaskItem(
-    task: Task,
-    onCheckedChange: (Boolean) -> Unit,
-    onTaskClick: (Task) -> Unit
+    sleep: Sleep,
+    onTaskClick: (Sleep) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -182,23 +175,14 @@ private fun TaskItem(
                 horizontal = dimensionResource(id = R.dimen.horizontal_margin),
                 vertical = dimensionResource(id = R.dimen.list_item_padding),
             )
-            .clickable { onTaskClick(task) }
+            .clickable { onTaskClick(sleep) }
     ) {
-        Checkbox(
-            checked = task.isCompleted,
-            onCheckedChange = onCheckedChange
-        )
         Text(
-            text = task.titleForList,
+            text = sleep.titleForList,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(
                 start = dimensionResource(id = R.dimen.horizontal_margin)
-            ),
-            textDecoration = if (task.isCompleted) {
-                TextDecoration.LineThrough
-            } else {
-                null
-            }
+            )
         )
     }
 }
@@ -230,32 +214,32 @@ private fun TasksContentPreview() {
         Surface {
             TasksContent(
                 loading = false,
-                tasks = listOf(
-                    Task(
+                sleeps = listOf(
+                    Sleep(
                         title = "Title 1",
                         description = "Description 1",
                         isCompleted = false,
                         id = "ID 1"
                     ),
-                    Task(
+                    Sleep(
                         title = "Title 2",
                         description = "Description 2",
                         isCompleted = true,
                         id = "ID 2"
                     ),
-                    Task(
+                    Sleep(
                         title = "Title 3",
                         description = "Description 3",
                         isCompleted = true,
                         id = "ID 3"
                     ),
-                    Task(
+                    Sleep(
                         title = "Title 4",
                         description = "Description 4",
                         isCompleted = false,
                         id = "ID 4"
                     ),
-                    Task(
+                    Sleep(
                         title = "Title 5",
                         description = "Description 5",
                         isCompleted = true,
@@ -267,7 +251,6 @@ private fun TasksContentPreview() {
                 noTasksIconRes = R.drawable.logo_no_fill,
                 onRefresh = { },
                 onTaskClick = { },
-                onTaskCheckedChange = { _, _ -> },
             )
         }
     }
@@ -280,13 +263,12 @@ private fun TasksContentEmptyPreview() {
         Surface {
             TasksContent(
                 loading = false,
-                tasks = emptyList(),
+                sleeps = emptyList(),
                 currentFilteringLabel = R.string.label_all,
                 noTasksLabel = R.string.no_tasks_all,
                 noTasksIconRes = R.drawable.logo_no_fill,
                 onRefresh = { },
                 onTaskClick = { },
-                onTaskCheckedChange = { _, _ -> },
             )
         }
     }
@@ -311,13 +293,12 @@ private fun TaskItemPreview() {
     AppCompatTheme {
         Surface {
             TaskItem(
-                task = Task(
+                sleep = Sleep(
                     title = "Title",
                     description = "Description",
                     id = "ID"
                 ),
-                onTaskClick = { },
-                onCheckedChange = { }
+                onTaskClick = { }
             )
         }
     }
@@ -329,14 +310,13 @@ private fun TaskItemCompletedPreview() {
     AppCompatTheme {
         Surface {
             TaskItem(
-                task = Task(
+                sleep = Sleep(
                     title = "Title",
                     description = "Description",
                     isCompleted = true,
                     id = "ID"
                 ),
-                onTaskClick = { },
-                onCheckedChange = { }
+                onTaskClick = { }
             )
         }
     }

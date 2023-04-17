@@ -17,17 +17,17 @@
 package com.hood.sleepdealer.data
 
 /**
- * Immutable model class for a Task.
+ * Immutable model class for a Sleep.
  *
- * @param title title of the task
- * @param description description of the task
- * @param isCompleted whether or not this task is completed
- * @param id id of the task
+ * @param title title of the sleep
+ * @param description description of the sleep
+ * @param isCompleted whether or not this sleep is completed
+ * @param id id of the sleep
  *
  * TODO: The constructor of this class should be `internal` but it is used in previews and tests
  *  so that's not possible until those previews/tests are refactored.
  */
-data class Task(
+data class Sleep(
     val title: String = "",
     val description: String = "",
     val isCompleted: Boolean = false,

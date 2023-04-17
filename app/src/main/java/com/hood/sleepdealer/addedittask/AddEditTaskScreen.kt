@@ -84,7 +84,7 @@ fun AddEditTaskScreen(
             modifier = Modifier.padding(paddingValues)
         )
 
-        // Check if the task is saved and call onTaskUpdate event
+        // Check if the sleep is saved and call onTaskUpdate event
         LaunchedEffect(uiState.isTaskSaved) {
             if (uiState.isTaskSaved) {
                 onTaskUpdate()

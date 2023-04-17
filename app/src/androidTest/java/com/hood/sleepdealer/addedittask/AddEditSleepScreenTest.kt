@@ -32,10 +32,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.hood.sleepdealer.HiltTestActivity
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
-import com.hood.sleepdealer.addedittask.AddEditTaskScreen
-import com.hood.sleepdealer.addedittask.AddEditTaskViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import javax.inject.Inject
@@ -48,13 +46,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration test for the Add Task screen.
+ * Integration test for the Add Sleep screen.
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-class AddEditTaskScreenTest {
+class AddEditSleepScreenTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -64,13 +62,13 @@ class AddEditTaskScreenTest {
     private val activity get() = composeTestRule.activity
 
     @Inject
-    lateinit var repository: TaskRepository
+    lateinit var repository: SleepRepository
 
     @Before
     fun setup() {
         hiltRule.inject()
 
-        // GIVEN - On the "Add Task" screen.
+        // GIVEN - On the "Add Sleep" screen.
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
@@ -93,7 +91,7 @@ class AddEditTaskScreenTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.cd_save_task))
             .performClick()
 
-        // THEN - Entered Task is still displayed (a correct task would close it).
+        // THEN - Entered Sleep is still displayed (a correct sleep would close it).
         composeTestRule
             .onNodeWithText(activity.getString(R.string.empty_task_message))
             .assertIsDisplayed()
@@ -107,7 +105,7 @@ class AddEditTaskScreenTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.cd_save_task))
             .performClick()
 
-        // THEN - Verify that the repository saved the task
+        // THEN - Verify that the repository saved the sleep
         val tasks = repository.getTasks(true)
         assertEquals(1, tasks.size)
         assertEquals("title", tasks[0].title)

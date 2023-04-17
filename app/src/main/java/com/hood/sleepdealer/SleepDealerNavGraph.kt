@@ -32,14 +32,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.hood.sleepdealer.R
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TASK_ID_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
 import com.hood.sleepdealer.addedittask.AddEditTaskScreen
-import com.hood.sleepdealer.statistics.StatisticsScreen
+import com.hood.sleepdealer.profile.ProfileScreen
 import com.hood.sleepdealer.taskdetail.TaskDetailScreen
-import com.hood.sleepdealer.tasks.TasksScreen
+import com.hood.sleepdealer.sleeps.SleepsScreen
 import com.hood.sleepdealer.util.AppModalDrawer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -70,7 +69,7 @@ fun SleepDealerNavGraph(
             )
         ) { entry ->
             AppModalDrawer(drawerState, currentRoute, navActions) {
-                TasksScreen(
+                SleepsScreen(
                     userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                     onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
                     onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
@@ -81,7 +80,7 @@ fun SleepDealerNavGraph(
         }
         composable(SleepDealerDestinations.STATISTICS_ROUTE) {
             AppModalDrawer(drawerState, currentRoute, navActions) {
-                StatisticsScreen(openDrawer = { coroutineScope.launch { drawerState.open() } })
+                ProfileScreen(openDrawer = { coroutineScope.launch { drawerState.open() } })
             }
         }
         composable(

@@ -22,7 +22,7 @@ import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Data Access Object for the task table.
+ * Data Access Object for the sleep table.
  */
 @Dao
 interface TaskDao {
@@ -32,16 +32,16 @@ interface TaskDao {
      *
      * @return all tasks.
      */
-    @Query("SELECT * FROM task")
+    @Query("SELECT * FROM sleep")
     fun observeAll(): Flow<List<LocalTask>>
 
     /**
-     * Observes a single task.
+     * Observes a single sleep.
      *
-     * @param taskId the task id.
-     * @return the task with taskId.
+     * @param taskId the sleep id.
+     * @return the sleep with taskId.
      */
-    @Query("SELECT * FROM task WHERE id = :taskId")
+    @Query("SELECT * FROM sleep WHERE id = :taskId")
     fun observeById(taskId: String): Flow<LocalTask>
 
     /**
@@ -49,28 +49,28 @@ interface TaskDao {
      *
      * @return all tasks.
      */
-    @Query("SELECT * FROM task")
+    @Query("SELECT * FROM sleep")
     suspend fun getAll(): List<LocalTask>
 
     /**
-     * Select a task by id.
+     * Select a sleep by id.
      *
-     * @param taskId the task id.
-     * @return the task with taskId.
+     * @param taskId the sleep id.
+     * @return the sleep with taskId.
      */
-    @Query("SELECT * FROM task WHERE id = :taskId")
+    @Query("SELECT * FROM sleep WHERE id = :taskId")
     suspend fun getById(taskId: String): LocalTask?
 
     /**
-     * Insert or update a task in the database. If a task already exists, replace it.
+     * Insert or update a sleep in the database. If a sleep already exists, replace it.
      *
-     * @param task the task to be inserted or updated.
+     * @param task the sleep to be inserted or updated.
      */
     @Upsert
     suspend fun upsert(task: LocalTask)
 
     /**
-     * Insert or update tasks in the database. If a task already exists, replace it.
+     * Insert or update tasks in the database. If a sleep already exists, replace it.
      *
      * @param tasks the tasks to be inserted or updated.
      */
@@ -78,26 +78,26 @@ interface TaskDao {
     suspend fun upsertAll(tasks: List<LocalTask>)
 
     /**
-     * Update the complete status of a task
+     * Update the complete status of a sleep
      *
-     * @param taskId id of the task
+     * @param taskId id of the sleep
      * @param completed status to be updated
      */
-    @Query("UPDATE task SET isCompleted = :completed WHERE id = :taskId")
+    @Query("UPDATE sleep SET isCompleted = :completed WHERE id = :taskId")
     suspend fun updateCompleted(taskId: String, completed: Boolean)
 
     /**
-     * Delete a task by id.
+     * Delete a sleep by id.
      *
      * @return the number of tasks deleted. This should always be 1.
      */
-    @Query("DELETE FROM task WHERE id = :taskId")
+    @Query("DELETE FROM sleep WHERE id = :taskId")
     suspend fun deleteById(taskId: String): Int
 
     /**
      * Delete all tasks.
      */
-    @Query("DELETE FROM task")
+    @Query("DELETE FROM sleep")
     suspend fun deleteAll()
 
     /**
@@ -105,6 +105,6 @@ interface TaskDao {
      *
      * @return the number of tasks deleted.
      */
-    @Query("DELETE FROM task WHERE isCompleted = 1")
+    @Query("DELETE FROM sleep WHERE isCompleted = 1")
     suspend fun deleteCompleted(): Int
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -23,11 +23,11 @@ import com.hood.sleepdealer.ADD_EDIT_RESULT_OK
 import com.hood.sleepdealer.DELETE_RESULT_OK
 import com.hood.sleepdealer.EDIT_RESULT_OK
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.data.Task
-import com.hood.sleepdealer.data.TaskRepository
-import com.hood.sleepdealer.tasks.TasksFilterType.ACTIVE_TASKS
-import com.hood.sleepdealer.tasks.TasksFilterType.ALL_TASKS
-import com.hood.sleepdealer.tasks.TasksFilterType.COMPLETED_TASKS
+import com.hood.sleepdealer.data.Sleep
+import com.hood.sleepdealer.data.SleepRepository
+import com.hood.sleepdealer.sleeps.TasksFilterType.ACTIVE_TASKS
+import com.hood.sleepdealer.sleeps.TasksFilterType.ALL_TASKS
+import com.hood.sleepdealer.sleeps.TasksFilterType.COMPLETED_TASKS
 import com.hood.sleepdealer.util.Async
 import com.hood.sleepdealer.util.WhileUiSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,21 +42,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * UiState for the task list screen.
+ * UiState for the sleep list screen.
  */
 data class TasksUiState(
-    val items: List<Task> = emptyList(),
+    val items: List<Sleep> = emptyList(),
     val isLoading: Boolean = false,
     val filteringUiInfo: FilteringUiInfo = FilteringUiInfo(),
     val userMessage: Int? = null
 )
 
 /**
- * ViewModel for the task list screen.
+ * ViewModel for the sleep list screen.
  */
 @HiltViewModel
-class TasksViewModel @Inject constructor(
-    private val taskRepository: TaskRepository,
+class SleepsViewModel @Inject constructor(
+    private val sleepRepository: SleepRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -67,11 +67,11 @@ class TasksViewModel @Inject constructor(
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
     private val _filteredTasksAsync =
-        combine(taskRepository.getTasksStream(), _savedFilterType) { tasks, type ->
-            filterTasks(tasks, type)
+        combine(sleepRepository.getTasksStream(), _savedFilterType) { tasks, type ->
+            sleeps(tasks)
         }
             .map { Async.Success(it) }
-            .catch<Async<List<Task>>> { emit(Async.Error(R.string.loading_tasks_error)) }
+            .catch<Async<List<Sleep>>> { emit(Async.Error(R.string.loading_tasks_error)) }
 
     val uiState: StateFlow<TasksUiState> = combine(
         _filterUiInfo, _isLoading, _userMessage, _filteredTasksAsync
@@ -99,27 +99,15 @@ class TasksViewModel @Inject constructor(
             initialValue = TasksUiState(isLoading = true)
         )
 
-    fun setFiltering(requestType: TasksFilterType) {
-        savedStateHandle[TASKS_FILTER_SAVED_STATE_KEY] = requestType
-    }
 
     fun clearCompletedTasks() {
         viewModelScope.launch {
-            taskRepository.clearCompletedTasks()
+            sleepRepository.clearCompletedTasks()
             showSnackbarMessage(R.string.completed_tasks_cleared)
             refresh()
         }
     }
 
-    fun completeTask(task: Task, completed: Boolean) = viewModelScope.launch {
-        if (completed) {
-            taskRepository.completeTask(task.id)
-            showSnackbarMessage(R.string.task_marked_complete)
-        } else {
-            taskRepository.activateTask(task.id)
-            showSnackbarMessage(R.string.task_marked_active)
-        }
-    }
 
     fun showEditResultMessage(result: Int) {
         when (result) {
@@ -140,26 +128,17 @@ class TasksViewModel @Inject constructor(
     fun refresh() {
         _isLoading.value = true
         viewModelScope.launch {
-            taskRepository.refresh()
+            sleepRepository.refresh()
             _isLoading.value = false
         }
     }
 
-    private fun filterTasks(tasks: List<Task>, filteringType: TasksFilterType): List<Task> {
-        val tasksToShow = ArrayList<Task>()
-        // We filter the tasks based on the requestType
-        for (task in tasks) {
-            when (filteringType) {
-                ALL_TASKS -> tasksToShow.add(task)
-                ACTIVE_TASKS -> if (task.isActive) {
-                    tasksToShow.add(task)
-                }
-                COMPLETED_TASKS -> if (task.isCompleted) {
-                    tasksToShow.add(task)
-                }
-            }
+    private fun sleeps(sleeps: List<Sleep>): List<Sleep> {
+        val sleepsToShow = ArrayList<Sleep>()
+        for (sleep in sleeps) {
+            sleepsToShow.add(sleep)
         }
-        return tasksToShow
+        return sleepsToShow
     }
 
     private fun getFilterUiInfo(requestType: TasksFilterType): FilteringUiInfo =

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.tasks
+package com.hood.sleepdealer.sleeps
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -35,7 +35,7 @@ import androidx.test.filters.LargeTest
 import com.hood.sleepdealer.HiltTestActivity
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.SleepDealerNavGraph
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -68,7 +68,7 @@ class TasksTest {
     private val activity get() = composeTestRule.activity
 
     @Inject
-    lateinit var repository: TaskRepository
+    lateinit var repository: SleepRepository
 
     @Before
     fun init() {
@@ -82,12 +82,12 @@ class TasksTest {
 
         setContent()
 
-        // Click on the task on the list and verify that all the data is correct
+        // Click on the sleep on the list and verify that all the data is correct
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(originalTaskTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(originalTaskTitle).performClick()
 
-        // Task detail screen
+        // Sleep detail screen
         composeTestRule.onNodeWithText(activity.getString(R.string.task_details))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(originalTaskTitle).assertIsDisplayed()
@@ -103,10 +103,10 @@ class TasksTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.cd_save_task))
             .performClick()
 
-        // Verify task is displayed on screen in the task list.
+        // Verify sleep is displayed on screen in the sleep list.
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText("NEW TITLE").assertIsDisplayed()
-        // Verify previous task is not displayed
+        // Verify previous sleep is not displayed
         composeTestRule.onNodeWithText(originalTaskTitle).assertDoesNotExist()
     }
 
@@ -115,7 +115,7 @@ class TasksTest {
         setContent()
 
         val taskTitle = "TITLE1"
-        // Add active task
+        // Add active sleep
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.add_task))
             .performClick()
         findTextField(R.string.title_hint).performTextInput(taskTitle)
@@ -125,11 +125,11 @@ class TasksTest {
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).assertIsDisplayed()
 
-        // Open the task detail screen
+        // Open the sleep detail screen
         composeTestRule.onNodeWithText(taskTitle).performClick()
         composeTestRule.onNodeWithText(activity.getString(R.string.task_details))
             .assertIsDisplayed()
-        // Click delete task in menu
+        // Click delete sleep in menu
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_delete_task))
             .performClick()
 
@@ -149,15 +149,15 @@ class TasksTest {
 
         setContent()
 
-        // Open the second task in details view
+        // Open the second sleep in details view
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText("TITLE2").assertIsDisplayed()
         composeTestRule.onNodeWithText("TITLE2").performClick()
-        // Click delete task in menu
+        // Click delete sleep in menu
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_delete_task))
             .performClick()
 
-        // Verify only one task was deleted
+        // Verify only one sleep was deleted
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_filter))
             .performClick()
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).performClick()
@@ -167,32 +167,32 @@ class TasksTest {
 
     @Test
     fun markTaskAsCompleteOnDetailScreen_taskIsCompleteInList() = runTest {
-        // Add 1 active task
+        // Add 1 active sleep
         val taskTitle = "COMPLETED"
         repository.createTask(taskTitle, "DESCRIPTION")
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).performClick()
 
-        // Click on the checkbox in task details screen
+        // Click on the checkbox in sleep details screen
         composeTestRule.onNode(isToggleable()).performClick()
 
         // Click on the navigation up button to go back to the list
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_back))
             .performClick()
 
-        // Check that the task is marked as completed
+        // Check that the sleep is marked as completed
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNode(isToggleable()).assertIsOn()
     }
 
     @Test
     fun markTaskAsActiveOnDetailScreen_taskIsActiveInList() = runTest {
-        // Add 1 completed task
+        // Add 1 completed sleep
         val taskTitle = "ACTIVE"
         repository.apply {
             createTask(taskTitle, "DESCRIPTION").also { completeTask(it) }
@@ -200,37 +200,37 @@ class TasksTest {
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).performClick()
 
-        // Click on the checkbox in task details screen
+        // Click on the checkbox in sleep details screen
         composeTestRule.onNode(isToggleable()).performClick()
 
         // Click on the navigation up button to go back to the list
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_back))
             .performClick()
 
-        // Check that the task is marked as active
+        // Check that the sleep is marked as active
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNode(isToggleable()).assertIsOff()
     }
 
     @Test
     fun markTaskAsCompleteAndActiveOnDetailScreen_taskIsActiveInList() = runTest {
-        // Add 1 active task
+        // Add 1 active sleep
         val taskTitle = "ACT-COMP"
         repository.createTask(taskTitle, "DESCRIPTION")
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).performClick()
 
-        // Click on the checkbox in task details screen
+        // Click on the checkbox in sleep details screen
         composeTestRule.onNode(isToggleable()).performClick()
         // Click again to restore it to original state
         composeTestRule.onNode(isToggleable()).performClick()
@@ -239,14 +239,14 @@ class TasksTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_back))
             .performClick()
 
-        // Check that the task is marked as active
+        // Check that the sleep is marked as active
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNode(isToggleable()).assertIsOff()
     }
 
     @Test
     fun markTaskAsActiveAndCompleteOnDetailScreen_taskIsCompleteInList() = runTest {
-        // Add 1 completed task
+        // Add 1 completed sleep
         val taskTitle = "COMP-ACT"
         repository.apply {
             createTask(taskTitle, "DESCRIPTION").also { completeTask(it) }
@@ -254,11 +254,11 @@ class TasksTest {
 
         setContent()
 
-        // Click on the task on the list
+        // Click on the sleep on the list
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(taskTitle).performClick()
-        // Click on the checkbox in task details screen
+        // Click on the checkbox in sleep details screen
         composeTestRule.onNode(isToggleable()).performClick()
         // Click again to restore it to original state
         composeTestRule.onNode(isToggleable()).performClick()
@@ -267,7 +267,7 @@ class TasksTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.menu_back))
             .performClick()
 
-        // Check that the task is marked as active
+        // Check that the sleep is marked as active
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNode(isToggleable()).assertIsOn()
     }
@@ -284,7 +284,7 @@ class TasksTest {
         composeTestRule.onNodeWithContentDescription(activity.getString(R.string.cd_save_task))
             .performClick()
 
-        // Then verify task is displayed on screen
+        // Then verify sleep is displayed on screen
         composeTestRule.onNodeWithText(activity.getString(R.string.label_all)).assertIsDisplayed()
         composeTestRule.onNodeWithText("title").assertIsDisplayed()
     }

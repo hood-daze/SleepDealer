@@ -49,7 +49,7 @@ class TaskDaoTest {
     }
     @Test
     fun insertTaskAndGetById() = runTest {
-        // GIVEN - insert a task
+        // GIVEN - insert a sleep
         val task = LocalTask(
             title = "title",
             description = "description",
@@ -58,7 +58,7 @@ class TaskDaoTest {
         )
         database.taskDao().upsert(task)
 
-        // WHEN - Get the task by id from the database
+        // WHEN - Get the sleep by id from the database
         val loaded = database.taskDao().getById(task.id)
 
         // THEN - The loaded data contains the expected values
@@ -71,7 +71,7 @@ class TaskDaoTest {
 
     @Test
     fun insertTaskReplacesOnConflict() = runTest {
-        // Given that a task is inserted
+        // Given that a sleep is inserted
         val task = LocalTask(
             title = "title",
             description = "description",
@@ -80,7 +80,7 @@ class TaskDaoTest {
         )
         database.taskDao().upsert(task)
 
-        // When a task with the same id is inserted
+        // When a sleep with the same id is inserted
         val newTask = LocalTask(
             title = "title2",
             description = "description2",
@@ -99,7 +99,7 @@ class TaskDaoTest {
 
     @Test
     fun insertTaskAndGetTasks() = runTest {
-        // GIVEN - insert a task
+        // GIVEN - insert a sleep
         val task = LocalTask(
             title = "title",
             description = "description",
@@ -111,7 +111,7 @@ class TaskDaoTest {
         // WHEN - Get tasks from the database
         val tasks = database.taskDao().getAll()
 
-        // THEN - There is only 1 task in the database, and contains the expected values
+        // THEN - There is only 1 sleep in the database, and contains the expected values
         assertEquals(1, tasks.size)
         assertEquals(tasks[0].id, task.id)
         assertEquals(tasks[0].title, task.title)
@@ -121,7 +121,7 @@ class TaskDaoTest {
 
     @Test
     fun updateTaskAndGetById() = runTest {
-        // When inserting a task
+        // When inserting a sleep
         val originalTask = LocalTask(
             title = "title",
             description = "description",
@@ -131,7 +131,7 @@ class TaskDaoTest {
 
         database.taskDao().upsert(originalTask)
 
-        // When the task is updated
+        // When the sleep is updated
         val updatedTask = LocalTask(
             title = "new title",
             description = "new description",
@@ -150,7 +150,7 @@ class TaskDaoTest {
 
     @Test
     fun updateCompletedAndGetById() = runTest {
-        // When inserting a task
+        // When inserting a sleep
         val task = LocalTask(
             title = "title",
             description = "description",
@@ -159,7 +159,7 @@ class TaskDaoTest {
         )
         database.taskDao().upsert(task)
 
-        // When the task is updated
+        // When the sleep is updated
         database.taskDao().updateCompleted(task.id, false)
 
         // THEN - The loaded data contains the expected values
@@ -172,7 +172,7 @@ class TaskDaoTest {
 
     @Test
     fun deleteTaskByIdAndGettingTasks() = runTest {
-        // Given a task inserted
+        // Given a sleep inserted
         val task = LocalTask(
             title = "title",
             description = "description",
@@ -181,7 +181,7 @@ class TaskDaoTest {
         )
         database.taskDao().upsert(task)
 
-        // When deleting a task by id
+        // When deleting a sleep by id
         database.taskDao().deleteById(task.id)
 
         // THEN - The list is empty
@@ -191,7 +191,7 @@ class TaskDaoTest {
 
     @Test
     fun deleteTasksAndGettingTasks() = runTest {
-        // Given a task inserted
+        // Given a sleep inserted
         database.taskDao().upsert(
             LocalTask(
                 title = "title",
@@ -211,9 +211,9 @@ class TaskDaoTest {
 
     @Test
     fun deleteCompletedTasksAndGettingTasks() = runTest {
-        // Given a completed task inserted
+        // Given a completed sleep inserted
         database.taskDao().upsert(
-            LocalTask(title = "completed", description = "task", id = "id", isCompleted = true)
+            LocalTask(title = "completed", description = "sleep", id = "id", isCompleted = true)
         )
 
         // When deleting completed tasks

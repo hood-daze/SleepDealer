@@ -27,7 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.hood.sleepdealer.HiltTestActivity
-import com.hood.sleepdealer.data.TaskRepository
+import com.hood.sleepdealer.data.SleepRepository
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -40,7 +40,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration test for the Task Details screen.
+ * Integration test for the Sleep Details screen.
  */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -55,7 +55,7 @@ class TaskDetailScreenTest {
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     @Inject
-    lateinit var repository: TaskRepository
+    lateinit var repository: SleepRepository
 
     @Before
     fun setup() {
@@ -64,18 +64,18 @@ class TaskDetailScreenTest {
 
     @Test
     fun activeTaskDetails_DisplayedInUi() = runTest {
-        // GIVEN - Add active (incomplete) task to the DB
-        val activeTaskId = repository.createTask(
-            title = "Active Task",
+        // GIVEN - Add active (incomplete) sleep to the DB
+        val activeSleepId = repository.createTask(
+            title = "Active Sleep",
             description = "AndroidX Rocks"
         )
 
         // WHEN - Details screen is opened
-        setContent(activeTaskId)
+        setContent(activeSleepId)
 
-        // THEN - Task details are displayed on the screen
+        // THEN - Sleep details are displayed on the screen
         // make sure that the title/description are both shown and correct
-        composeTestRule.onNodeWithText("Active Task").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Active Sleep").assertIsDisplayed()
         composeTestRule.onNodeWithText("AndroidX Rocks").assertIsDisplayed()
         // and make sure the "active" checkbox is shown unchecked
         composeTestRule.onNode(isToggleable()).assertIsOff()
@@ -83,16 +83,16 @@ class TaskDetailScreenTest {
 
     @Test
     fun completedTaskDetails_DisplayedInUi() = runTest {
-        // GIVEN - Add completed task to the DB
-        val completedTaskId = repository.createTask("Completed Task", "AndroidX Rocks")
-        repository.completeTask(completedTaskId)
+        // GIVEN - Add completed sleep to the DB
+        val completedSleepId = repository.createTask("Completed Sleep", "AndroidX Rocks")
+        repository.completeTask(completedSleepId)
 
         // WHEN - Details screen is opened
-        setContent(completedTaskId)
+        setContent(completedSleepId)
 
-        // THEN - Task details are displayed on the screen
+        // THEN - Sleep details are displayed on the screen
         // make sure that the title/description are both shown and correct
-        composeTestRule.onNodeWithText("Completed Task").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Completed Sleep").assertIsDisplayed()
         composeTestRule.onNodeWithText("AndroidX Rocks").assertIsDisplayed()
         // and make sure the "active" checkbox is shown unchecked
         composeTestRule.onNode(isToggleable()).assertIsOn()
