@@ -74,7 +74,7 @@ fun LocalSleep.toNetwork() = NetworkSleep(
     id = id,
     title = title,
     shortDescription = description,
-    status = if (isCompleted) { com.hood.sleepdealer.data.source.network.TaskStatus.COMPLETE } else { com.hood.sleepdealer.data.source.network.TaskStatus.ACTIVE }
+    status = if (isCompleted) { TaskStatus.COMPLETE } else { TaskStatus.ACTIVE }
 )
 
 fun List<LocalSleep>.toNetwork() = map(LocalSleep::toNetwork)

@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 data class SleepsUiState(
     val items: List<Sleep> = emptyList(),
     val isLoading: Boolean = false,
-    val uiInfo: UiInfo = UiInfo(),
+    val sleepsUiInfo: SleepsUiInfo = SleepsUiInfo(),
     val userMessage: Int? = null
 )
 
@@ -45,7 +45,7 @@ class SleepsViewModel @Inject constructor(
     private val _savedFilterType =
         savedStateHandle.getStateFlow(TASKS_FILTER_SAVED_STATE_KEY, ALL_TASKS)
 
-    private val _uiInfo = _savedFilterType.map { getUiInfo() }.distinctUntilChanged()
+    private val _sleepsUiInfo = _savedFilterType.map { getUiInfo() }.distinctUntilChanged()
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
     private val _sleepsAsync =
@@ -53,8 +53,8 @@ class SleepsViewModel @Inject constructor(
             .map { Async.Success(it) }
             .catch<Async<List<Sleep>>> { emit(Async.Error(R.string.loading_tasks_error)) }
 
-    val uiState: StateFlow<SleepsUiState> = combine(
-        _uiInfo, _isLoading, _userMessage, _sleepsAsync
+    val sleepsUiState: StateFlow<SleepsUiState> = combine(
+        _sleepsUiInfo, _isLoading, _userMessage, _sleepsAsync
     ) { uiInfo, isLoading, userMessage, sleepsAsync ->
         when (sleepsAsync) {
             Async.Loading -> {
@@ -66,7 +66,7 @@ class SleepsViewModel @Inject constructor(
             is Async.Success -> {
                 SleepsUiState(
                     items = sleepsAsync.data,
-                    uiInfo = uiInfo,
+                    sleepsUiInfo = uiInfo,
                     isLoading = isLoading,
                     userMessage = userMessage
                 )
@@ -104,8 +104,8 @@ class SleepsViewModel @Inject constructor(
         }
     }
 
-    private fun getUiInfo(): UiInfo =
-        UiInfo(
+    private fun getUiInfo(): SleepsUiInfo =
+        SleepsUiInfo(
             R.string.label_all, R.string.no_sleeps_all,
             R.drawable.logo_no_fill
         )
@@ -114,7 +114,7 @@ class SleepsViewModel @Inject constructor(
 // Used to save the current filtering in SavedStateHandle.
 const val TASKS_FILTER_SAVED_STATE_KEY = "TASKS_FILTER_SAVED_STATE_KEY"
 
-data class UiInfo(
+data class SleepsUiInfo(
     val currentFilteringLabel: Int = R.string.label_all,
     val noSleepsLabel: Int = R.string.no_sleeps_all,
     val noSleepIconRes: Int = R.drawable.logo_no_fill,

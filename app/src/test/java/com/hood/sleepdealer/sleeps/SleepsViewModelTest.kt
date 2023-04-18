@@ -78,16 +78,16 @@ class SleepsViewModelTest {
         sleepsViewModel.refresh()
 
         // Then progress indicator is shown
-        assertThat(sleepsViewModel.uiState.first().isLoading).isTrue()
+        assertThat(sleepsViewModel.sleepsUiState.first().isLoading).isTrue()
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
         // Then progress indicator is hidden
-        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.sleepsUiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(sleepsViewModel.uiState.first().items).hasSize(3)
+        assertThat(sleepsViewModel.sleepsUiState.first().items).hasSize(3)
     }
 
     @Test
@@ -100,10 +100,10 @@ class SleepsViewModelTest {
         sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.sleepsUiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(sleepsViewModel.uiState.first().items).hasSize(1)
+        assertThat(sleepsViewModel.sleepsUiState.first().items).hasSize(1)
     }
 
     @Test
@@ -116,10 +116,10 @@ class SleepsViewModelTest {
         sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.sleepsUiState.first().isLoading).isFalse()
 
         // And data correctly loaded
-        assertThat(sleepsViewModel.uiState.first().items).hasSize(2)
+        assertThat(sleepsViewModel.sleepsUiState.first().items).hasSize(2)
     }
 
     @Test
@@ -131,11 +131,11 @@ class SleepsViewModelTest {
         sleepsViewModel.refresh()
 
         // Then progress indicator is hidden
-        assertThat(sleepsViewModel.uiState.first().isLoading).isFalse()
+        assertThat(sleepsViewModel.sleepsUiState.first().isLoading).isFalse()
 
         // And the list of items is empty
-        assertThat(sleepsViewModel.uiState.first().items).isEmpty()
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().items).isEmpty()
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.loading_tasks_error)
     }
 
@@ -148,7 +148,7 @@ class SleepsViewModelTest {
         sleepsViewModel.refresh()
 
         // Fetch tasks
-        val allTasks = sleepsViewModel.uiState.first().items
+        val allTasks = sleepsViewModel.sleepsUiState.first().items
         val completedTasks = allTasks?.filter { it.isCompleted }
 
         // Verify there are no completed tasks left
@@ -158,7 +158,7 @@ class SleepsViewModelTest {
         assertThat(allTasks).hasSize(1)
 
         // Verify snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.completed_sleeps_cleared)
     }
 
@@ -168,7 +168,7 @@ class SleepsViewModelTest {
         sleepsViewModel.showEditResultMessage(EDIT_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.successfully_saved_sleep_message)
     }
 
@@ -178,7 +178,7 @@ class SleepsViewModelTest {
         sleepsViewModel.showEditResultMessage(ADD_EDIT_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.successfully_added_sleep_message)
     }
 
@@ -188,7 +188,7 @@ class SleepsViewModelTest {
         sleepsViewModel.showEditResultMessage(DELETE_RESULT_OK)
 
         // The snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.successfully_deleted_sleep_message)
     }
 
@@ -205,7 +205,7 @@ class SleepsViewModelTest {
         assertThat(tasksRepository.savedTasks.value[sleep.id]?.isCompleted).isTrue()
 
         // The snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.task_marked_complete)
     }
 
@@ -222,7 +222,7 @@ class SleepsViewModelTest {
         assertThat(tasksRepository.savedTasks.value[sleep.id]?.isActive).isTrue()
 
         // The snackbar is updated
-        assertThat(sleepsViewModel.uiState.first().userMessage)
+        assertThat(sleepsViewModel.sleepsUiState.first().userMessage)
             .isEqualTo(R.string.task_marked_active)
     }
 }

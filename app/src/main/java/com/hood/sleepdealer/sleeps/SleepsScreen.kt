@@ -85,14 +85,14 @@ fun SleepsScreen(
             }
         }
     ) { paddingValues ->
-        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val uiState by viewModel.sleepsUiState.collectAsStateWithLifecycle()
 
         SleepsContent(
             loading = uiState.isLoading,
             sleeps = uiState.items,
-            currentFilteringLabel = uiState.uiInfo.currentFilteringLabel,
-            noSleepsLabel = uiState.uiInfo.noSleepsLabel,
-            noSleepsIconRes = uiState.uiInfo.noSleepIconRes,
+            currentFilteringLabel = uiState.sleepsUiInfo.currentFilteringLabel,
+            noSleepsLabel = uiState.sleepsUiInfo.noSleepsLabel,
+            noSleepsIconRes = uiState.sleepsUiInfo.noSleepIconRes,
             onRefresh = viewModel::refresh,
             onSleepClick = onSleepClick,
             modifier = Modifier.padding(paddingValues)
