@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.profile
+package com.hood.sleepdealer.sleeps
 
+import androidx.annotation.StringRes
 import androidx.compose.material.Surface
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.hood.sleepdealer.HiltTestActivity
@@ -37,13 +41,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration test for the statistics screen.
+ * Integration test for the Sleep List screen.
  */
+// TODO - Move to the sharedTest folder when https://issuetracker.google.com/224974381 is fixed
 @RunWith(AndroidJUnit4::class)
 @MediumTest
+// @LooperMode(LooperMode.Mode.PAUSED)
+// @TextLayoutMode(TextLayoutMode.Mode.REALISTIC)
 @HiltAndroidTest
-@ExperimentalCoroutinesApi
-class StatisticsScreenTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class SlepsScreenTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -56,37 +63,36 @@ class StatisticsScreenTest {
     lateinit var repository: SleepRepository
 
     @Before
-    fun setup() {
+    fun init() {
         hiltRule.inject()
     }
 
     @Test
-    fun tasks_showsNonEmptyMessage() = runTest {
-        // Given some tasks
-        repository.apply {
-            createSleep("Title1", "Description1")
-            createSleep("Title2", "Description2").also {
-                completeTask(it)
-            }
-        }
+    fun displaySleep_whenRepositoryHasData() = runTest {
+        // GIVEN - One sleep already in the repository
+        repository.createSleep("TITLE1", "DESCRIPTION1")
 
+        // WHEN - On startup
+        setContent()
+
+        // THEN - Verify sleep is displayed on screen
+        composeTestRule.onNodeWithText("TITLE1").assertIsDisplayed()
+    }
+
+    private fun setContent() {
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
-                    ProfileScreen(
-                        openDrawer = { },
-                        viewModel = ProfileViewModel(repository)
+                    SleepsScreen(
+                        viewModel = SleepsViewModel(repository, SavedStateHandle()),
+                        userMessage = R.string.successfully_added_sleep_message,
+                        onUserMessageDisplayed = { },
+                        onAddSleep = { },
+                        onSleepClick = { },
+                        openDrawer = { }
                     )
                 }
             }
         }
-
-        val expectedActiveTaskText = activity.getString(R.string.statistics_active_tasks, 50.0f)
-        val expectedCompletedTaskText = activity
-            .getString(R.string.statistics_completed_tasks, 50.0f)
-
-        // check that both info boxes are displayed and contain the correct info
-        composeTestRule.onNodeWithText(expectedActiveTaskText).assertIsDisplayed()
-        composeTestRule.onNodeWithText(expectedCompletedTaskText).assertIsDisplayed()
     }
 }

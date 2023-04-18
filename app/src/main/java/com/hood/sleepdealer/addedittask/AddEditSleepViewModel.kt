@@ -99,7 +99,7 @@ class AddEditSleepViewModel @Inject constructor(
     }
 
     private fun createSleep() = viewModelScope.launch {
-        sleepRepository.createTask(uiState.value.title, uiState.value.description)
+        sleepRepository.createSleep(uiState.value.title, uiState.value.description)
         _uiState.update {
             it.copy(isSleepSaved = true)
         }

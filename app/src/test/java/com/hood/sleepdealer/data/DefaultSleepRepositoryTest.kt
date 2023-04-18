@@ -106,7 +106,7 @@ class DefaultSleepRepositoryTest {
     @Test
     fun saveTask_savesToLocalAndRemote() = testScope.runTest {
         // When a sleep is saved to the tasks repository
-        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
+        val newTaskId = taskRepository.createSleep(newSleep.title, newSleep.description)
 
         // Then the remote and local sources contain the new sleep
         assertThat(networkDataSource.tasks?.map { it.id }?.contains(newTaskId))
@@ -177,7 +177,7 @@ class DefaultSleepRepositoryTest {
     @Test
     fun completeTask_completesTaskToServiceAPIUpdatesCache() = testScope.runTest {
         // Save a sleep
-        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
+        val newTaskId = taskRepository.createSleep(newSleep.title, newSleep.description)
 
         // Make sure it's active
         assertThat(taskRepository.getSleep(newTaskId)?.isCompleted).isFalse()
@@ -192,7 +192,7 @@ class DefaultSleepRepositoryTest {
     @Test
     fun completeTask_activeTaskToServiceAPIUpdatesCache() = testScope.runTest {
         // Save a sleep
-        val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
+        val newTaskId = taskRepository.createSleep(newSleep.title, newSleep.description)
         taskRepository.completeTask(newTaskId)
 
         // Make sure it's completed

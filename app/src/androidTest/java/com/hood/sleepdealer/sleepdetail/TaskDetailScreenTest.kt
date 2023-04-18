@@ -65,7 +65,7 @@ class TaskDetailScreenTest {
     @Test
     fun activeTaskDetails_DisplayedInUi() = runTest {
         // GIVEN - Add active (incomplete) sleep to the DB
-        val activeSleepId = repository.createTask(
+        val activeSleepId = repository.createSleep(
             title = "Active Sleep",
             description = "AndroidX Rocks"
         )
@@ -84,7 +84,7 @@ class TaskDetailScreenTest {
     @Test
     fun completedTaskDetails_DisplayedInUi() = runTest {
         // GIVEN - Add completed sleep to the DB
-        val completedSleepId = repository.createTask("Completed Sleep", "AndroidX Rocks")
+        val completedSleepId = repository.createSleep("Completed Sleep", "AndroidX Rocks")
         repository.completeTask(completedSleepId)
 
         // WHEN - Details screen is opened

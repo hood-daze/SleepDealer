@@ -35,7 +35,7 @@ interface SleepRepository {
 
     suspend fun refreshTask(taskId: String)
 
-    suspend fun createTask(title: String, description: String): String
+    suspend fun createSleep(title: String, description: String): String
 
     suspend fun updateSleep(taskId: String, title: String, description: String)
 

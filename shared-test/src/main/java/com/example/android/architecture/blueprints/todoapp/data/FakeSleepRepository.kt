@@ -56,7 +56,7 @@ class FakeSleepRepository : SleepRepository {
         refresh()
     }
 
-    override suspend fun createTask(title: String, description: String): String {
+    override suspend fun createSleep(title: String, description: String): String {
         val taskId = generateTaskId()
         Sleep(title = title, description = description, id = taskId).also {
             saveTask(it)

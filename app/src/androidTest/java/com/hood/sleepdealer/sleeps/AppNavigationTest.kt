@@ -130,7 +130,7 @@ class AppNavigationTest {
     @Test
     fun taskDetailScreen_doubleUIBackButton() = runTest {
         val taskName = "UI <- button"
-        sleepRepository.createTask(taskName, "Description")
+        sleepRepository.createSleep(taskName, "Description")
 
         setContent()
 
@@ -159,7 +159,7 @@ class AppNavigationTest {
     @Test
     fun taskDetailScreen_doubleBackButton() = runTest {
         val taskName = "Back button"
-        sleepRepository.createTask(taskName, "Description")
+        sleepRepository.createSleep(taskName, "Description")
 
         setContent()
 
