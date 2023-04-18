@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 data class AddEditSleepUiState(
     val title: String = "",
     val description: String = "",
-    val isTaskCompleted: Boolean = false,
     val isLoading: Boolean = false,
     val userMessage: Int? = null,
     val isTaskSaved: Boolean = false
@@ -133,7 +132,6 @@ class AddEditSleepViewModel @Inject constructor(
                         it.copy(
                             title = task.title,
                             description = task.description,
-                            isTaskCompleted = task.isCompleted,
                             isLoading = false
                         )
                     }

@@ -155,7 +155,6 @@ private fun EditTaskContentPreview() {
                 Sleep(
                     title = "Title",
                     description = "Description",
-                    isCompleted = false,
                     id = "ID"
                 ),
                 onRefresh = { }
@@ -175,7 +174,6 @@ private fun EditTaskContentTaskCompletedPreview() {
                 Sleep(
                     title = "Title",
                     description = "Description",
-                    isCompleted = false,
                     id = "ID"
                 ),
                 onRefresh = { }
@@ -195,7 +193,6 @@ private fun EditTaskContentEmptyPreview() {
                 Sleep(
                     title = "Title",
                     description = "Description",
-                    isCompleted = false,
                     id = "ID"
                 ),
                 onRefresh = { }

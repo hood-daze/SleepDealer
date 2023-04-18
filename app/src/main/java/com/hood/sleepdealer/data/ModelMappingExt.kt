@@ -18,7 +18,6 @@ package com.hood.sleepdealer.data
 
 import com.hood.sleepdealer.data.source.local.LocalSleep
 import com.hood.sleepdealer.data.source.network.NetworkSleep
-import com.hood.sleepdealer.data.source.network.TaskStatus
 
 /**
  * Data model mapping extension functions. There are three model types:
@@ -39,7 +38,6 @@ fun Sleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = description,
-    isCompleted = isCompleted,
 )
 
 fun List<Sleep>.toLocal() = map(Sleep::toLocal)
@@ -49,7 +47,6 @@ fun LocalSleep.toExternal() = Sleep(
     id = id,
     title = title,
     description = description,
-    isCompleted = isCompleted,
 )
 
 // Note: JvmName is used to provide a unique name for each extension function with the same name.
@@ -63,7 +60,6 @@ fun NetworkSleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = shortDescription,
-    isCompleted = (status == TaskStatus.COMPLETE),
 )
 
 @JvmName("networkToLocal")
@@ -74,7 +70,6 @@ fun LocalSleep.toNetwork() = NetworkSleep(
     id = id,
     title = title,
     shortDescription = description,
-    status = if (isCompleted) { TaskStatus.COMPLETE } else { TaskStatus.ACTIVE }
 )
 
 fun List<LocalSleep>.toNetwork() = map(LocalSleep::toNetwork)

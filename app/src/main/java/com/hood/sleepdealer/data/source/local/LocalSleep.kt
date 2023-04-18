@@ -33,5 +33,4 @@ data class LocalSleep(
     @PrimaryKey val id: String,
     var title: String,
     var description: String,
-    var isCompleted: Boolean,
 )

@@ -216,31 +216,26 @@ private fun TasksContentPreview() {
                     Sleep(
                         title = "Title 1",
                         description = "Description 1",
-                        isCompleted = false,
                         id = "ID 1"
                     ),
                     Sleep(
                         title = "Title 2",
                         description = "Description 2",
-                        isCompleted = true,
                         id = "ID 2"
                     ),
                     Sleep(
                         title = "Title 3",
                         description = "Description 3",
-                        isCompleted = true,
                         id = "ID 3"
                     ),
                     Sleep(
                         title = "Title 4",
                         description = "Description 4",
-                        isCompleted = false,
                         id = "ID 4"
                     ),
                     Sleep(
                         title = "Title 5",
                         description = "Description 5",
-                        isCompleted = true,
                         id = "ID 5"
                     ),
                 ),
@@ -311,7 +306,6 @@ private fun TaskItemCompletedPreview() {
                 sleep = Sleep(
                     title = "Title",
                     description = "Description",
-                    isCompleted = true,
                     id = "ID"
                 ),
                 onTaskClick = { }
