@@ -22,7 +22,7 @@ package com.hood.sleepdealer.data.source.network
  */
 interface NetworkDataSource {
 
-    suspend fun loadTasks(): List<NetworkTask>
+    suspend fun loadSleeps(): List<NetworkSleep>
 
-    suspend fun saveTasks(tasks: List<NetworkTask>)
+    suspend fun saveSleeps(tasks: List<NetworkSleep>)
 }

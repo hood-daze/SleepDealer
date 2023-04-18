@@ -39,12 +39,6 @@ interface SleepRepository {
 
     suspend fun updateTask(taskId: String, title: String, description: String)
 
-    suspend fun completeTask(taskId: String)
-
-    suspend fun activateTask(taskId: String)
-
-    suspend fun clearCompletedTasks()
-
     suspend fun deleteAllTasks()
 
     suspend fun deleteTask(taskId: String)

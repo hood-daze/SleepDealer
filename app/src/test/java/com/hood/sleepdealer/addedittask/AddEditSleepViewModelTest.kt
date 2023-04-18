@@ -34,13 +34,13 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Unit tests for the implementation of [AddEditTaskViewModel].
+ * Unit tests for the implementation of [AddEditSleepViewModel].
  */
 @ExperimentalCoroutinesApi
-class AddEditTaskViewModelTest {
+class AddEditSleepViewModelTest {
 
     // Subject under test
-    private lateinit var addEditTaskViewModel: AddEditTaskViewModel
+    private lateinit var addEditSleepViewModel: AddEditSleepViewModel
 
     // Use a fake repository to be injected into the viewmodel
     private lateinit var tasksRepository: FakeSleepRepository
@@ -61,18 +61,18 @@ class AddEditTaskViewModelTest {
 
     @Test
     fun saveNewTaskToRepository_showsSuccessMessageUi() {
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
 
         val newTitle = "New Sleep Title"
         val newDescription = "Some Sleep Description"
-        addEditTaskViewModel.apply {
+        addEditSleepViewModel.apply {
             updateTitle(newTitle)
             updateDescription(newDescription)
         }
-        addEditTaskViewModel.saveTask()
+        addEditSleepViewModel.saveTask()
 
         val newTask = tasksRepository.savedTasks.value.values.first()
 
@@ -86,24 +86,24 @@ class AddEditTaskViewModelTest {
         // Set Main dispatcher to not run coroutines eagerly, for just this one test
         Dispatchers.setMain(StandardTestDispatcher())
 
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
 
         // Then progress indicator is shown
-        assertThat(addEditTaskViewModel.uiState.value.isLoading).isTrue()
+        assertThat(addEditSleepViewModel.uiState.value.isLoading).isTrue()
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
         // Then progress indicator is hidden
-        assertThat(addEditTaskViewModel.uiState.value.isLoading).isFalse()
+        assertThat(addEditSleepViewModel.uiState.value.isLoading).isFalse()
     }
 
     @Test
     fun loadTasks_taskShown() {
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
@@ -112,7 +112,7 @@ class AddEditTaskViewModelTest {
         tasksRepository.addTasks(sleep)
 
         // Verify a sleep is loaded
-        val uiState = addEditTaskViewModel.uiState.value
+        val uiState = addEditSleepViewModel.uiState.value
         assertThat(uiState.title).isEqualTo(sleep.title)
         assertThat(uiState.description).isEqualTo(sleep.description)
         assertThat(uiState.isLoading).isFalse()
@@ -120,7 +120,7 @@ class AddEditTaskViewModelTest {
 
     @Test
     fun saveNewTaskToRepository_emptyTitle_error() {
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
@@ -130,7 +130,7 @@ class AddEditTaskViewModelTest {
 
     @Test
     fun saveNewTaskToRepository_emptyDescription_error() {
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
@@ -140,7 +140,7 @@ class AddEditTaskViewModelTest {
 
     @Test
     fun saveNewTaskToRepository_emptyDescriptionEmptyTitle_error() {
-        addEditTaskViewModel = AddEditTaskViewModel(
+        addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
             SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
         )
@@ -149,16 +149,16 @@ class AddEditTaskViewModelTest {
     }
 
     private fun saveTaskAndAssertUserMessage(title: String, description: String) {
-        addEditTaskViewModel.apply {
+        addEditSleepViewModel.apply {
             updateTitle(title)
             updateDescription(description)
         }
 
         // When saving an incomplete sleep
-        addEditTaskViewModel.saveTask()
+        addEditSleepViewModel.saveTask()
 
         assertThat(
-            addEditTaskViewModel.uiState.value.userMessage
+            addEditSleepViewModel.uiState.value.userMessage
         ).isEqualTo(string.empty_task_message)
     }
 }

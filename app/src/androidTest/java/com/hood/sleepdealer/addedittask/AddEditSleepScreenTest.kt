@@ -72,8 +72,8 @@ class AddEditSleepScreenTest {
         composeTestRule.setContent {
             AppCompatTheme {
                 Surface {
-                    AddEditTaskScreen(
-                        viewModel = AddEditTaskViewModel(repository, SavedStateHandle()),
+                    AddEditSleepScreen(
+                        viewModel = AddEditSleepViewModel(repository, SavedStateHandle()),
                         topBarTitle = R.string.add_sleep,
                         onTaskUpdate = { },
                         onBack = { },

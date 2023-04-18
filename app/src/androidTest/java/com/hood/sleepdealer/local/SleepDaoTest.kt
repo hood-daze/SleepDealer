@@ -20,8 +20,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.hood.sleepdealer.data.source.local.LocalTask
-import com.hood.sleepdealer.data.source.local.ToDoDatabase
+import com.hood.sleepdealer.data.source.local.LocalSleep
+import com.hood.sleepdealer.data.source.local.SleepDatabase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,36 +33,36 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class TaskDaoTest {
+class SleepDaoTest {
 
     // using an in-memory database because the information stored here disappears when the
     // process is killed
-    private lateinit var database: ToDoDatabase
+    private lateinit var database: SleepDatabase
 
     // Ensure that we use a new database for each test.
     @Before
     fun initDb() {
         database = Room.inMemoryDatabaseBuilder(
             getApplicationContext(),
-            ToDoDatabase::class.java
+            SleepDatabase::class.java
         ).allowMainThreadQueries().build()
     }
     @Test
     fun insertTaskAndGetById() = runTest {
         // GIVEN - insert a sleep
-        val task = LocalTask(
+        val task = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = false,
         )
-        database.taskDao().upsert(task)
+        database.sleepDao().upsert(task)
 
         // WHEN - Get the sleep by id from the database
-        val loaded = database.taskDao().getById(task.id)
+        val loaded = database.sleepDao().getById(task.id)
 
         // THEN - The loaded data contains the expected values
-        assertNotNull(loaded as LocalTask)
+        assertNotNull(loaded as LocalSleep)
         assertEquals(task.id, loaded.id)
         assertEquals(task.title, loaded.title)
         assertEquals(task.description, loaded.description)
@@ -72,25 +72,25 @@ class TaskDaoTest {
     @Test
     fun insertTaskReplacesOnConflict() = runTest {
         // Given that a sleep is inserted
-        val task = LocalTask(
+        val task = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = false,
         )
-        database.taskDao().upsert(task)
+        database.sleepDao().upsert(task)
 
         // When a sleep with the same id is inserted
-        val newTask = LocalTask(
+        val newTask = LocalSleep(
             title = "title2",
             description = "description2",
             isCompleted = true,
             id = task.id
         )
-        database.taskDao().upsert(newTask)
+        database.sleepDao().upsert(newTask)
 
         // THEN - The loaded data contains the expected values
-        val loaded = database.taskDao().getById(task.id)
+        val loaded = database.sleepDao().getById(task.id)
         assertEquals(task.id, loaded?.id)
         assertEquals("title2", loaded?.title)
         assertEquals("description2", loaded?.description)
@@ -100,16 +100,16 @@ class TaskDaoTest {
     @Test
     fun insertTaskAndGetTasks() = runTest {
         // GIVEN - insert a sleep
-        val task = LocalTask(
+        val task = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = false,
         )
-        database.taskDao().upsert(task)
+        database.sleepDao().upsert(task)
 
         // WHEN - Get tasks from the database
-        val tasks = database.taskDao().getAll()
+        val tasks = database.sleepDao().getAll()
 
         // THEN - There is only 1 sleep in the database, and contains the expected values
         assertEquals(1, tasks.size)
@@ -122,26 +122,26 @@ class TaskDaoTest {
     @Test
     fun updateTaskAndGetById() = runTest {
         // When inserting a sleep
-        val originalTask = LocalTask(
+        val originalTask = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = false,
         )
 
-        database.taskDao().upsert(originalTask)
+        database.sleepDao().upsert(originalTask)
 
         // When the sleep is updated
-        val updatedTask = LocalTask(
+        val updatedTask = LocalSleep(
             title = "new title",
             description = "new description",
             isCompleted = true,
             id = originalTask.id
         )
-        database.taskDao().upsert(updatedTask)
+        database.sleepDao().upsert(updatedTask)
 
         // THEN - The loaded data contains the expected values
-        val loaded = database.taskDao().getById(originalTask.id)
+        val loaded = database.sleepDao().getById(originalTask.id)
         assertEquals(originalTask.id, loaded?.id)
         assertEquals("new title", loaded?.title)
         assertEquals("new description", loaded?.description)
@@ -151,19 +151,19 @@ class TaskDaoTest {
     @Test
     fun updateCompletedAndGetById() = runTest {
         // When inserting a sleep
-        val task = LocalTask(
+        val task = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = true
         )
-        database.taskDao().upsert(task)
+        database.sleepDao().upsert(task)
 
         // When the sleep is updated
-        database.taskDao().updateCompleted(task.id, false)
+        database.sleepDao().updateCompleted(task.id, false)
 
         // THEN - The loaded data contains the expected values
-        val loaded = database.taskDao().getById(task.id)
+        val loaded = database.sleepDao().getById(task.id)
         assertEquals(task.id, loaded?.id)
         assertEquals(task.title, loaded?.title)
         assertEquals(task.description, loaded?.description)
@@ -173,27 +173,27 @@ class TaskDaoTest {
     @Test
     fun deleteTaskByIdAndGettingTasks() = runTest {
         // Given a sleep inserted
-        val task = LocalTask(
+        val task = LocalSleep(
             title = "title",
             description = "description",
             id = "id",
             isCompleted = false,
         )
-        database.taskDao().upsert(task)
+        database.sleepDao().upsert(task)
 
         // When deleting a sleep by id
-        database.taskDao().deleteById(task.id)
+        database.sleepDao().deleteById(task.id)
 
         // THEN - The list is empty
-        val tasks = database.taskDao().getAll()
+        val tasks = database.sleepDao().getAll()
         assertEquals(true, tasks.isEmpty())
     }
 
     @Test
     fun deleteTasksAndGettingTasks() = runTest {
         // Given a sleep inserted
-        database.taskDao().upsert(
-            LocalTask(
+        database.sleepDao().upsert(
+            LocalSleep(
                 title = "title",
                 description = "description",
                 id = "id",
@@ -202,25 +202,25 @@ class TaskDaoTest {
         )
 
         // When deleting all tasks
-        database.taskDao().deleteAll()
+        database.sleepDao().deleteAll()
 
         // THEN - The list is empty
-        val tasks = database.taskDao().getAll()
+        val tasks = database.sleepDao().getAll()
         assertEquals(true, tasks.isEmpty())
     }
 
     @Test
     fun deleteCompletedTasksAndGettingTasks() = runTest {
         // Given a completed sleep inserted
-        database.taskDao().upsert(
-            LocalTask(title = "completed", description = "sleep", id = "id", isCompleted = true)
+        database.sleepDao().upsert(
+            LocalSleep(title = "completed", description = "sleep", id = "id", isCompleted = true)
         )
 
         // When deleting completed tasks
-        database.taskDao().deleteCompleted()
+        database.sleepDao().deleteCompleted()
 
         // THEN - The list is empty
-        val tasks = database.taskDao().getAll()
+        val tasks = database.sleepDao().getAll()
         assertEquals(true, tasks.isEmpty())
     }
 }

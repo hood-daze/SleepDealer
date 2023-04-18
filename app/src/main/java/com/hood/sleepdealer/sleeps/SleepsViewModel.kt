@@ -80,15 +80,6 @@ class SleepsViewModel @Inject constructor(
         )
 
 
-    fun clearCompletedTasks() {
-        viewModelScope.launch {
-            sleepRepository.clearCompletedTasks()
-            showSnackbarMessage(R.string.completed_sleeps_cleared)
-            refresh()
-        }
-    }
-
-
     fun showEditResultMessage(result: Int) {
         when (result) {
             EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_sleep_message)

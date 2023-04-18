@@ -16,15 +16,12 @@
 
 package com.hood.sleepdealer.data.source.network
 
-import com.hood.sleepdealer.data.source.network.NetworkDataSource
-import com.hood.sleepdealer.data.source.network.NetworkTask
-
 class FakeNetworkDataSource(
-    var tasks: MutableList<NetworkTask>? = mutableListOf()
+    var tasks: MutableList<NetworkSleep>? = mutableListOf()
 ) : NetworkDataSource {
-    override suspend fun loadTasks() = tasks ?: throw Exception("Sleep list is null")
+    override suspend fun loadSleeps() = tasks ?: throw Exception("Sleep list is null")
 
-    override suspend fun saveTasks(tasks: List<NetworkTask>) {
+    override suspend fun saveSleeps(tasks: List<NetworkSleep>) {
         this.tasks = tasks.toMutableList()
     }
 }

@@ -47,7 +47,7 @@ import com.google.accompanist.appcompattheme.AppCompatTheme
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
-import com.hood.sleepdealer.util.TaskDetailTopAppBar
+import com.hood.sleepdealer.util.SleepDetailTopAppBar
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -63,7 +63,7 @@ fun SleepDetailScreen(
         scaffoldState = scaffoldState,
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TaskDetailTopAppBar(onBack = onBack, onDelete = viewModel::deleteTask)
+            SleepDetailTopAppBar(onBack = onBack, onDelete = viewModel::deleteTask)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onEditTask(viewModel.sleepId) }) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,16 @@
 
 package com.hood.sleepdealer.data.source.local
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Database
+import androidx.room.RoomDatabase
 
 /**
- * Internal model used to represent a sleep stored locally in a Room database. This is used inside
- * the data layer only.
+ * The Room Database that contains the Sleep table.
  *
- * See ModelMappingExt.kt for mapping functions used to convert this model to other
- * models.
+ * Note that exportSchema should be true in production databases.
  */
-@Entity(
-    tableName = "sleep"
-)
-data class LocalTask(
-    @PrimaryKey val id: String,
-    var title: String,
-    var description: String,
-    var isCompleted: Boolean,
-)
+@Database(entities = [LocalSleep::class], version = 1, exportSchema = false)
+abstract class SleepDatabase : RoomDatabase() {
+
+    abstract fun sleepDao(): SleepDao
+}

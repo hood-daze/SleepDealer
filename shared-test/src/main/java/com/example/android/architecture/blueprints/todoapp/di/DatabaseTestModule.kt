@@ -18,8 +18,7 @@ package com.hood.sleepdealer.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hood.sleepdealer.data.source.local.ToDoDatabase
-import com.hood.sleepdealer.di.DatabaseModule
+import com.hood.sleepdealer.data.source.local.SleepDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,9 +35,9 @@ object DatabaseTestModule {
 
     @Singleton
     @Provides
-    fun provideDataBase(@ApplicationContext context: Context): ToDoDatabase {
+    fun provideDataBase(@ApplicationContext context: Context): SleepDatabase {
         return Room
-            .inMemoryDatabaseBuilder(context.applicationContext, ToDoDatabase::class.java)
+            .inMemoryDatabaseBuilder(context.applicationContext, SleepDatabase::class.java)
             .allowMainThreadQueries()
             .build()
     }

@@ -63,7 +63,7 @@ fun StatisticsTopAppBar(openDrawer: () -> Unit) {
 }
 
 @Composable
-fun TaskDetailTopAppBar(onBack: () -> Unit, onDelete: () -> Unit) {
+fun SleepDetailTopAppBar(onBack: () -> Unit, onDelete: () -> Unit) {
     TopAppBar(
         title = {
             Text(text = stringResource(id = R.string.task_details))
@@ -120,7 +120,7 @@ private fun StatisticsTopAppBarPreview() {
 private fun TaskDetailTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            TaskDetailTopAppBar({ }, { })
+            SleepDetailTopAppBar({ }, { })
         }
     }
 }

@@ -16,7 +16,7 @@
 
 package com.hood.sleepdealer.data
 
-import com.hood.sleepdealer.data.source.local.TaskDao
+import com.hood.sleepdealer.data.source.local.SleepDao
 import com.hood.sleepdealer.data.source.network.NetworkDataSource
 import com.hood.sleepdealer.di.ApplicationScope
 import com.hood.sleepdealer.di.DefaultDispatcher
@@ -43,7 +43,7 @@ import kotlinx.coroutines.withContext
 @Singleton
 class DefaultSleepRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
-    private val localDataSource: TaskDao,
+    private val localDataSource: SleepDao,
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher,
     @ApplicationScope private val scope: CoroutineScope,
 ) : SleepRepository {
@@ -112,21 +112,6 @@ class DefaultSleepRepository @Inject constructor(
         return localDataSource.getById(taskId)?.toExternal()
     }
 
-    override suspend fun completeTask(taskId: String) {
-        localDataSource.updateCompleted(taskId = taskId, completed = true)
-        saveTasksToNetwork()
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        localDataSource.updateCompleted(taskId = taskId, completed = false)
-        saveTasksToNetwork()
-    }
-
-    override suspend fun clearCompletedTasks() {
-        localDataSource.deleteCompleted()
-        saveTasksToNetwork()
-    }
-
     override suspend fun deleteAllTasks() {
         localDataSource.deleteAll()
         saveTasksToNetwork()
@@ -156,7 +141,7 @@ class DefaultSleepRepository @Inject constructor(
      */
     override suspend fun refresh() {
         withContext(dispatcher) {
-            val remoteTasks = networkDataSource.loadTasks()
+            val remoteTasks = networkDataSource.loadSleeps()
             localDataSource.deleteAll()
             localDataSource.upsertAll(remoteTasks.toLocal())
         }
@@ -177,7 +162,7 @@ class DefaultSleepRepository @Inject constructor(
                 val networkTasks = withContext(dispatcher) {
                     localTasks.toNetwork()
                 }
-                networkDataSource.saveTasks(networkTasks)
+                networkDataSource.saveSleeps(networkTasks)
             } catch (e: Exception) {
                 // In a real app you'd handle the exception e.g. by exposing a `networkStatus` flow
                 // to an app level UI state holder which could then display a Toast message.

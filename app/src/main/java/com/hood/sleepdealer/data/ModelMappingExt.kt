@@ -16,8 +16,8 @@
 
 package com.hood.sleepdealer.data
 
-import com.hood.sleepdealer.data.source.local.LocalTask
-import com.hood.sleepdealer.data.source.network.NetworkTask
+import com.hood.sleepdealer.data.source.local.LocalSleep
+import com.hood.sleepdealer.data.source.network.NetworkSleep
 import com.hood.sleepdealer.data.source.network.TaskStatus
 
 /**
@@ -26,16 +26,16 @@ import com.hood.sleepdealer.data.source.network.TaskStatus
  * - Sleep: External model exposed to other layers in the architecture.
  * Obtained using `toExternal`.
  *
- * - NetworkTask: Internal model used to represent a sleep from the network. Obtained using
+ * - NetworkSleep: Internal model used to represent a sleep from the network. Obtained using
  * `toNetwork`.
  *
- * - LocalTask: Internal model used to represent a sleep stored locally in a database. Obtained
+ * - LocalSleep: Internal model used to represent a sleep stored locally in a database. Obtained
  * using `toLocal`.
  *
  */
 
 // External to local
-fun Sleep.toLocal() = LocalTask(
+fun Sleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = description,
@@ -45,7 +45,7 @@ fun Sleep.toLocal() = LocalTask(
 fun List<Sleep>.toLocal() = map(Sleep::toLocal)
 
 // Local to External
-fun LocalTask.toExternal() = Sleep(
+fun LocalSleep.toExternal() = Sleep(
     id = id,
     title = title,
     description = description,
@@ -56,10 +56,10 @@ fun LocalTask.toExternal() = Sleep(
 // Without this, type erasure will cause compiler errors because these methods will have the same
 // signature on the JVM.
 @JvmName("localToExternal")
-fun List<LocalTask>.toExternal() = map(LocalTask::toExternal)
+fun List<LocalSleep>.toExternal() = map(LocalSleep::toExternal)
 
 // Network to Local
-fun NetworkTask.toLocal() = LocalTask(
+fun NetworkSleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = shortDescription,
@@ -67,17 +67,17 @@ fun NetworkTask.toLocal() = LocalTask(
 )
 
 @JvmName("networkToLocal")
-fun List<NetworkTask>.toLocal() = map(NetworkTask::toLocal)
+fun List<NetworkSleep>.toLocal() = map(NetworkSleep::toLocal)
 
 // Local to Network
-fun LocalTask.toNetwork() = NetworkTask(
+fun LocalSleep.toNetwork() = NetworkSleep(
     id = id,
     title = title,
     shortDescription = description,
     status = if (isCompleted) { com.hood.sleepdealer.data.source.network.TaskStatus.COMPLETE } else { com.hood.sleepdealer.data.source.network.TaskStatus.ACTIVE }
 )
 
-fun List<LocalTask>.toNetwork() = map(LocalTask::toNetwork)
+fun List<LocalSleep>.toNetwork() = map(LocalSleep::toNetwork)
 
 // External to Network
 fun Sleep.toNetwork() = toLocal().toNetwork()
@@ -86,7 +86,7 @@ fun Sleep.toNetwork() = toLocal().toNetwork()
 fun List<Sleep>.toNetwork() = map(Sleep::toNetwork)
 
 // Network to External
-fun NetworkTask.toExternal() = toLocal().toExternal()
+fun NetworkSleep.toExternal() = toLocal().toExternal()
 
 @JvmName("networkToExternal")
-fun List<NetworkTask>.toExternal() = map(NetworkTask::toExternal)
+fun List<NetworkSleep>.toExternal() = map(NetworkSleep::toExternal)

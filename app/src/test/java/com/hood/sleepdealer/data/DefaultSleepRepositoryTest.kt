@@ -16,7 +16,7 @@
 
 package com.hood.sleepdealer.data
 
-import com.hood.sleepdealer.data.source.local.FakeTaskDao
+import com.hood.sleepdealer.data.source.local.FakeSleepDao
 import com.hood.sleepdealer.data.source.network.FakeNetworkDataSource
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase.assertEquals
@@ -47,7 +47,7 @@ class DefaultSleepRepositoryTest {
 
     // Test dependencies
     private lateinit var networkDataSource: FakeNetworkDataSource
-    private lateinit var localDataSource: FakeTaskDao
+    private lateinit var localDataSource: FakeSleepDao
 
     private var testDispatcher = UnconfinedTestDispatcher()
     private var testScope = TestScope(testDispatcher)
@@ -59,7 +59,7 @@ class DefaultSleepRepositoryTest {
     @Before
     fun createRepository() {
         networkDataSource = FakeNetworkDataSource(networkTasks.toMutableList())
-        localDataSource = FakeTaskDao(localTasks)
+        localDataSource = FakeSleepDao(localTasks)
         // Get a reference to the class under test
         taskRepository = DefaultSleepRepository(
             networkDataSource = networkDataSource,
@@ -208,7 +208,7 @@ class DefaultSleepRepositoryTest {
     @Test
     fun getTask_repositoryCachesAfterFirstApiCall() = testScope.runTest {
         // Obtain a sleep from the local data source
-        localDataSource = FakeTaskDao(mutableListOf(sleep1.toLocal()))
+        localDataSource = FakeSleepDao(mutableListOf(sleep1.toLocal()))
         val initial = taskRepository.getTask(sleep1.id)
 
         // Change the tasks on the remote

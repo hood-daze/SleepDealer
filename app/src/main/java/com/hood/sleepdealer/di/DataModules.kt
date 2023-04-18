@@ -20,10 +20,10 @@ import android.content.Context
 import androidx.room.Room
 import com.hood.sleepdealer.data.DefaultSleepRepository
 import com.hood.sleepdealer.data.SleepRepository
-import com.hood.sleepdealer.data.source.local.TaskDao
-import com.hood.sleepdealer.data.source.local.ToDoDatabase
+import com.hood.sleepdealer.data.source.local.SleepDao
+import com.hood.sleepdealer.data.source.local.SleepDatabase
 import com.hood.sleepdealer.data.source.network.NetworkDataSource
-import com.hood.sleepdealer.data.source.network.TaskNetworkDataSource
+import com.hood.sleepdealer.data.source.network.SleepNetworkDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -47,7 +47,7 @@ abstract class DataSourceModule {
 
     @Singleton
     @Binds
-    abstract fun bindNetworkDataSource(dataSource: TaskNetworkDataSource): NetworkDataSource
+    abstract fun bindNetworkDataSource(dataSource: SleepNetworkDataSource): NetworkDataSource
 }
 
 @Module
@@ -56,14 +56,14 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDataBase(@ApplicationContext context: Context): ToDoDatabase {
+    fun provideDataBase(@ApplicationContext context: Context): SleepDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            ToDoDatabase::class.java,
+            SleepDatabase::class.java,
             "Tasks.db"
         ).build()
     }
 
     @Provides
-    fun provideTaskDao(database: ToDoDatabase): TaskDao = database.taskDao()
+    fun provideTaskDao(database: SleepDatabase): SleepDao = database.sleepDao()
 }

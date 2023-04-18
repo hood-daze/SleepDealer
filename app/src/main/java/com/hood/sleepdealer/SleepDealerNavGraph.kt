@@ -35,7 +35,7 @@ import androidx.navigation.navArgument
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TASK_ID_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
-import com.hood.sleepdealer.addedittask.AddEditTaskScreen
+import com.hood.sleepdealer.addedittask.AddEditSleepScreen
 import com.hood.sleepdealer.profile.ProfileScreen
 import com.hood.sleepdealer.sleepdetail.SleepDetailScreen
 import com.hood.sleepdealer.sleeps.SleepsScreen
@@ -91,7 +91,7 @@ fun SleepDealerNavGraph(
             )
         ) { entry ->
             val taskId = entry.arguments?.getString(TASK_ID_ARG)
-            AddEditTaskScreen(
+            AddEditSleepScreen(
                 topBarTitle = entry.arguments?.getInt(TITLE_ARG)!!,
                 onTaskUpdate = {
                     navActions.navigateToTasks(

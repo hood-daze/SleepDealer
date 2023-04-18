@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 /**
  * UiState for the Add/Edit screen
  */
-data class AddEditTaskUiState(
+data class AddEditSleepUiState(
     val title: String = "",
     val description: String = "",
     val isTaskCompleted: Boolean = false,
@@ -46,7 +46,7 @@ data class AddEditTaskUiState(
  * ViewModel for the Add/Edit screen.
  */
 @HiltViewModel
-class AddEditTaskViewModel @Inject constructor(
+class AddEditSleepViewModel @Inject constructor(
     private val sleepRepository: SleepRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -56,8 +56,8 @@ class AddEditTaskViewModel @Inject constructor(
     // A MutableStateFlow needs to be created in this ViewModel. The source of truth of the current
     // editable Sleep is the ViewModel, we need to mutate the UI state directly in methods such as
     // `updateTitle` or `updateDescription`
-    private val _uiState = MutableStateFlow(AddEditTaskUiState())
-    val uiState: StateFlow<AddEditTaskUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(AddEditSleepUiState())
+    val uiState: StateFlow<AddEditSleepUiState> = _uiState.asStateFlow()
 
     init {
         if (taskId != null) {

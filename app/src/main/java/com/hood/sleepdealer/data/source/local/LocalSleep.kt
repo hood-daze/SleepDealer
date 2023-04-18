@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.data.source.network
+package com.hood.sleepdealer.data.source.local
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
- * Internal model used to represent a sleep obtained from the network. This is used inside the data
- * layer only.
+ * Internal model used to represent a sleep stored locally in a Room database. This is used inside
+ * the data layer only.
  *
  * See ModelMappingExt.kt for mapping functions used to convert this model to other
  * models.
  */
-data class NetworkTask(
-    val id: String,
-    val title: String,
-    val shortDescription: String,
-    val priority: Int? = null,
-    val status: TaskStatus = TaskStatus.ACTIVE
+@Entity(
+    tableName = "sleep"
 )
-
-enum class TaskStatus {
-    ACTIVE,
-    COMPLETE
-}
+data class LocalSleep(
+    @PrimaryKey val id: String,
+    var title: String,
+    var description: String,
+    var isCompleted: Boolean,
+)

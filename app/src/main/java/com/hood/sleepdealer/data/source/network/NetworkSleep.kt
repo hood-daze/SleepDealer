@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.data.source.local
-
-import androidx.room.Database
-import androidx.room.RoomDatabase
+package com.hood.sleepdealer.data.source.network
 
 /**
- * The Room Database that contains the Sleep table.
+ * Internal model used to represent a sleep obtained from the network. This is used inside the data
+ * layer only.
  *
- * Note that exportSchema should be true in production databases.
+ * See ModelMappingExt.kt for mapping functions used to convert this model to other
+ * models.
  */
-@Database(entities = [LocalTask::class], version = 1, exportSchema = false)
-abstract class ToDoDatabase : RoomDatabase() {
+data class NetworkSleep(
+    val id: String,
+    val title: String,
+    val shortDescription: String,
+    val priority: Int? = null,
+    val status: TaskStatus = TaskStatus.ACTIVE
+)
 
-    abstract fun taskDao(): TaskDao
+enum class TaskStatus {
+    ACTIVE,
+    COMPLETE
 }

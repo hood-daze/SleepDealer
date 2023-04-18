@@ -16,15 +16,13 @@
 
 package com.hood.sleepdealer.data.source.local
 
-import com.hood.sleepdealer.data.source.local.LocalTask
-import com.hood.sleepdealer.data.source.local.TaskDao
 import kotlinx.coroutines.flow.Flow
 
-class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {
+class FakeSleepDao(initialTasks: List<LocalSleep>? = emptyList()) : SleepDao {
 
-    private var _tasks: MutableMap<String, LocalTask>? = null
+    private var _tasks: MutableMap<String, LocalSleep>? = null
 
-    var tasks: List<LocalTask>?
+    var tasks: List<LocalSleep>?
         get() = _tasks?.values?.toList()
         set(newTasks) {
             _tasks = newTasks?.associateBy { it.id }?.toMutableMap()
@@ -36,13 +34,13 @@ class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {
 
     override suspend fun getAll() = tasks ?: throw Exception("Sleep list is null")
 
-    override suspend fun getById(taskId: String): LocalTask? = _tasks?.get(taskId)
+    override suspend fun getById(sleepId: String): LocalSleep? = _tasks?.get(sleepId)
 
-    override suspend fun upsertAll(tasks: List<LocalTask>) {
+    override suspend fun upsertAll(tasks: List<LocalSleep>) {
         _tasks?.putAll(tasks.associateBy { it.id })
     }
 
-    override suspend fun upsert(task: LocalTask) {
+    override suspend fun upsert(task: LocalSleep) {
         _tasks?.put(task.id, task)
     }
 
@@ -54,8 +52,8 @@ class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {
         _tasks?.clear()
     }
 
-    override suspend fun deleteById(taskId: String): Int {
-        return if (_tasks?.remove(taskId) == null) {
+    override suspend fun deleteById(sleepId: String): Int {
+        return if (_tasks?.remove(sleepId) == null) {
             0
         } else {
             1
@@ -71,11 +69,11 @@ class FakeTaskDao(initialTasks: List<LocalTask>? = emptyList()) : TaskDao {
         return 0
     }
 
-    override fun observeAll(): Flow<List<LocalTask>> {
+    override fun observeAll(): Flow<List<LocalSleep>> {
         TODO("Not implemented")
     }
 
-    override fun observeById(taskId: String): Flow<LocalTask> {
+    override fun observeById(sleepId: String): Flow<LocalSleep> {
         TODO("Not implemented")
     }
 }
