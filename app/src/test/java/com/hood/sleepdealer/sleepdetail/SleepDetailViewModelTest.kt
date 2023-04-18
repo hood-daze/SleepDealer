@@ -61,7 +61,7 @@ class SleepDetailViewModelTest {
 
         sleepDetailViewModel = SleepDetailViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
     }
 
@@ -101,7 +101,7 @@ class SleepDetailViewModelTest {
         sleepDetailViewModel.setCompleted(false)
 
         // Then the sleep is not completed and the snackbar shows the correct message
-        val newTask = tasksRepository.getTask(sleep.id)
+        val newTask = tasksRepository.getSleep(sleep.id)
         assertTrue((newTask?.isActive) ?: false)
         assertThat(sleepDetailViewModel.uiState.first().userMessage)
             .isEqualTo(R.string.task_marked_active)
@@ -123,7 +123,7 @@ class SleepDetailViewModelTest {
         // Given an ID for a non existent sleep
         sleepDetailViewModel = SleepDetailViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "nonexistent_id"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "nonexistent_id"))
         )
 
         // The sleep is null and the snackbar shows a "not found" error message

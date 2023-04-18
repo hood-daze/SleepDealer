@@ -64,8 +64,8 @@ class DefaultSleepRepository @Inject constructor(
         return taskId
     }
 
-    override suspend fun updateTask(taskId: String, title: String, description: String) {
-        val sleep = getTask(taskId)?.copy(
+    override suspend fun updateSleep(taskId: String, title: String, description: String) {
+        val sleep = getSleep(taskId)?.copy(
             title = title,
             description = description
         ) ?: throw Exception("Sleep (id $taskId) not found")
@@ -105,7 +105,7 @@ class DefaultSleepRepository @Inject constructor(
      * @param taskId - The ID of the sleep
      * @param forceUpdate - true if the sleep should be updated from the network data source first.
      */
-    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Sleep? {
+    override suspend fun getSleep(taskId: String, forceUpdate: Boolean): Sleep? {
         if (forceUpdate) {
             refresh()
         }

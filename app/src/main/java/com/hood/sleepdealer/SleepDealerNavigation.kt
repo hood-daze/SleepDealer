@@ -18,22 +18,22 @@ package com.hood.sleepdealer
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.hood.sleepdealer.SleepDealerDestinationsArgs.TASK_ID_ARG
+import com.hood.sleepdealer.SleepDealerDestinationsArgs.SLEEP_ID_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
-import com.hood.sleepdealer.SleepDealerScreens.ADD_EDIT_TASK_SCREEN
-import com.hood.sleepdealer.SleepDealerScreens.STATISTICS_SCREEN
-import com.hood.sleepdealer.SleepDealerScreens.TASKS_SCREEN
-import com.hood.sleepdealer.SleepDealerScreens.TASK_DETAIL_SCREEN
+import com.hood.sleepdealer.SleepDealerScreens.ADD_EDIT_SLEEP_SCREEN
+import com.hood.sleepdealer.SleepDealerScreens.PROFILE_SCREEN
+import com.hood.sleepdealer.SleepDealerScreens.SLEEPS_SCREEN
+import com.hood.sleepdealer.SleepDealerScreens.SLEEP_DETAIL_SCREEN
 
 /**
  * Screens used in [SleepDealerDestinations]
  */
 private object SleepDealerScreens {
-    const val TASKS_SCREEN = "tasks"
-    const val STATISTICS_SCREEN = "statistics"
-    const val TASK_DETAIL_SCREEN = "sleep"
-    const val ADD_EDIT_TASK_SCREEN = "addEditTask"
+    const val SLEEPS_SCREEN = "sleeps"
+    const val PROFILE_SCREEN = "profile"
+    const val SLEEP_DETAIL_SCREEN = "sleep"
+    const val ADD_EDIT_SLEEP_SCREEN = "addEditSleep"
 }
 
 /**
@@ -41,7 +41,7 @@ private object SleepDealerScreens {
  */
 object SleepDealerDestinationsArgs {
     const val USER_MESSAGE_ARG = "userMessage"
-    const val TASK_ID_ARG = "taskId"
+    const val SLEEP_ID_ARG = "sleepId"
     const val TITLE_ARG = "title"
 }
 
@@ -49,10 +49,10 @@ object SleepDealerDestinationsArgs {
  * Destinations used in the [SleepDealerActivity]
  */
 object SleepDealerDestinations {
-    const val TASKS_ROUTE = "$TASKS_SCREEN?$USER_MESSAGE_ARG={$USER_MESSAGE_ARG}"
-    const val STATISTICS_ROUTE = STATISTICS_SCREEN
-    const val TASK_DETAIL_ROUTE = "$TASK_DETAIL_SCREEN/{$TASK_ID_ARG}"
-    const val ADD_EDIT_TASK_ROUTE = "$ADD_EDIT_TASK_SCREEN/{$TITLE_ARG}?$TASK_ID_ARG={$TASK_ID_ARG}"
+    const val SLEEPS_ROUTE = "$SLEEPS_SCREEN?$USER_MESSAGE_ARG={$USER_MESSAGE_ARG}"
+    const val PROFILE_ROUTE = PROFILE_SCREEN
+    const val SLEEP_DETAIL_ROUTE = "$SLEEP_DETAIL_SCREEN/{$SLEEP_ID_ARG}"
+    const val ADD_EDIT_SLEEP_ROUTE = "$ADD_EDIT_SLEEP_SCREEN/{$TITLE_ARG}?$SLEEP_ID_ARG={$SLEEP_ID_ARG}"
 }
 
 /**
@@ -60,10 +60,10 @@ object SleepDealerDestinations {
  */
 class SleepDealerNavigationActions(private val navController: NavHostController) {
 
-    fun navigateToTasks(userMessage: Int = 0) {
+    fun navigateToSleeps(userMessage: Int = 0) {
         val navigatesFromDrawer = userMessage == 0
         navController.navigate(
-            TASKS_SCREEN.let {
+            SLEEPS_SCREEN.let {
                 if (userMessage != 0) "$it?$USER_MESSAGE_ARG=$userMessage" else it
             }
         ) {
@@ -76,8 +76,8 @@ class SleepDealerNavigationActions(private val navController: NavHostController)
         }
     }
 
-    fun navigateToStatistics() {
-        navController.navigate(SleepDealerDestinations.STATISTICS_ROUTE) {
+    fun navigateToProfile() {
+        navController.navigate(SleepDealerDestinations.PROFILE_ROUTE) {
             // Pop up to the start destination of the graph to
             // avoid building up a large stack of destinations
             // on the back stack as users select items
@@ -92,14 +92,14 @@ class SleepDealerNavigationActions(private val navController: NavHostController)
         }
     }
 
-    fun navigateToTaskDetail(taskId: String) {
-        navController.navigate("$TASK_DETAIL_SCREEN/$taskId")
+    fun navigateToSleepDetail(taskId: String) {
+        navController.navigate("$SLEEP_DETAIL_SCREEN/$taskId")
     }
 
-    fun navigateToAddEditTask(title: Int, taskId: String?) {
+    fun navigateToAddEditSleep(title: Int, sleepId: String?) {
         navController.navigate(
-            "$ADD_EDIT_TASK_SCREEN/$title".let {
-                if (taskId != null) "$it?$TASK_ID_ARG=$taskId" else it
+            "$ADD_EDIT_SLEEP_SCREEN/$title".let {
+                if (sleepId != null) "$it?$SLEEP_ID_ARG=$sleepId" else it
             }
         )
     }

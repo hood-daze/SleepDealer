@@ -64,8 +64,8 @@ fun AppModalDrawer(
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
-                navigateToTasks = { navigationActions.navigateToTasks() },
-                navigateToStatistics = { navigationActions.navigateToStatistics() },
+                navigateToTasks = { navigationActions.navigateToSleeps() },
+                navigateToStatistics = { navigationActions.navigateToProfile() },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } }
             )
         }
@@ -87,7 +87,7 @@ private fun AppDrawer(
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_list),
             label = stringResource(id = R.string.list_title),
-            isSelected = currentRoute == SleepDealerDestinations.TASKS_ROUTE,
+            isSelected = currentRoute == SleepDealerDestinations.SLEEPS_ROUTE,
             action = {
                 navigateToTasks()
                 closeDrawer()
@@ -96,7 +96,7 @@ private fun AppDrawer(
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_statistics),
             label = "プロフィール",
-            isSelected = currentRoute == SleepDealerDestinations.STATISTICS_ROUTE,
+            isSelected = currentRoute == SleepDealerDestinations.PROFILE_ROUTE,
             action = {
                 navigateToStatistics()
                 closeDrawer()
@@ -177,7 +177,7 @@ fun PreviewAppDrawer() {
     AppCompatTheme {
         Surface {
             AppDrawer(
-                currentRoute = SleepDealerDestinations.TASKS_ROUTE,
+                currentRoute = SleepDealerDestinations.SLEEPS_ROUTE,
                 navigateToTasks = {},
                 navigateToStatistics = {},
                 closeDrawer = {}

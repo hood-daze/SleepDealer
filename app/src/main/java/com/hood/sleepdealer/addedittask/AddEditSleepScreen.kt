@@ -85,8 +85,8 @@ fun AddEditSleepScreen(
         )
 
         // Check if the sleep is saved and call onTaskUpdate event
-        LaunchedEffect(uiState.isTaskSaved) {
-            if (uiState.isTaskSaved) {
+        LaunchedEffect(uiState.isSleepSaved) {
+            if (uiState.isSleepSaved) {
                 onTaskUpdate()
             }
         }

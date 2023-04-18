@@ -63,7 +63,7 @@ class AddEditSleepViewModelTest {
     fun saveNewTaskToRepository_showsSuccessMessageUi() {
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         val newTitle = "New Sleep Title"
@@ -88,7 +88,7 @@ class AddEditSleepViewModelTest {
 
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         // Then progress indicator is shown
@@ -105,7 +105,7 @@ class AddEditSleepViewModelTest {
     fun loadTasks_taskShown() {
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         // Add sleep to repository
@@ -122,7 +122,7 @@ class AddEditSleepViewModelTest {
     fun saveNewTaskToRepository_emptyTitle_error() {
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         saveTaskAndAssertUserMessage("", "Some Sleep Description")
@@ -132,7 +132,7 @@ class AddEditSleepViewModelTest {
     fun saveNewTaskToRepository_emptyDescription_error() {
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         saveTaskAndAssertUserMessage("Title", "")
@@ -142,7 +142,7 @@ class AddEditSleepViewModelTest {
     fun saveNewTaskToRepository_emptyDescriptionEmptyTitle_error() {
         addEditSleepViewModel = AddEditSleepViewModel(
             tasksRepository,
-            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.TASK_ID_ARG to "0"))
+            SavedStateHandle(mapOf(SleepDealerDestinationsArgs.SLEEP_ID_ARG to "0"))
         )
 
         saveTaskAndAssertUserMessage("", "")

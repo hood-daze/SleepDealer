@@ -72,7 +72,7 @@ class FakeSleepRepository : SleepRepository {
         }
     }
 
-    override suspend fun getTask(taskId: String, forceUpdate: Boolean): Sleep? {
+    override suspend fun getSleep(taskId: String, forceUpdate: Boolean): Sleep? {
         if (shouldThrowError) {
             throw Exception("Test exception")
         }
@@ -86,7 +86,7 @@ class FakeSleepRepository : SleepRepository {
         return observableTasks.first()
     }
 
-    override suspend fun updateTask(taskId: String, title: String, description: String) {
+    override suspend fun updateSleep(taskId: String, title: String, description: String) {
         val updatedSleep = _savedTasks.value[taskId]?.copy(
             title = title,
             description = description

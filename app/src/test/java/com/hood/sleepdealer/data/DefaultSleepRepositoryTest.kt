@@ -180,13 +180,13 @@ class DefaultSleepRepositoryTest {
         val newTaskId = taskRepository.createTask(newSleep.title, newSleep.description)
 
         // Make sure it's active
-        assertThat(taskRepository.getTask(newTaskId)?.isCompleted).isFalse()
+        assertThat(taskRepository.getSleep(newTaskId)?.isCompleted).isFalse()
 
         // Mark is as complete
         taskRepository.completeTask(newTaskId)
 
         // Verify it's now completed
-        assertThat(taskRepository.getTask(newTaskId)?.isCompleted).isTrue()
+        assertThat(taskRepository.getSleep(newTaskId)?.isCompleted).isTrue()
     }
 
     @Test
@@ -196,26 +196,26 @@ class DefaultSleepRepositoryTest {
         taskRepository.completeTask(newTaskId)
 
         // Make sure it's completed
-        assertThat(taskRepository.getTask(newTaskId)?.isActive).isFalse()
+        assertThat(taskRepository.getSleep(newTaskId)?.isActive).isFalse()
 
         // Mark is as active
         taskRepository.activateTask(newTaskId)
 
         // Verify it's now activated
-        assertThat(taskRepository.getTask(newTaskId)?.isActive).isTrue()
+        assertThat(taskRepository.getSleep(newTaskId)?.isActive).isTrue()
     }
 
     @Test
     fun getTask_repositoryCachesAfterFirstApiCall() = testScope.runTest {
         // Obtain a sleep from the local data source
         localDataSource = FakeSleepDao(mutableListOf(sleep1.toLocal()))
-        val initial = taskRepository.getTask(sleep1.id)
+        val initial = taskRepository.getSleep(sleep1.id)
 
         // Change the tasks on the remote
         networkDataSource.tasks = newTasks.toNetwork().toMutableList()
 
         // Obtain the same sleep again
-        val second = taskRepository.getTask(sleep1.id)
+        val second = taskRepository.getSleep(sleep1.id)
 
         // Initial and second tasks should match because we didn't force a refresh
         assertThat(second).isEqualTo(initial)
@@ -225,15 +225,15 @@ class DefaultSleepRepositoryTest {
     fun getTask_forceRefresh() = testScope.runTest {
         // Trigger the repository to load data, which loads from remote and caches
         networkDataSource.tasks = mutableListOf(sleep1.toNetwork())
-        val task1FirstTime = taskRepository.getTask(sleep1.id, forceUpdate = true)
+        val task1FirstTime = taskRepository.getSleep(sleep1.id, forceUpdate = true)
         assertThat(task1FirstTime?.id).isEqualTo(sleep1.id)
 
         // Configure the remote data source to return a different sleep
         networkDataSource.tasks = mutableListOf(sleep2.toNetwork())
 
         // Force refresh
-        val task1SecondTime = taskRepository.getTask(sleep1.id, true)
-        val task2SecondTime = taskRepository.getTask(sleep2.id, true)
+        val task1SecondTime = taskRepository.getSleep(sleep1.id, true)
+        val task2SecondTime = taskRepository.getSleep(sleep2.id, true)
 
         // Only sleep2 works because sleep1 does not exist on the remote
         assertThat(task1SecondTime).isNull()

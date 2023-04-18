@@ -31,13 +31,13 @@ interface SleepRepository {
 
     fun getTaskStream(taskId: String): Flow<Sleep?>
 
-    suspend fun getTask(taskId: String, forceUpdate: Boolean = false): Sleep?
+    suspend fun getSleep(taskId: String, forceUpdate: Boolean = false): Sleep?
 
     suspend fun refreshTask(taskId: String)
 
     suspend fun createTask(title: String, description: String): String
 
-    suspend fun updateTask(taskId: String, title: String, description: String)
+    suspend fun updateSleep(taskId: String, title: String, description: String)
 
     suspend fun deleteAllTasks()
 

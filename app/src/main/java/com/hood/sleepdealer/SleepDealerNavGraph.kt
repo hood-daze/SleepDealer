@@ -32,7 +32,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.hood.sleepdealer.SleepDealerDestinationsArgs.TASK_ID_ARG
+import com.hood.sleepdealer.SleepDealerDestinationsArgs.SLEEP_ID_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
 import com.hood.sleepdealer.addedittask.AddEditSleepScreen
@@ -49,7 +49,7 @@ fun SleepDealerNavGraph(
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    startDestination: String = SleepDealerDestinations.TASKS_ROUTE,
+    startDestination: String = SleepDealerDestinations.SLEEPS_ROUTE,
     navActions: SleepDealerNavigationActions = remember(navController) {
         SleepDealerNavigationActions(navController)
     }
@@ -63,7 +63,7 @@ fun SleepDealerNavGraph(
         modifier = modifier
     ) {
         composable(
-            SleepDealerDestinations.TASKS_ROUTE,
+            SleepDealerDestinations.SLEEPS_ROUTE,
             arguments = listOf(
                 navArgument(USER_MESSAGE_ARG) { type = NavType.IntType; defaultValue = 0 }
             )
@@ -72,42 +72,42 @@ fun SleepDealerNavGraph(
                 SleepsScreen(
                     userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                     onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
-                    onAddSleep = { navActions.navigateToAddEditTask(R.string.add_sleep, null) },
-                    onSleepClick = { task -> navActions.navigateToTaskDetail(task.id) },
+                    onAddSleep = { navActions.navigateToAddEditSleep(R.string.add_sleep, null) },
+                    onSleepClick = { task -> navActions.navigateToSleepDetail(task.id) },
                     openDrawer = { coroutineScope.launch { drawerState.open() } }
                 )
             }
         }
-        composable(SleepDealerDestinations.STATISTICS_ROUTE) {
+        composable(SleepDealerDestinations.PROFILE_ROUTE) {
             AppModalDrawer(drawerState, currentRoute, navActions) {
                 ProfileScreen(openDrawer = { coroutineScope.launch { drawerState.open() } })
             }
         }
         composable(
-            SleepDealerDestinations.ADD_EDIT_TASK_ROUTE,
+            SleepDealerDestinations.ADD_EDIT_SLEEP_ROUTE,
             arguments = listOf(
                 navArgument(TITLE_ARG) { type = NavType.IntType },
-                navArgument(TASK_ID_ARG) { type = NavType.StringType; nullable = true },
+                navArgument(SLEEP_ID_ARG) { type = NavType.StringType; nullable = true },
             )
         ) { entry ->
-            val taskId = entry.arguments?.getString(TASK_ID_ARG)
+            val taskId = entry.arguments?.getString(SLEEP_ID_ARG)
             AddEditSleepScreen(
                 topBarTitle = entry.arguments?.getInt(TITLE_ARG)!!,
                 onTaskUpdate = {
-                    navActions.navigateToTasks(
+                    navActions.navigateToSleeps(
                         if (taskId == null) ADD_EDIT_RESULT_OK else EDIT_RESULT_OK
                     )
                 },
                 onBack = { navController.popBackStack() }
             )
         }
-        composable(SleepDealerDestinations.TASK_DETAIL_ROUTE) {
+        composable(SleepDealerDestinations.SLEEP_DETAIL_ROUTE) {
             SleepDetailScreen(
                 onEditTask = { taskId ->
-                    navActions.navigateToAddEditTask(R.string.edit_task, taskId)
+                    navActions.navigateToAddEditSleep(R.string.edit_task, taskId)
                 },
                 onBack = { navController.popBackStack() },
-                onDeleteTask = { navActions.navigateToTasks(DELETE_RESULT_OK) }
+                onDeleteTask = { navActions.navigateToSleeps(DELETE_RESULT_OK) }
             )
         }
     }

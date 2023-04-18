@@ -38,7 +38,7 @@ data class AddEditSleepUiState(
     val description: String = "",
     val isLoading: Boolean = false,
     val userMessage: Int? = null,
-    val isTaskSaved: Boolean = false
+    val isSleepSaved: Boolean = false
 )
 
 /**
@@ -50,7 +50,7 @@ class AddEditSleepViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val taskId: String? = savedStateHandle[SleepDealerDestinationsArgs.TASK_ID_ARG]
+    private val sleepId: String? = savedStateHandle[SleepDealerDestinationsArgs.SLEEP_ID_ARG]
 
     // A MutableStateFlow needs to be created in this ViewModel. The source of truth of the current
     // editable Sleep is the ViewModel, we need to mutate the UI state directly in methods such as
@@ -59,8 +59,8 @@ class AddEditSleepViewModel @Inject constructor(
     val uiState: StateFlow<AddEditSleepUiState> = _uiState.asStateFlow()
 
     init {
-        if (taskId != null) {
-            loadTask(taskId)
+        if (sleepId != null) {
+            loadSleep(sleepId)
         }
     }
 
@@ -73,10 +73,10 @@ class AddEditSleepViewModel @Inject constructor(
             return
         }
 
-        if (taskId == null) {
-            createNewTask()
+        if (sleepId == null) {
+            createSleep()
         } else {
-            updateTask()
+            updateSleep()
         }
     }
 
@@ -98,40 +98,40 @@ class AddEditSleepViewModel @Inject constructor(
         }
     }
 
-    private fun createNewTask() = viewModelScope.launch {
+    private fun createSleep() = viewModelScope.launch {
         sleepRepository.createTask(uiState.value.title, uiState.value.description)
         _uiState.update {
-            it.copy(isTaskSaved = true)
+            it.copy(isSleepSaved = true)
         }
     }
 
-    private fun updateTask() {
-        if (taskId == null) {
+    private fun updateSleep() {
+        if (sleepId == null) {
             throw RuntimeException("updateTask() was called but sleep is new.")
         }
         viewModelScope.launch {
-            sleepRepository.updateTask(
-                taskId,
+            sleepRepository.updateSleep(
+                sleepId,
                 title = uiState.value.title,
                 description = uiState.value.description,
             )
             _uiState.update {
-                it.copy(isTaskSaved = true)
+                it.copy(isSleepSaved = true)
             }
         }
     }
 
-    private fun loadTask(taskId: String) {
+    private fun loadSleep(sleepId: String) {
         _uiState.update {
             it.copy(isLoading = true)
         }
         viewModelScope.launch {
-            sleepRepository.getTask(taskId).let { task ->
-                if (task != null) {
+            sleepRepository.getSleep(sleepId).let { sleep ->
+                if (sleep != null) {
                     _uiState.update {
                         it.copy(
-                            title = task.title,
-                            description = task.description,
+                            title = sleep.title,
+                            description = sleep.description,
                             isLoading = false
                         )
                     }

@@ -54,7 +54,7 @@ class SleepDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val sleepId: String = savedStateHandle[SleepDealerDestinationsArgs.TASK_ID_ARG]!!
+    val sleepId: String = savedStateHandle[SleepDealerDestinationsArgs.SLEEP_ID_ARG]!!
 
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
