@@ -23,15 +23,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,7 +63,7 @@ fun SleepDetailScreen(
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        EditTaskContent(
+        SleepDetailContent(
             loading = uiState.isLoading,
             empty = uiState.sleep == null && !uiState.isLoading,
             sleep = uiState.sleep,
@@ -94,7 +90,7 @@ fun SleepDetailScreen(
 }
 
 @Composable
-private fun EditTaskContent(
+private fun SleepDetailContent(
     loading: Boolean,
     empty: Boolean,
     sleep: Sleep?,
@@ -140,10 +136,10 @@ private fun EditTaskContent(
 
 @Preview
 @Composable
-private fun EditTaskContentPreview() {
+private fun SleepDetailContentPreview() {
     AppCompatTheme {
         Surface {
-            EditTaskContent(
+            SleepDetailContent(
                 loading = false,
                 empty = false,
                 Sleep(
@@ -157,31 +153,13 @@ private fun EditTaskContentPreview() {
     }
 }
 
-@Preview
-@Composable
-private fun EditTaskContentTaskCompletedPreview() {
-    AppCompatTheme {
-        Surface {
-            EditTaskContent(
-                loading = false,
-                empty = false,
-                Sleep(
-                    title = "Title",
-                    description = "Description",
-                    id = "ID"
-                ),
-                onRefresh = { }
-            )
-        }
-    }
-}
 
 @Preview
 @Composable
-private fun EditTaskContentEmptyPreview() {
+private fun SleepDetailContentEmptyPreview() {
     AppCompatTheme {
         Surface {
-            EditTaskContent(
+            SleepDetailContent(
                 loading = false,
                 empty = true,
                 Sleep(

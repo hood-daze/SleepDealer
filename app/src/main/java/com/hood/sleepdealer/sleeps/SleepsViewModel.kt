@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hood.sleepdealer.ADD_RESULT_OK
 import com.hood.sleepdealer.DELETE_RESULT_OK
-import com.hood.sleepdealer.EDIT_RESULT_OK
 import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.data.SleepRepository
@@ -82,7 +81,6 @@ class SleepsViewModel @Inject constructor(
 
     fun showEditResultMessage(result: Int) {
         when (result) {
-            EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_sleep_message)
             ADD_RESULT_OK -> showSnackbarMessage(R.string.successfully_added_sleep_message)
             DELETE_RESULT_OK -> showSnackbarMessage(R.string.successfully_deleted_sleep_message)
         }

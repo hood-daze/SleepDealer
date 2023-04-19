@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.addedittask
+package com.hood.sleepdealer.addsleep
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 /**
  * UiState for the Add/Edit screen
  */
-data class AddEditSleepUiState(
+data class AddSleepUiState(
     val title: String = "",
     val description: String = "",
     val isLoading: Boolean = false,
@@ -45,7 +45,7 @@ data class AddEditSleepUiState(
  * ViewModel for the Add/Edit screen.
  */
 @HiltViewModel
-class AddEditSleepViewModel @Inject constructor(
+class AddSleepViewModel @Inject constructor(
     private val sleepRepository: SleepRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -55,14 +55,8 @@ class AddEditSleepViewModel @Inject constructor(
     // A MutableStateFlow needs to be created in this ViewModel. The source of truth of the current
     // editable Sleep is the ViewModel, we need to mutate the UI state directly in methods such as
     // `updateTitle` or `updateDescription`
-    private val _uiState = MutableStateFlow(AddEditSleepUiState())
-    val uiState: StateFlow<AddEditSleepUiState> = _uiState.asStateFlow()
-
-    init {
-        if (sleepId != null) {
-            loadSleep(sleepId)
-        }
-    }
+    private val _uiState = MutableStateFlow(AddSleepUiState())
+    val uiState: StateFlow<AddSleepUiState> = _uiState.asStateFlow()
 
     // Called when clicking on fab.
     fun saveTask() {
@@ -75,8 +69,6 @@ class AddEditSleepViewModel @Inject constructor(
 
         if (sleepId == null) {
             createSleep()
-        } else {
-            updateSleep()
         }
     }
 
@@ -105,42 +97,4 @@ class AddEditSleepViewModel @Inject constructor(
         }
     }
 
-    private fun updateSleep() {
-        if (sleepId == null) {
-            throw RuntimeException("updateTask() was called but sleep is new.")
-        }
-        viewModelScope.launch {
-            sleepRepository.updateSleep(
-                sleepId,
-                title = uiState.value.title,
-                description = uiState.value.description,
-            )
-            _uiState.update {
-                it.copy(isSleepSaved = true)
-            }
-        }
-    }
-
-    private fun loadSleep(sleepId: String) {
-        _uiState.update {
-            it.copy(isLoading = true)
-        }
-        viewModelScope.launch {
-            sleepRepository.getSleep(sleepId).let { sleep ->
-                if (sleep != null) {
-                    _uiState.update {
-                        it.copy(
-                            title = sleep.title,
-                            description = sleep.description,
-                            isLoading = false
-                        )
-                    }
-                } else {
-                    _uiState.update {
-                        it.copy(isLoading = false)
-                    }
-                }
-            }
-        }
-    }
 }

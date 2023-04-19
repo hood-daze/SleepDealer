@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.addedittask
+package com.hood.sleepdealer.addsleep
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
@@ -61,7 +61,7 @@ fun AddSleepScreen(
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    viewModel: AddEditSleepViewModel = hiltViewModel()
+    viewModel: AddSleepViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),

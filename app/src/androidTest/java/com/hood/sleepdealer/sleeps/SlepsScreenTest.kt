@@ -87,7 +87,6 @@ class SlepsScreenTest {
                         viewModel = SleepsViewModel(repository, SavedStateHandle()),
                         userMessage = R.string.successfully_added_sleep_message,
                         onUserMessageDisplayed = { },
-                        onAddSleep = { },
                         onSleepClick = { },
                         openDrawer = { }
                     )

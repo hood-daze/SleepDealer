@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hood.sleepdealer.addedittask
+package com.hood.sleepdealer.addsleep
 
 import androidx.compose.material.Surface
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -73,7 +73,7 @@ class AddEditSleepScreenTest {
             AppCompatTheme {
                 Surface {
                     AddSleepScreen(
-                        viewModel = AddEditSleepViewModel(repository, SavedStateHandle()),
+                        viewModel = AddSleepViewModel(repository, SavedStateHandle()),
                         topBarTitle = R.string.add_sleep,
                         onTaskUpdate = { },
                         openDrawer = { },

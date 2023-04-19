@@ -34,7 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
-import com.hood.sleepdealer.addedittask.AddSleepScreen
+import com.hood.sleepdealer.addsleep.AddSleepScreen
 import com.hood.sleepdealer.profile.ProfileScreen
 import com.hood.sleepdealer.sleepdetail.SleepDetailScreen
 import com.hood.sleepdealer.sleeps.SleepsScreen
@@ -111,4 +111,3 @@ fun SleepDealerNavGraph(
 // Keys for navigation
 const val ADD_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val DELETE_RESULT_OK = Activity.RESULT_FIRST_USER + 2
-const val EDIT_RESULT_OK = Activity.RESULT_FIRST_USER + 3
