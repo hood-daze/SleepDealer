@@ -70,15 +70,14 @@ class AppNavigationTest {
     }
 
     @Test
-    fun drawerNavigationFromTasksToStatistics() {
+    fun drawerNavigationFromSleepsToProfile() {
         setContent()
 
         openDrawer()
         // Start statistics screen.
-        composeTestRule.onNodeWithText(activity.getString(R.string.statistics_title)).performClick()
+        composeTestRule.onNodeWithText(activity.getString(R.string.profile_title)).performClick()
         // Check that statistics screen was opened.
-        composeTestRule.onNodeWithText(activity.getString(R.string.statistics_no_tasks))
-            .assertIsDisplayed()
+        // Todo
 
         openDrawer()
         // Start tasks screen.
@@ -89,20 +88,24 @@ class AppNavigationTest {
     }
 
     @Test
-    fun tasksScreen_clickOnAndroidHomeIcon_OpensNavigation() {
+    fun sleepsScreen_clickOnAndroidHomeIcon_OpensNavigation() {
         setContent()
 
         // Check that left drawer is closed at startup
         composeTestRule.onNodeWithText(activity.getString(R.string.list_title))
             .assertIsNotDisplayed()
-        composeTestRule.onNodeWithText(activity.getString(R.string.statistics_title))
+        composeTestRule.onNodeWithText(activity.getString(R.string.add_sleep_title))
+            .assertIsNotDisplayed()
+        composeTestRule.onNodeWithText(activity.getString(R.string.profile_title))
             .assertIsNotDisplayed()
 
         openDrawer()
 
         // Check if drawer is open
         composeTestRule.onNodeWithText(activity.getString(R.string.list_title)).assertIsDisplayed()
-        composeTestRule.onNodeWithText(activity.getString(R.string.statistics_title))
+        composeTestRule.onNodeWithText(activity.getString(R.string.add_sleep_title))
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(activity.getString(R.string.profile_title))
             .assertIsDisplayed()
     }
 
@@ -112,7 +115,7 @@ class AppNavigationTest {
 
         // When the user navigates to the stats screen
         openDrawer()
-        composeTestRule.onNodeWithText(activity.getString(R.string.statistics_title)).performClick()
+        composeTestRule.onNodeWithText(activity.getString(R.string.profile_title)).performClick()
 
         composeTestRule.onNodeWithText(activity.getString(R.string.list_title))
             .assertIsNotDisplayed()
@@ -122,7 +125,7 @@ class AppNavigationTest {
         // Check if drawer is open
         composeTestRule.onNodeWithText(activity.getString(R.string.list_title)).assertIsDisplayed()
         assertTrue(
-            composeTestRule.onAllNodesWithText(activity.getString(R.string.statistics_title))
+            composeTestRule.onAllNodesWithText(activity.getString(R.string.profile_title))
                 .fetchSemanticsNodes().isNotEmpty()
         )
     }

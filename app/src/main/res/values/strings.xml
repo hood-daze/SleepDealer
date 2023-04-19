@@ -63,5 +63,6 @@
     <string name="tasks_header_image_content_description">Tasks header image</string>
     <string name="no_tasks_image_content_description">No sleeps image</string>
     <string name="add_sleep_title">測定</string>
+    <string name="profile_title">プロフィール</string>
 
 </resources>

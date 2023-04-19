@@ -48,7 +48,7 @@ fun SleepDealerNavGraph(
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    startDestination: String = SleepDealerDestinations.ADD_SLEEP_ROUTE,
+    startDestination: String = SleepDealerDestinations.SLEEPS_ROUTE,
     navActions: SleepDealerNavigationActions = remember(navController) {
         SleepDealerNavigationActions(navController)
     }

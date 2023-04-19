@@ -87,16 +87,6 @@ private fun AppDrawer(
     Column(modifier = modifier.fillMaxSize()) {
         DrawerHeader()
         DrawerButton(
-            painter = painterResource(id = R.drawable.ic_statistics),
-            label = stringResource(id = R.string.add_sleep_title),
-            isSelected = currentRoute == SleepDealerDestinations.ADD_SLEEP_ROUTE,
-            action = {
-                navigateToAddSleep()
-                closeDrawer()
-            }
-        )
-
-        DrawerButton(
             painter = painterResource(id = R.drawable.ic_list),
             label = stringResource(id = R.string.list_title),
             isSelected = currentRoute == SleepDealerDestinations.SLEEPS_ROUTE,
@@ -108,7 +98,17 @@ private fun AppDrawer(
 
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_statistics),
-            label = "プロフィール",
+            label = stringResource(id = R.string.add_sleep_title),
+            isSelected = currentRoute == SleepDealerDestinations.ADD_SLEEP_ROUTE,
+            action = {
+                navigateToAddSleep()
+                closeDrawer()
+            }
+        )
+
+        DrawerButton(
+            painter = painterResource(id = R.drawable.ic_statistics),
+            label = stringResource(R.string.profile_title),
             isSelected = currentRoute == SleepDealerDestinations.PROFILE_ROUTE,
             action = {
                 navigateToProfile()
