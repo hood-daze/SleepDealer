@@ -66,6 +66,7 @@ fun AppModalDrawer(
                 currentRoute = currentRoute,
                 navigateToTasks = { navigationActions.navigateToSleeps() },
                 navigateToStatistics = { navigationActions.navigateToProfile() },
+                navigateToAddEditSleep = { navigationActions.navigateToAddEditSleep(R.string.add_sleep) },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } }
             )
         }
@@ -79,6 +80,7 @@ private fun AppDrawer(
     currentRoute: String,
     navigateToTasks: () -> Unit,
     navigateToStatistics: () -> Unit,
+    navigateToAddEditSleep: () -> Unit,
     closeDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -99,6 +101,16 @@ private fun AppDrawer(
             isSelected = currentRoute == SleepDealerDestinations.PROFILE_ROUTE,
             action = {
                 navigateToStatistics()
+                closeDrawer()
+            }
+        )
+
+        DrawerButton(
+            painter = painterResource(id = R.drawable.ic_statistics),
+            label = "計測",
+            isSelected = currentRoute == SleepDealerDestinations.ADD_SLEEP_ROUTE,
+            action = {
+                navigateToAddEditSleep()
                 closeDrawer()
             }
         )
@@ -180,6 +192,7 @@ fun PreviewAppDrawer() {
                 currentRoute = SleepDealerDestinations.SLEEPS_ROUTE,
                 navigateToTasks = {},
                 navigateToStatistics = {},
+                navigateToAddEditSleep = {},
                 closeDrawer = {}
             )
         }

@@ -55,10 +55,10 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AddEditSleepScreen(
+fun AddSleepScreen(
     @StringRes topBarTitle: Int,
     onTaskUpdate: () -> Unit,
-    onBack: () -> Unit,
+    openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     viewModel: AddEditSleepViewModel = hiltViewModel()
@@ -66,7 +66,7 @@ fun AddEditSleepScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        topBar = { AddEditTaskTopAppBar(topBarTitle, onBack) },
+        topBar = { AddEditTaskTopAppBar(topBarTitle, openDrawer) },
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::saveTask) {
                 Icon(Icons.Filled.Done, stringResource(id = R.string.cd_save_task))

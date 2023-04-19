@@ -52,7 +52,7 @@ object SleepDealerDestinations {
     const val SLEEPS_ROUTE = "$SLEEPS_SCREEN?$USER_MESSAGE_ARG={$USER_MESSAGE_ARG}"
     const val PROFILE_ROUTE = PROFILE_SCREEN
     const val SLEEP_DETAIL_ROUTE = "$SLEEP_DETAIL_SCREEN/{$SLEEP_ID_ARG}"
-    const val ADD_EDIT_SLEEP_ROUTE = "$ADD_EDIT_SLEEP_SCREEN/{$TITLE_ARG}?$SLEEP_ID_ARG={$SLEEP_ID_ARG}"
+    const val ADD_SLEEP_ROUTE = "$ADD_EDIT_SLEEP_SCREEN/{$TITLE_ARG}"
 }
 
 /**
@@ -92,15 +92,25 @@ class SleepDealerNavigationActions(private val navController: NavHostController)
         }
     }
 
-    fun navigateToSleepDetail(taskId: String) {
-        navController.navigate("$SLEEP_DETAIL_SCREEN/$taskId")
+    fun navigateToSleepDetail(sleepId: String) {
+        navController.navigate("$SLEEP_DETAIL_SCREEN/$sleepId")
     }
 
-    fun navigateToAddEditSleep(title: Int, sleepId: String?) {
+    fun navigateToAddEditSleep(title: Int) {
         navController.navigate(
-            "$ADD_EDIT_SLEEP_SCREEN/$title".let {
-                if (sleepId != null) "$it?$SLEEP_ID_ARG=$sleepId" else it
+            "$ADD_EDIT_SLEEP_SCREEN/$title"
+        ){
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            // on the back stack as users select items
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
             }
-        )
+            // Avoid multiple copies of the same destination when
+            // reselecting the same item
+            launchSingleTop = true
+            // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
     }
 }

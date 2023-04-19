@@ -17,7 +17,7 @@
 package com.hood.sleepdealer.sleeps
 
 import androidx.lifecycle.SavedStateHandle
-import com.hood.sleepdealer.ADD_EDIT_RESULT_OK
+import com.hood.sleepdealer.ADD_RESULT_OK
 import com.hood.sleepdealer.DELETE_RESULT_OK
 import com.hood.sleepdealer.EDIT_RESULT_OK
 import com.hood.sleepdealer.MainCoroutineRule
@@ -175,7 +175,7 @@ class SleepsViewModelTest {
     @Test
     fun showEditResultMessages_addOk_snackbarUpdated() = runTest {
         // When the viewmodel receives a result from another destination
-        sleepsViewModel.showEditResultMessage(ADD_EDIT_RESULT_OK)
+        sleepsViewModel.showEditResultMessage(ADD_RESULT_OK)
 
         // The snackbar is updated
         assertThat(sleepsViewModel.sleepsUiState.first().userMessage)

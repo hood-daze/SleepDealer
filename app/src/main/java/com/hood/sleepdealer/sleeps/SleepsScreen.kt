@@ -63,7 +63,6 @@ import com.google.accompanist.appcompattheme.AppCompatTheme
 @Composable
 fun SleepsScreen(
     @StringRes userMessage: Int,
-    onAddSleep: () -> Unit,
     onSleepClick: (Sleep) -> Unit,
     onUserMessageDisplayed: () -> Unit,
     openDrawer: () -> Unit,
@@ -79,11 +78,6 @@ fun SleepsScreen(
             )
         },
         modifier = modifier.fillMaxSize(),
-        floatingActionButton = {
-            FloatingActionButton(onClick = onAddSleep) {
-                Icon(Icons.Filled.Add, stringResource(id = R.string.add_sleep))
-            }
-        }
     ) { paddingValues ->
         val uiState by viewModel.sleepsUiState.collectAsStateWithLifecycle()
 

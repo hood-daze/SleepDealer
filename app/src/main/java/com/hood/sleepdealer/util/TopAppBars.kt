@@ -63,6 +63,19 @@ fun StatisticsTopAppBar(openDrawer: () -> Unit) {
 }
 
 @Composable
+fun AddEditTaskTopAppBar(@StringRes title: Int, openDrawer: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = stringResource(title)) },
+        navigationIcon = {
+            IconButton(onClick = openDrawer) {
+                Icon(Icons.Filled.Menu, stringResource(id = R.string.open_drawer))
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
 fun SleepDetailTopAppBar(onBack: () -> Unit, onDelete: () -> Unit) {
     TopAppBar(
         title = {
@@ -82,18 +95,8 @@ fun SleepDetailTopAppBar(onBack: () -> Unit, onDelete: () -> Unit) {
     )
 }
 
-@Composable
-fun AddEditTaskTopAppBar(@StringRes title: Int, onBack: () -> Unit) {
-    TopAppBar(
-        title = { Text(text = stringResource(title)) },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.menu_back))
-            }
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
-}
+
+
 
 @Preview
 @Composable
@@ -130,7 +133,7 @@ private fun TaskDetailTopAppBarPreview() {
 private fun AddEditTaskTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            AddEditTaskTopAppBar(R.string.add_sleep) { }
+            AddEditTaskTopAppBar(R.string.add_sleep,{})
         }
     }
 }

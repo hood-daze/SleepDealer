@@ -52,7 +52,6 @@ import com.hood.sleepdealer.util.SleepDetailTopAppBar
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SleepDetailScreen(
-    onEditTask: (String) -> Unit,
     onBack: () -> Unit,
     onDeleteTask: () -> Unit,
     modifier: Modifier = Modifier,
@@ -65,11 +64,6 @@ fun SleepDetailScreen(
         topBar = {
             SleepDetailTopAppBar(onBack = onBack, onDelete = viewModel::deleteTask)
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { onEditTask(viewModel.sleepId) }) {
-                Icon(Icons.Filled.Edit, stringResource(id = R.string.edit_task))
-            }
-        }
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
