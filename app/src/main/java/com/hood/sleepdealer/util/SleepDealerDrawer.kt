@@ -65,8 +65,8 @@ fun AppModalDrawer(
             AppDrawer(
                 currentRoute = currentRoute,
                 navigateToTasks = { navigationActions.navigateToSleeps() },
-                navigateToStatistics = { navigationActions.navigateToProfile() },
-                navigateToAddEditSleep = { navigationActions.navigateToAddEditSleep(R.string.add_sleep) },
+                navigateToProfile = { navigationActions.navigateToProfile() },
+                navigateToAddSleep = { navigationActions.navigateToAddSleep() },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } }
             )
         }
@@ -79,13 +79,23 @@ fun AppModalDrawer(
 private fun AppDrawer(
     currentRoute: String,
     navigateToTasks: () -> Unit,
-    navigateToStatistics: () -> Unit,
-    navigateToAddEditSleep: () -> Unit,
+    navigateToProfile: () -> Unit,
+    navigateToAddSleep: () -> Unit,
     closeDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         DrawerHeader()
+        DrawerButton(
+            painter = painterResource(id = R.drawable.ic_statistics),
+            label = stringResource(id = R.string.add_sleep_title),
+            isSelected = currentRoute == SleepDealerDestinations.ADD_SLEEP_ROUTE,
+            action = {
+                navigateToAddSleep()
+                closeDrawer()
+            }
+        )
+
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_list),
             label = stringResource(id = R.string.list_title),
@@ -95,22 +105,13 @@ private fun AppDrawer(
                 closeDrawer()
             }
         )
+
         DrawerButton(
             painter = painterResource(id = R.drawable.ic_statistics),
             label = "プロフィール",
             isSelected = currentRoute == SleepDealerDestinations.PROFILE_ROUTE,
             action = {
-                navigateToStatistics()
-                closeDrawer()
-            }
-        )
-
-        DrawerButton(
-            painter = painterResource(id = R.drawable.ic_statistics),
-            label = "計測",
-            isSelected = currentRoute == SleepDealerDestinations.ADD_SLEEP_ROUTE,
-            action = {
-                navigateToAddEditSleep()
+                navigateToProfile()
                 closeDrawer()
             }
         )
@@ -191,8 +192,8 @@ fun PreviewAppDrawer() {
             AppDrawer(
                 currentRoute = SleepDealerDestinations.SLEEPS_ROUTE,
                 navigateToTasks = {},
-                navigateToStatistics = {},
-                navigateToAddEditSleep = {},
+                navigateToProfile = {},
+                navigateToAddSleep = {},
                 closeDrawer = {}
             )
         }

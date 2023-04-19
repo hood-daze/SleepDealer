@@ -31,7 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.util.StatisticsTopAppBar
+import com.hood.sleepdealer.util.ProfileTopAppBar
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -43,7 +43,7 @@ fun ProfileScreen(
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { StatisticsTopAppBar(openDrawer) }
+        topBar = { ProfileTopAppBar(openDrawer) }
     ) { paddingValues ->
         StatisticsContent(
             modifier = modifier.padding(paddingValues)

@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.SLEEP_ID_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
-import com.hood.sleepdealer.SleepDealerScreens.ADD_EDIT_SLEEP_SCREEN
+import com.hood.sleepdealer.SleepDealerScreens.ADD_SLEEP_SCREEN
 import com.hood.sleepdealer.SleepDealerScreens.PROFILE_SCREEN
 import com.hood.sleepdealer.SleepDealerScreens.SLEEPS_SCREEN
 import com.hood.sleepdealer.SleepDealerScreens.SLEEP_DETAIL_SCREEN
@@ -33,7 +33,7 @@ private object SleepDealerScreens {
     const val SLEEPS_SCREEN = "sleeps"
     const val PROFILE_SCREEN = "profile"
     const val SLEEP_DETAIL_SCREEN = "sleep"
-    const val ADD_EDIT_SLEEP_SCREEN = "addEditSleep"
+    const val ADD_SLEEP_SCREEN = "addEditSleep"
 }
 
 /**
@@ -52,7 +52,7 @@ object SleepDealerDestinations {
     const val SLEEPS_ROUTE = "$SLEEPS_SCREEN?$USER_MESSAGE_ARG={$USER_MESSAGE_ARG}"
     const val PROFILE_ROUTE = PROFILE_SCREEN
     const val SLEEP_DETAIL_ROUTE = "$SLEEP_DETAIL_SCREEN/{$SLEEP_ID_ARG}"
-    const val ADD_SLEEP_ROUTE = "$ADD_EDIT_SLEEP_SCREEN/{$TITLE_ARG}"
+    const val ADD_SLEEP_ROUTE = "$ADD_SLEEP_SCREEN"
 }
 
 /**
@@ -96,9 +96,9 @@ class SleepDealerNavigationActions(private val navController: NavHostController)
         navController.navigate("$SLEEP_DETAIL_SCREEN/$sleepId")
     }
 
-    fun navigateToAddEditSleep(title: Int) {
+    fun navigateToAddSleep() {
         navController.navigate(
-            "$ADD_EDIT_SLEEP_SCREEN/$title"
+            ADD_SLEEP_SCREEN
         ){
             // Pop up to the start destination of the graph to
             // avoid building up a large stack of destinations

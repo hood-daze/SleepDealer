@@ -50,7 +50,7 @@ fun SleepsTopAppBar(
 }
 
 @Composable
-fun StatisticsTopAppBar(openDrawer: () -> Unit) {
+fun ProfileTopAppBar(openDrawer: () -> Unit) {
     TopAppBar(
         title = { Text(text = "プロフィール") },
         navigationIcon = {
@@ -63,7 +63,7 @@ fun StatisticsTopAppBar(openDrawer: () -> Unit) {
 }
 
 @Composable
-fun AddEditTaskTopAppBar(@StringRes title: Int, openDrawer: () -> Unit) {
+fun AddSleepTopAppBar(@StringRes title: Int, openDrawer: () -> Unit) {
     TopAppBar(
         title = { Text(text = stringResource(title)) },
         navigationIcon = {
@@ -113,7 +113,7 @@ private fun TasksTopAppBarPreview() {
 private fun StatisticsTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            StatisticsTopAppBar { }
+            ProfileTopAppBar { }
         }
     }
 }
@@ -133,7 +133,7 @@ private fun TaskDetailTopAppBarPreview() {
 private fun AddEditTaskTopAppBarPreview() {
     AppCompatTheme {
         Surface {
-            AddEditTaskTopAppBar(R.string.add_sleep,{})
+            AddSleepTopAppBar(R.string.add_sleep,{})
         }
     }
 }

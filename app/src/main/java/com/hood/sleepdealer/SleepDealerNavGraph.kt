@@ -48,7 +48,7 @@ fun SleepDealerNavGraph(
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    startDestination: String = SleepDealerDestinations.SLEEPS_ROUTE,
+    startDestination: String = SleepDealerDestinations.ADD_SLEEP_ROUTE,
     navActions: SleepDealerNavigationActions = remember(navController) {
         SleepDealerNavigationActions(navController)
     }
@@ -61,6 +61,20 @@ fun SleepDealerNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(
+            SleepDealerDestinations.ADD_SLEEP_ROUTE
+        ) { entry ->
+            AppModalDrawer(drawerState, currentRoute, navActions) {
+                AddSleepScreen(
+                    topBarTitle = R.string.add_sleep_title,
+                    onTaskUpdate = {
+                        navActions.navigateToSleeps(ADD_RESULT_OK)
+                    },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } }
+                )
+            }
+        }
+
         composable(
             SleepDealerDestinations.SLEEPS_ROUTE,
             arguments = listOf(
@@ -83,22 +97,7 @@ fun SleepDealerNavGraph(
                 )
             }
         }
-        composable(
-            SleepDealerDestinations.ADD_SLEEP_ROUTE,
-            arguments = listOf(
-                navArgument(TITLE_ARG) { type = NavType.IntType }
-            )
-        ) { entry ->
-            AppModalDrawer(drawerState, currentRoute, navActions) {
-                AddSleepScreen(
-                    topBarTitle = entry.arguments?.getInt(TITLE_ARG)!!,
-                    onTaskUpdate = {
-                        navActions.navigateToSleeps(ADD_RESULT_OK)
-                    },
-                    openDrawer = { coroutineScope.launch { drawerState.open() } }
-                )
-            }
-        }
+
         composable(SleepDealerDestinations.SLEEP_DETAIL_ROUTE) {
             SleepDetailScreen(
                 onBack = { navController.popBackStack() },

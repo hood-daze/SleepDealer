@@ -35,7 +35,7 @@
     <string name="cd_save_task">Save sleep</string>
     <string name="empty_task_message">Tasks cannot be empty</string>
     <string name="successfully_saved_sleep_message">Task saved</string>
-    <string name="list_title">Task List</string>
+    <string name="list_title">履歴</string>
 
     <string name="no_data">No data</string>
     <string name="loading">LOADING</string>
@@ -62,5 +62,6 @@
     <!-- Content Descriptions -->
     <string name="tasks_header_image_content_description">Tasks header image</string>
     <string name="no_tasks_image_content_description">No sleeps image</string>
+    <string name="add_sleep_title">測定</string>
 
 </resources>

@@ -52,7 +52,7 @@ import org.junit.runner.RunWith
 @MediumTest
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-class AddEditSleepScreenTest {
+class AddSleepScreenTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

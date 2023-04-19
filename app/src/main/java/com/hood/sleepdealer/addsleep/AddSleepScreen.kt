@@ -49,7 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hood.sleepdealer.R
-import com.hood.sleepdealer.util.AddEditTaskTopAppBar
+import com.hood.sleepdealer.util.AddSleepTopAppBar
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -66,7 +66,7 @@ fun AddSleepScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        topBar = { AddEditTaskTopAppBar(topBarTitle, openDrawer) },
+        topBar = { AddSleepTopAppBar(topBarTitle, openDrawer) },
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::saveTask) {
                 Icon(Icons.Filled.Done, stringResource(id = R.string.cd_save_task))
@@ -75,7 +75,7 @@ fun AddSleepScreen(
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        AddEditTaskContent(
+        AddSleepContent(
             loading = uiState.isLoading,
             title = uiState.title,
             description = uiState.description,
@@ -103,7 +103,7 @@ fun AddSleepScreen(
 }
 
 @Composable
-private fun AddEditTaskContent(
+private fun AddSleepContent(
     loading: Boolean,
     title: String,
     description: String,
