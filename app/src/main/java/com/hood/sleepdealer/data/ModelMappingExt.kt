@@ -38,6 +38,7 @@ fun Sleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = description,
+    dateTime = dateTime
 )
 
 fun List<Sleep>.toLocal() = map(Sleep::toLocal)
@@ -47,6 +48,7 @@ fun LocalSleep.toExternal() = Sleep(
     id = id,
     title = title,
     description = description,
+    dateTime = dateTime
 )
 
 // Note: JvmName is used to provide a unique name for each extension function with the same name.
@@ -60,6 +62,7 @@ fun NetworkSleep.toLocal() = LocalSleep(
     id = id,
     title = title,
     description = shortDescription,
+    dateTime = dateTime
 )
 
 @JvmName("networkToLocal")
@@ -70,6 +73,7 @@ fun LocalSleep.toNetwork() = NetworkSleep(
     id = id,
     title = title,
     shortDescription = description,
+    dateTime = dateTime
 )
 
 fun List<LocalSleep>.toNetwork() = map(LocalSleep::toNetwork)

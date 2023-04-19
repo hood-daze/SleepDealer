@@ -16,6 +16,8 @@
 
 package com.hood.sleepdealer.sleepdetail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +46,7 @@ import com.hood.sleepdealer.R
 import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.SleepDetailTopAppBar
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -134,6 +137,7 @@ private fun SleepDetailContent(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun SleepDetailContentPreview() {
@@ -145,7 +149,8 @@ private fun SleepDetailContentPreview() {
                 Sleep(
                     title = "Title",
                     description = "Description",
-                    id = "ID"
+                    id = "ID",
+                    dateTime = LocalDateTime.now()
                 ),
                 onRefresh = { }
             )
@@ -154,6 +159,7 @@ private fun SleepDetailContentPreview() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun SleepDetailContentEmptyPreview() {
@@ -165,7 +171,8 @@ private fun SleepDetailContentEmptyPreview() {
                 Sleep(
                     title = "Title",
                     description = "Description",
-                    id = "ID"
+                    id = "ID",
+                    dateTime = LocalDateTime.now()
                 ),
                 onRefresh = { }
             )

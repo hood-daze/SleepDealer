@@ -16,6 +16,8 @@
 
 package com.hood.sleepdealer.data
 
+import java.time.LocalDateTime
+
 /**
  * Immutable model class for a Sleep.
  *
@@ -30,6 +32,7 @@ package com.hood.sleepdealer.data
 data class Sleep(
     val title: String = "",
     val description: String = "",
+    val dateTime: LocalDateTime,
     val id: String,
 ) {
 

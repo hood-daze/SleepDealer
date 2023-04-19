@@ -18,6 +18,7 @@ package com.hood.sleepdealer.data.source.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 /**
  * Internal model used to represent a sleep stored locally in a Room database. This is used inside
@@ -33,4 +34,5 @@ data class LocalSleep(
     @PrimaryKey val id: String,
     var title: String,
     var description: String,
+    var dateTime: LocalDateTime
 )

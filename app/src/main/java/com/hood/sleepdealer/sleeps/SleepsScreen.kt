@@ -16,7 +16,9 @@
 
 package com.hood.sleepdealer.sleeps
 
+import android.os.Build
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,15 +31,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,6 +56,7 @@ import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.SleepsTopAppBar
 import com.google.accompanist.appcompattheme.AppCompatTheme
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -199,6 +198,7 @@ private fun TasksEmptyContent(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun TasksContentPreview() {
@@ -210,27 +210,32 @@ private fun TasksContentPreview() {
                     Sleep(
                         title = "Title 1",
                         description = "Description 1",
-                        id = "ID 1"
+                        id = "ID 1",
+                        dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 2",
                         description = "Description 2",
-                        id = "ID 2"
+                        id = "ID 2",
+                        dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 3",
                         description = "Description 3",
-                        id = "ID 3"
+                        id = "ID 3",
+                        dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 4",
                         description = "Description 4",
-                        id = "ID 4"
+                        id = "ID 4",
+                        dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 5",
                         description = "Description 5",
-                        id = "ID 5"
+                        id = "ID 5",
+                        dateTime = LocalDateTime.now()
                     ),
                 ),
                 currentFilteringLabel = R.string.label_all,
@@ -274,33 +279,18 @@ private fun TasksEmptyContentPreview() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-private fun TaskItemPreview() {
+private fun SleepItemPreview() {
     AppCompatTheme {
         Surface {
             TaskItem(
                 sleep = Sleep(
                     title = "Title",
                     description = "Description",
-                    id = "ID"
-                ),
-                onTaskClick = { }
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TaskItemCompletedPreview() {
-    AppCompatTheme {
-        Surface {
-            TaskItem(
-                sleep = Sleep(
-                    title = "Title",
-                    description = "Description",
-                    id = "ID"
+                    id = "ID",
+                    dateTime = LocalDateTime.now()
                 ),
                 onTaskClick = { }
             )

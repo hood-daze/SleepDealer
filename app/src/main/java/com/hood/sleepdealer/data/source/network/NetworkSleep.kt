@@ -16,6 +16,8 @@
 
 package com.hood.sleepdealer.data.source.network
 
+import java.time.LocalDateTime
+
 /**
  * Internal model used to represent a sleep obtained from the network. This is used inside the data
  * layer only.
@@ -27,5 +29,6 @@ data class NetworkSleep(
     val id: String,
     val title: String,
     val shortDescription: String,
+    val dateTime: LocalDateTime,
     val priority: Int? = null,
 )

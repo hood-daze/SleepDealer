@@ -16,33 +16,41 @@
 
 package com.hood.sleepdealer.data.source.network
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.time.LocalDateTime
 
 class SleepNetworkDataSource @Inject constructor() : NetworkDataSource {
 
     // A mutex is used to ensure that reads and writes are thread-safe.
     private val accessMutex = Mutex()
+    @RequiresApi(Build.VERSION_CODES.O)
     private var sleeps = listOf(
         NetworkSleep(
             id = "PISA",
             title = "Build tower in Pisa",
-            shortDescription = "Ground looks good, no foundation work required."
+            shortDescription = "Ground looks good, no foundation work required.",
+            dateTime = LocalDateTime.now()
         ),
         NetworkSleep(
             id = "TACOMA",
             title = "Finish bridge in Tacoma",
-            shortDescription = "Found awesome girders at half the cost!"
+            shortDescription = "Found awesome girders at half the cost!",
+            dateTime = LocalDateTime.now()
         )
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun loadSleeps(): List<NetworkSleep> = accessMutex.withLock {
         delay(SERVICE_LATENCY_IN_MILLIS)
         return sleeps
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun saveSleeps(newSleeps: List<NetworkSleep>) = accessMutex.withLock {
         delay(SERVICE_LATENCY_IN_MILLIS)
         sleeps = newSleeps

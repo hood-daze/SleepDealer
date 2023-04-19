@@ -18,6 +18,8 @@ package com.hood.sleepdealer.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.hood.sleepdealer.data.LocalDateTimeConverter
 
 /**
  * The Room Database that contains the Sleep table.
@@ -25,6 +27,7 @@ import androidx.room.RoomDatabase
  * Note that exportSchema should be true in production databases.
  */
 @Database(entities = [LocalSleep::class], version = 1, exportSchema = false)
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class SleepDatabase : RoomDatabase() {
 
     abstract fun sleepDao(): SleepDao

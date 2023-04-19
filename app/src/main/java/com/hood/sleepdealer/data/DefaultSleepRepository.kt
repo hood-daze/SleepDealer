@@ -16,6 +16,8 @@
 
 package com.hood.sleepdealer.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.hood.sleepdealer.data.source.local.SleepDao
 import com.hood.sleepdealer.data.source.network.NetworkDataSource
 import com.hood.sleepdealer.di.ApplicationScope
@@ -29,6 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 
 /**
  * Default implementation of [SleepRepository]. Single entry point for managing tasks' data.
@@ -48,6 +51,7 @@ class DefaultSleepRepository @Inject constructor(
     @ApplicationScope private val scope: CoroutineScope,
 ) : SleepRepository {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun createSleep(title: String, description: String): String {
         // ID creation might be a complex operation so it's executed using the supplied
         // coroutine dispatcher
@@ -58,6 +62,7 @@ class DefaultSleepRepository @Inject constructor(
             title = title,
             description = description,
             id = taskId,
+            dateTime = LocalDateTime.now()
         )
         localDataSource.upsert(sleep.toLocal())
         saveTasksToNetwork()
