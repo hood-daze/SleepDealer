@@ -6,7 +6,7 @@ import androidx.room.TypeConverter
 import java.time.LocalDateTime
 
 object LocalDateTimeConverter {
-    @RequiresApi(Build.VERSION_CODES.O)
+
     @TypeConverter
     fun toDate(dateString: String?): LocalDateTime? {
         return if (dateString == null) {

@@ -67,10 +67,10 @@ class ProfileViewModelTest {
     @Test
     fun loadNonEmptyTasksFromRepository_NonEmptyResults() = runTest {
         // We initialise the tasks to 3, with one active and two completed
-        val sleep1 = Sleep(id = "1", title = "Title1", description = "Desc1")
-        val sleep2 = Sleep(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
-        val sleep3 = Sleep(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
-        val sleep4 = Sleep(id = "4", title = "Title4", description = "Desc4", isCompleted = true)
+        val sleep1 = Sleep(id = "1", title = "Title1", score = "Desc1")
+        val sleep2 = Sleep(id = "2", title = "Title2", score = "Desc2", isCompleted = true)
+        val sleep3 = Sleep(id = "3", title = "Title3", score = "Desc3", isCompleted = true)
+        val sleep4 = Sleep(id = "4", title = "Title4", score = "Desc4", isCompleted = true)
         tasksRepository.addTasks(sleep1, sleep2, sleep3, sleep4)
 
         // Then the results are not empty

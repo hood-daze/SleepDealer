@@ -52,7 +52,7 @@ class SleepDetailViewModelTest {
 
     // Use a fake repository to be injected into the viewmodel
     private lateinit var tasksRepository: FakeSleepRepository
-    private val sleep = Sleep(title = "Title1", description = "Description1", id = "0")
+    private val sleep = Sleep(title = "Title1", score = "Description1", id = "0")
 
     @Before
     fun setupViewModel() {
@@ -70,7 +70,7 @@ class SleepDetailViewModelTest {
         val uiState = sleepDetailViewModel.uiState.first()
         // Then verify that the view was notified
         assertThat(uiState.sleep?.title).isEqualTo(sleep.title)
-        assertThat(uiState.sleep?.description).isEqualTo(sleep.description)
+        assertThat(uiState.sleep?.score).isEqualTo(sleep.score)
     }
 
     @Test
@@ -90,7 +90,7 @@ class SleepDetailViewModelTest {
 
     @Test
     fun activateTask() = runTest {
-        tasksRepository.deleteAllTasks()
+        tasksRepository.deleteAllSleeps()
         tasksRepository.addTasks(sleep.copy(isCompleted = true))
 
         // Verify that the sleep was completed initially

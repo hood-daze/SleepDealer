@@ -58,7 +58,7 @@ class FakeSleepRepository : SleepRepository {
 
     override suspend fun createSleep(title: String, description: String): String {
         val taskId = generateTaskId()
-        Sleep(title = title, description = description, id = taskId).also {
+        Sleep(title = title, score = description, id = taskId).also {
             saveTask(it)
         }
         return taskId
@@ -66,7 +66,7 @@ class FakeSleepRepository : SleepRepository {
 
     override fun getSleepsStream(): Flow<List<Sleep>> = observableTasks
 
-    override fun getTaskStream(taskId: String): Flow<Sleep?> {
+    override fun getSleepStream(taskId: String): Flow<Sleep?> {
         return observableTasks.map { tasks ->
             return@map tasks.firstOrNull { it.id == taskId }
         }
@@ -89,7 +89,7 @@ class FakeSleepRepository : SleepRepository {
     override suspend fun updateSleep(taskId: String, title: String, description: String) {
         val updatedSleep = _savedTasks.value[taskId]?.copy(
             title = title,
-            description = description
+            score = description
         ) ?: throw Exception("Sleep (id $taskId) not found")
 
         saveTask(updatedSleep)
@@ -123,7 +123,7 @@ class FakeSleepRepository : SleepRepository {
         }
     }
 
-    override suspend fun deleteTask(taskId: String) {
+    override suspend fun deleteSleep(taskId: String) {
         _savedTasks.update { tasks ->
             val newTasks = LinkedHashMap<String, Sleep>(tasks)
             newTasks.remove(taskId)
@@ -131,7 +131,7 @@ class FakeSleepRepository : SleepRepository {
         }
     }
 
-    override suspend fun deleteAllTasks() {
+    override suspend fun deleteAllSleeps() {
         _savedTasks.update {
             LinkedHashMap()
         }

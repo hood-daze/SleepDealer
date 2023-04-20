@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 data class NetworkSleep(
     val id: String,
     val title: String,
-    val shortDescription: String,
+    val score: Int,
     val dateTime: LocalDateTime,
     val priority: Int? = null,
 )

@@ -22,7 +22,7 @@ import java.time.LocalDateTime
  * Immutable model class for a Sleep.
  *
  * @param title title of the sleep
- * @param description description of the sleep
+ * @param score description of the sleep
  * @param isCompleted whether or not this sleep is completed
  * @param id id of the sleep
  *
@@ -31,15 +31,13 @@ import java.time.LocalDateTime
  */
 data class Sleep(
     val title: String = "",
-    val description: String = "",
+    val score: Int = -1,
     val dateTime: LocalDateTime,
     val id: String,
 ) {
 
     val titleForList: String
-        get() = if (title.isNotEmpty()) title else description
+        get() = dateTime.toString()
 
 
-    val isEmpty
-        get() = title.isEmpty() || description.isEmpty()
 }

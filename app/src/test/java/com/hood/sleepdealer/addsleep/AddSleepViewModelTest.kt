@@ -44,7 +44,7 @@ class AddSleepViewModelTest {
 
     // Use a fake repository to be injected into the viewmodel
     private lateinit var tasksRepository: FakeSleepRepository
-    private val sleep = Sleep(title = "Title1", description = "Description1", id = "0")
+    private val sleep = Sleep(title = "Title1", score = "Description1", id = "0")
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -70,7 +70,7 @@ class AddSleepViewModelTest {
         val newDescription = "Some Sleep Description"
         addSleepViewModel.apply {
             updateTitle(newTitle)
-            updateDescription(newDescription)
+            updateScore(newDescription)
         }
         addSleepViewModel.saveTask()
 
@@ -78,7 +78,7 @@ class AddSleepViewModelTest {
 
         // Then a sleep is saved in the repository and the view updated
         assertThat(newTask.title).isEqualTo(newTitle)
-        assertThat(newTask.description).isEqualTo(newDescription)
+        assertThat(newTask.score).isEqualTo(newDescription)
     }
 
     @Test
@@ -114,7 +114,7 @@ class AddSleepViewModelTest {
         // Verify a sleep is loaded
         val uiState = addSleepViewModel.uiState.value
         assertThat(uiState.title).isEqualTo(sleep.title)
-        assertThat(uiState.description).isEqualTo(sleep.description)
+        assertThat(uiState.score).isEqualTo(sleep.score)
         assertThat(uiState.isLoading).isFalse()
     }
 
@@ -151,7 +151,7 @@ class AddSleepViewModelTest {
     private fun saveTaskAndAssertUserMessage(title: String, description: String) {
         addSleepViewModel.apply {
             updateTitle(title)
-            updateDescription(description)
+            updateScore(description)
         }
 
         // When saving an incomplete sleep

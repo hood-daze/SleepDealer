@@ -198,7 +198,7 @@ private fun TasksEmptyContent(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview
 @Composable
 private fun TasksContentPreview() {
@@ -209,31 +209,31 @@ private fun TasksContentPreview() {
                 sleeps = listOf(
                     Sleep(
                         title = "Title 1",
-                        description = "Description 1",
+                        score = 10,
                         id = "ID 1",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 2",
-                        description = "Description 2",
+                        score = 20,
                         id = "ID 2",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 3",
-                        description = "Description 3",
+                        score = 30,
                         id = "ID 3",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 4",
-                        description = "Description 4",
+                        score = 40,
                         id = "ID 4",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
                         title = "Title 5",
-                        description = "Description 5",
+                        score = 50,
                         id = "ID 5",
                         dateTime = LocalDateTime.now()
                     ),
@@ -279,7 +279,7 @@ private fun TasksEmptyContentPreview() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview
 @Composable
 private fun SleepItemPreview() {
@@ -288,7 +288,7 @@ private fun SleepItemPreview() {
             TaskItem(
                 sleep = Sleep(
                     title = "Title",
-                    description = "Description",
+                    score = 90,
                     id = "ID",
                     dateTime = LocalDateTime.now()
                 ),

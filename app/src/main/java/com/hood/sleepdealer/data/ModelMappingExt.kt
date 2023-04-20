@@ -37,7 +37,7 @@ import com.hood.sleepdealer.data.source.network.NetworkSleep
 fun Sleep.toLocal() = LocalSleep(
     id = id,
     title = title,
-    description = description,
+    score = score,
     dateTime = dateTime
 )
 
@@ -47,7 +47,7 @@ fun List<Sleep>.toLocal() = map(Sleep::toLocal)
 fun LocalSleep.toExternal() = Sleep(
     id = id,
     title = title,
-    description = description,
+    score = score,
     dateTime = dateTime
 )
 
@@ -61,7 +61,7 @@ fun List<LocalSleep>.toExternal() = map(LocalSleep::toExternal)
 fun NetworkSleep.toLocal() = LocalSleep(
     id = id,
     title = title,
-    description = shortDescription,
+    score = score,
     dateTime = dateTime
 )
 
@@ -72,7 +72,7 @@ fun List<NetworkSleep>.toLocal() = map(NetworkSleep::toLocal)
 fun LocalSleep.toNetwork() = NetworkSleep(
     id = id,
     title = title,
-    shortDescription = description,
+    score = score,
     dateTime = dateTime
 )
 

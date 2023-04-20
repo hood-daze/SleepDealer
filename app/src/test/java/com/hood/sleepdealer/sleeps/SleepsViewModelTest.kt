@@ -57,9 +57,9 @@ class SleepsViewModelTest {
     fun setupViewModel() {
         // We initialise the tasks to 3, with one active and two completed
         tasksRepository = FakeSleepRepository()
-        val sleep1 = Sleep(id = "1", title = "Title1", description = "Desc1")
-        val sleep2 = Sleep(id = "2", title = "Title2", description = "Desc2", isCompleted = true)
-        val sleep3 = Sleep(id = "3", title = "Title3", description = "Desc3", isCompleted = true)
+        val sleep1 = Sleep(id = "1", title = "Title1", score = "Desc1")
+        val sleep2 = Sleep(id = "2", title = "Title2", score = "Desc2", isCompleted = true)
+        val sleep3 = Sleep(id = "3", title = "Title3", score = "Desc3", isCompleted = true)
         tasksRepository.addTasks(sleep1, sleep2, sleep3)
 
         sleepsViewModel = SleepsViewModel(tasksRepository, SavedStateHandle())
@@ -195,7 +195,7 @@ class SleepsViewModelTest {
     @Test
     fun completeTask_dataAndSnackbarUpdated() = runTest {
         // With a repository that has an active sleep
-        val sleep = Sleep(id = "id", title = "Title", description = "Description")
+        val sleep = Sleep(id = "id", title = "Title", score = "Description")
         tasksRepository.addTasks(sleep)
 
         // Complete sleep
@@ -212,7 +212,7 @@ class SleepsViewModelTest {
     @Test
     fun activateTask_dataAndSnackbarUpdated() = runTest {
         // With a repository that has a completed sleep
-        val sleep = Sleep(id = "id", title = "Title", description = "Description", isCompleted = true)
+        val sleep = Sleep(id = "id", title = "Title", score = "Description", isCompleted = true)
         tasksRepository.addTasks(sleep)
 
         // Activate sleep

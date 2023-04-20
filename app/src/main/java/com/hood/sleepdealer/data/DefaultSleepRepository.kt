@@ -51,8 +51,8 @@ class DefaultSleepRepository @Inject constructor(
     @ApplicationScope private val scope: CoroutineScope,
 ) : SleepRepository {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun createSleep(title: String, description: String): String {
+
+    override suspend fun createSleep(title: String, score: Int): String {
         // ID creation might be a complex operation so it's executed using the supplied
         // coroutine dispatcher
         val taskId = withContext(dispatcher) {
@@ -60,7 +60,7 @@ class DefaultSleepRepository @Inject constructor(
         }
         val sleep = Sleep(
             title = title,
-            description = description,
+            score = score,
             id = taskId,
             dateTime = LocalDateTime.now()
         )
@@ -69,11 +69,11 @@ class DefaultSleepRepository @Inject constructor(
         return taskId
     }
 
-    override suspend fun updateSleep(taskId: String, title: String, description: String) {
-        val sleep = getSleep(taskId)?.copy(
+    override suspend fun updateSleep(sleepId: String, title: String, score: Int) {
+        val sleep = getSleep(sleepId)?.copy(
             title = title,
-            description = description
-        ) ?: throw Exception("Sleep (id $taskId) not found")
+            score = score
+        ) ?: throw Exception("Sleep (id $sleepId) not found")
 
         localDataSource.upsert(sleep.toLocal())
         saveTasksToNetwork()
@@ -100,30 +100,30 @@ class DefaultSleepRepository @Inject constructor(
         refresh()
     }
 
-    override fun getTaskStream(taskId: String): Flow<Sleep?> {
-        return localDataSource.observeById(taskId).map { it.toExternal() }
+    override fun getSleepStream(sleepId: String): Flow<Sleep?> {
+        return localDataSource.observeById(sleepId).map { it.toExternal() }
     }
 
     /**
      * Get a Sleep with the given ID. Will return null if the sleep cannot be found.
      *
-     * @param taskId - The ID of the sleep
+     * @param sleepId - The ID of the sleep
      * @param forceUpdate - true if the sleep should be updated from the network data source first.
      */
-    override suspend fun getSleep(taskId: String, forceUpdate: Boolean): Sleep? {
+    override suspend fun getSleep(sleepId: String, forceUpdate: Boolean): Sleep? {
         if (forceUpdate) {
             refresh()
         }
-        return localDataSource.getById(taskId)?.toExternal()
+        return localDataSource.getById(sleepId)?.toExternal()
     }
 
-    override suspend fun deleteAllTasks() {
+    override suspend fun deleteAllSleeps() {
         localDataSource.deleteAll()
         saveTasksToNetwork()
     }
 
-    override suspend fun deleteTask(taskId: String) {
-        localDataSource.deleteById(taskId)
+    override suspend fun deleteSleep(sleepId: String) {
+        localDataSource.deleteById(sleepId)
         saveTasksToNetwork()
     }
 

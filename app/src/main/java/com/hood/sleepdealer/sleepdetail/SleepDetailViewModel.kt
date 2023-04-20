@@ -59,7 +59,7 @@ class SleepDetailViewModel @Inject constructor(
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
     private val _isTaskDeleted = MutableStateFlow(false)
-    private val _taskAsync = sleepRepository.getTaskStream(sleepId)
+    private val _taskAsync = sleepRepository.getSleepStream(sleepId)
         .map { handleTask(it) }
         .catch { emit(Async.Error(R.string.loading_task_error)) }
 
@@ -93,7 +93,7 @@ class SleepDetailViewModel @Inject constructor(
         )
 
     fun deleteTask() = viewModelScope.launch {
-        sleepRepository.deleteTask(sleepId)
+        sleepRepository.deleteSleep(sleepId)
         _isTaskDeleted.value = true
     }
 

@@ -28,29 +28,29 @@ class SleepNetworkDataSource @Inject constructor() : NetworkDataSource {
 
     // A mutex is used to ensure that reads and writes are thread-safe.
     private val accessMutex = Mutex()
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private var sleeps = listOf(
         NetworkSleep(
             id = "PISA",
             title = "Build tower in Pisa",
-            shortDescription = "Ground looks good, no foundation work required.",
+            score = 20,
             dateTime = LocalDateTime.now()
         ),
         NetworkSleep(
             id = "TACOMA",
             title = "Finish bridge in Tacoma",
-            shortDescription = "Found awesome girders at half the cost!",
+            score = 30,
             dateTime = LocalDateTime.now()
         )
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override suspend fun loadSleeps(): List<NetworkSleep> = accessMutex.withLock {
         delay(SERVICE_LATENCY_IN_MILLIS)
         return sleeps
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override suspend fun saveSleeps(newSleeps: List<NetworkSleep>) = accessMutex.withLock {
         delay(SERVICE_LATENCY_IN_MILLIS)
         sleeps = newSleeps

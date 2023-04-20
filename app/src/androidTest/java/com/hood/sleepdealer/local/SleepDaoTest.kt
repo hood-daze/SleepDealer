@@ -52,7 +52,7 @@ class SleepDaoTest {
         // GIVEN - insert a sleep
         val task = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = false,
         )
@@ -65,7 +65,7 @@ class SleepDaoTest {
         assertNotNull(loaded as LocalSleep)
         assertEquals(task.id, loaded.id)
         assertEquals(task.title, loaded.title)
-        assertEquals(task.description, loaded.description)
+        assertEquals(task.score, loaded.score)
         assertEquals(task.isCompleted, loaded.isCompleted)
     }
 
@@ -74,7 +74,7 @@ class SleepDaoTest {
         // Given that a sleep is inserted
         val task = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = false,
         )
@@ -83,7 +83,7 @@ class SleepDaoTest {
         // When a sleep with the same id is inserted
         val newTask = LocalSleep(
             title = "title2",
-            description = "description2",
+            score = "description2",
             isCompleted = true,
             id = task.id
         )
@@ -93,7 +93,7 @@ class SleepDaoTest {
         val loaded = database.sleepDao().getById(task.id)
         assertEquals(task.id, loaded?.id)
         assertEquals("title2", loaded?.title)
-        assertEquals("description2", loaded?.description)
+        assertEquals("description2", loaded?.score)
         assertEquals(true, loaded?.isCompleted)
     }
 
@@ -102,7 +102,7 @@ class SleepDaoTest {
         // GIVEN - insert a sleep
         val task = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = false,
         )
@@ -115,7 +115,7 @@ class SleepDaoTest {
         assertEquals(1, tasks.size)
         assertEquals(tasks[0].id, task.id)
         assertEquals(tasks[0].title, task.title)
-        assertEquals(tasks[0].description, task.description)
+        assertEquals(tasks[0].score, task.score)
         assertEquals(tasks[0].isCompleted, task.isCompleted)
     }
 
@@ -124,7 +124,7 @@ class SleepDaoTest {
         // When inserting a sleep
         val originalTask = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = false,
         )
@@ -134,7 +134,7 @@ class SleepDaoTest {
         // When the sleep is updated
         val updatedTask = LocalSleep(
             title = "new title",
-            description = "new description",
+            score = "new description",
             isCompleted = true,
             id = originalTask.id
         )
@@ -144,7 +144,7 @@ class SleepDaoTest {
         val loaded = database.sleepDao().getById(originalTask.id)
         assertEquals(originalTask.id, loaded?.id)
         assertEquals("new title", loaded?.title)
-        assertEquals("new description", loaded?.description)
+        assertEquals("new description", loaded?.score)
         assertEquals(true, loaded?.isCompleted)
     }
 
@@ -153,7 +153,7 @@ class SleepDaoTest {
         // When inserting a sleep
         val task = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = true
         )
@@ -166,7 +166,7 @@ class SleepDaoTest {
         val loaded = database.sleepDao().getById(task.id)
         assertEquals(task.id, loaded?.id)
         assertEquals(task.title, loaded?.title)
-        assertEquals(task.description, loaded?.description)
+        assertEquals(task.score, loaded?.score)
         assertEquals(false, loaded?.isCompleted)
     }
 
@@ -175,7 +175,7 @@ class SleepDaoTest {
         // Given a sleep inserted
         val task = LocalSleep(
             title = "title",
-            description = "description",
+            score = "description",
             id = "id",
             isCompleted = false,
         )
@@ -195,7 +195,7 @@ class SleepDaoTest {
         database.sleepDao().upsert(
             LocalSleep(
                 title = "title",
-                description = "description",
+                score = "description",
                 id = "id",
                 isCompleted = false,
             )
@@ -213,7 +213,7 @@ class SleepDaoTest {
     fun deleteCompletedTasksAndGettingTasks() = runTest {
         // Given a completed sleep inserted
         database.sleepDao().upsert(
-            LocalSleep(title = "completed", description = "sleep", id = "id", isCompleted = true)
+            LocalSleep(title = "completed", score = "sleep", id = "id", isCompleted = true)
         )
 
         // When deleting completed tasks

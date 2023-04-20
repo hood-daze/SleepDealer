@@ -129,7 +129,7 @@ private fun SleepDetailContent(
                 if (sleep != null) {
                     Column {
                         Text(text = sleep.title, style = MaterialTheme.typography.h6)
-                        Text(text = sleep.description, style = MaterialTheme.typography.body1)
+                        Text(text = sleep.score.toString(), style = MaterialTheme.typography.body1)
                     }
                 }
             }
@@ -137,7 +137,7 @@ private fun SleepDetailContent(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview
 @Composable
 private fun SleepDetailContentPreview() {
@@ -148,7 +148,7 @@ private fun SleepDetailContentPreview() {
                 empty = false,
                 Sleep(
                     title = "Title",
-                    description = "Description",
+                    score = 30,
                     id = "ID",
                     dateTime = LocalDateTime.now()
                 ),
@@ -159,7 +159,7 @@ private fun SleepDetailContentPreview() {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview
 @Composable
 private fun SleepDetailContentEmptyPreview() {
@@ -170,7 +170,7 @@ private fun SleepDetailContentEmptyPreview() {
                 empty = true,
                 Sleep(
                     title = "Title",
-                    description = "Description",
+                    score = 50,
                     id = "ID",
                     dateTime = LocalDateTime.now()
                 ),

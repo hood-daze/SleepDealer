@@ -109,7 +109,7 @@ class AddSleepScreenTest {
         val tasks = repository.getTasks(true)
         assertEquals(1, tasks.size)
         assertEquals("title", tasks[0].title)
-        assertEquals("description", tasks[0].description)
+        assertEquals("description", tasks[0].score)
     }
 
     private fun findTextField(text: Int): SemanticsNodeInteraction {

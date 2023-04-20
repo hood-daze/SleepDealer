@@ -33,7 +33,7 @@ class StatisticsUtilsTest {
             Sleep(
                 id = "id",
                 title = "title",
-                description = "desc",
+                score = "desc",
                 isCompleted = false,
             )
         )
@@ -51,7 +51,7 @@ class StatisticsUtilsTest {
             Sleep(
                 id = "id",
                 title = "title",
-                description = "desc",
+                score = "desc",
                 isCompleted = true,
             )
         )
@@ -67,11 +67,11 @@ class StatisticsUtilsTest {
     fun getActiveAndCompletedStats_both() {
         // Given 3 completed tasks and 2 active tasks
         val sleeps = listOf(
-            Sleep(id = "1", title = "title", description = "desc", isCompleted = true),
-            Sleep(id = "2", title = "title", description = "desc", isCompleted = true),
-            Sleep(id = "3", title = "title", description = "desc", isCompleted = true),
-            Sleep(id = "4", title = "title", description = "desc", isCompleted = false),
-            Sleep(id = "5", title = "title", description = "desc", isCompleted = false),
+            Sleep(id = "1", title = "title", score = "desc", isCompleted = true),
+            Sleep(id = "2", title = "title", score = "desc", isCompleted = true),
+            Sleep(id = "3", title = "title", score = "desc", isCompleted = true),
+            Sleep(id = "4", title = "title", score = "desc", isCompleted = false),
+            Sleep(id = "5", title = "title", score = "desc", isCompleted = false),
         )
         // When the list of tasks is computed
         val result = getActiveAndCompletedStats(sleeps)

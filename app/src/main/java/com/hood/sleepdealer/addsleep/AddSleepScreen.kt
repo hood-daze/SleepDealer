@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -39,6 +40,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -78,9 +80,9 @@ fun AddSleepScreen(
         AddSleepContent(
             loading = uiState.isLoading,
             title = uiState.title,
-            description = uiState.description,
+            score = uiState.score,
             onTitleChanged = viewModel::updateTitle,
-            onDescriptionChanged = viewModel::updateDescription,
+            onScoreChanged = viewModel::updateScore,
             modifier = Modifier.padding(paddingValues)
         )
 
@@ -106,9 +108,9 @@ fun AddSleepScreen(
 private fun AddSleepContent(
     loading: Boolean,
     title: String,
-    description: String,
+    score: Int,
     onTitleChanged: (String) -> Unit,
-    onDescriptionChanged: (String) -> Unit,
+    onScoreChanged: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (loading) {
@@ -144,14 +146,27 @@ private fun AddSleepContent(
                 maxLines = 1,
                 colors = textFieldColors
             )
-            OutlinedTextField(
-                value = description,
-                onValueChange = onDescriptionChanged,
-                placeholder = { Text(stringResource(id = R.string.description_hint)) },
-                modifier = Modifier
-                    .height(350.dp)
-                    .fillMaxWidth(),
-                colors = textFieldColors
+
+//            OutlinedTextField(
+//                value = score,
+//                onValueChange = onScoreChanged,
+//                placeholder = { Text(stringResource(id = R.string.description_hint)) },
+//                modifier = Modifier
+//                    .height(350.dp)
+//                    .fillMaxWidth(),
+//                colors = textFieldColors
+//            )
+
+            Button(
+                onClick = { onScoreChanged((0..100).random()) },
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text(stringResource(id = R.string.description_hint))
+            }
+
+            Text(
+                text = score.toString(),
+                style = MaterialTheme.typography.h5
             )
         }
     }

@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
  */
 data class AddSleepUiState(
     val title: String = "",
-    val description: String = "",
+    val score: Int = -1,
     val isLoading: Boolean = false,
     val userMessage: Int? = null,
     val isSleepSaved: Boolean = false
@@ -60,7 +60,7 @@ class AddSleepViewModel @Inject constructor(
 
     // Called when clicking on fab.
     fun saveTask() {
-        if (uiState.value.title.isEmpty() || uiState.value.description.isEmpty()) {
+        if (uiState.value.title.isEmpty() || uiState.value.score == -1) {
             _uiState.update {
                 it.copy(userMessage = R.string.empty_task_message)
             }
@@ -84,14 +84,14 @@ class AddSleepViewModel @Inject constructor(
         }
     }
 
-    fun updateDescription(newDescription: String) {
+    fun updateScore(newScore: Int) {
         _uiState.update {
-            it.copy(description = newDescription)
+            it.copy(score = newScore)
         }
     }
 
     private fun createSleep() = viewModelScope.launch {
-        sleepRepository.createSleep(uiState.value.title, uiState.value.description)
+        sleepRepository.createSleep(uiState.value.title, uiState.value.score)
         _uiState.update {
             it.copy(isSleepSaved = true)
         }
