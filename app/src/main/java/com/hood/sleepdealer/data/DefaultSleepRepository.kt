@@ -16,8 +16,6 @@
 
 package com.hood.sleepdealer.data
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.hood.sleepdealer.data.source.local.SleepDao
 import com.hood.sleepdealer.data.source.network.NetworkDataSource
 import com.hood.sleepdealer.di.ApplicationScope
@@ -52,34 +50,32 @@ class DefaultSleepRepository @Inject constructor(
 ) : SleepRepository {
 
 
-    override suspend fun createSleep(title: String, score: Int): String {
+    override suspend fun createSleep(score: Int): String {
         // ID creation might be a complex operation so it's executed using the supplied
         // coroutine dispatcher
-        val taskId = withContext(dispatcher) {
+        val sleepId = withContext(dispatcher) {
             UUID.randomUUID().toString()
         }
         val sleep = Sleep(
-            title = title,
             score = score,
-            id = taskId,
+            id = sleepId,
             dateTime = LocalDateTime.now()
         )
         localDataSource.upsert(sleep.toLocal())
-        saveTasksToNetwork()
-        return taskId
+        saveSleepsToNetwork()
+        return sleepId
     }
 
-    override suspend fun updateSleep(sleepId: String, title: String, score: Int) {
+    override suspend fun updateSleep(sleepId: String, score: Int) {
         val sleep = getSleep(sleepId)?.copy(
-            title = title,
             score = score
         ) ?: throw Exception("Sleep (id $sleepId) not found")
 
         localDataSource.upsert(sleep.toLocal())
-        saveTasksToNetwork()
+        saveSleepsToNetwork()
     }
 
-    override suspend fun getTasks(forceUpdate: Boolean): List<Sleep> {
+    override suspend fun getSleeps(forceUpdate: Boolean): List<Sleep> {
         if (forceUpdate) {
             refresh()
         }
@@ -96,7 +92,7 @@ class DefaultSleepRepository @Inject constructor(
         }
     }
 
-    override suspend fun refreshTask(taskId: String) {
+    override suspend fun refreshSleep(sleepId: String) {
         refresh()
     }
 
@@ -119,12 +115,12 @@ class DefaultSleepRepository @Inject constructor(
 
     override suspend fun deleteAllSleeps() {
         localDataSource.deleteAll()
-        saveTasksToNetwork()
+        saveSleepsToNetwork()
     }
 
     override suspend fun deleteSleep(sleepId: String) {
         localDataSource.deleteById(sleepId)
-        saveTasksToNetwork()
+        saveSleepsToNetwork()
     }
 
     /**
@@ -160,7 +156,7 @@ class DefaultSleepRepository @Inject constructor(
      * should provide a mechanism for failures to be communicated back to the user so that
      * they are aware that their data isn't being backed up.
      */
-    private fun saveTasksToNetwork() {
+    private fun saveSleepsToNetwork() {
         scope.launch {
             try {
                 val localTasks = localDataSource.getAll()

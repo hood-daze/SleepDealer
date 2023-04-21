@@ -41,12 +41,10 @@
 
 
     <string name="label_all">測定履歴</string>
-    <string name="no_sleeps_all">You have no sleeps!</string>
-    <string name="no_tasks_active">You have no active sleeps!</string>
-    <string name="no_tasks_completed">You have no completed sleeps!</string>
-    <string name="refresh">Refresh</string>
-    <string name="successfully_deleted_sleep_message">Task was deleted</string>
-    <string name="successfully_added_sleep_message">Task added</string>
+    <string name="no_sleeps_all">睡眠記録がありません!</string>
+    <string name="refresh">更新</string>
+    <string name="successfully_deleted_sleep_message">睡眠記録を削除しました。</string>
+    <string name="successfully_added_sleep_message">睡眠記録を追加しました。</string>
     <string name="no_data_description" />
 
     <!-- Content Descriptions -->

@@ -209,18 +209,4 @@ class SleepDaoTest {
         assertEquals(true, tasks.isEmpty())
     }
 
-    @Test
-    fun deleteCompletedTasksAndGettingTasks() = runTest {
-        // Given a completed sleep inserted
-        database.sleepDao().upsert(
-            LocalSleep(title = "completed", score = "sleep", id = "id", isCompleted = true)
-        )
-
-        // When deleting completed tasks
-        database.sleepDao().deleteCompleted()
-
-        // THEN - The list is empty
-        val tasks = database.sleepDao().getAll()
-        assertEquals(true, tasks.isEmpty())
-    }
 }

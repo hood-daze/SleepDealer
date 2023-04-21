@@ -32,7 +32,6 @@ import java.time.LocalDateTime
 )
 data class LocalSleep(
     @PrimaryKey val id: String,
-    var title: String,
     var score: Int,
     var dateTime: LocalDateTime
 )

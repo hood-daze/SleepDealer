@@ -16,8 +16,6 @@
 
 package com.hood.sleepdealer.sleepdetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -128,7 +126,7 @@ private fun SleepDetailContent(
             ) {
                 if (sleep != null) {
                     Column {
-                        Text(text = sleep.title, style = MaterialTheme.typography.h6)
+                        Text(text = sleep.dateTime.toString(), style = MaterialTheme.typography.h6)
                         Text(text = sleep.score.toString(), style = MaterialTheme.typography.body1)
                     }
                 }
@@ -147,7 +145,6 @@ private fun SleepDetailContentPreview() {
                 loading = false,
                 empty = false,
                 Sleep(
-                    title = "Title",
                     score = 30,
                     id = "ID",
                     dateTime = LocalDateTime.now()
@@ -169,7 +166,6 @@ private fun SleepDetailContentEmptyPreview() {
                 loading = false,
                 empty = true,
                 Sleep(
-                    title = "Title",
                     score = 50,
                     id = "ID",
                     dateTime = LocalDateTime.now()

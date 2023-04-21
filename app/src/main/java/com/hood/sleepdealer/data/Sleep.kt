@@ -30,7 +30,6 @@ import java.time.LocalDateTime
  *  so that's not possible until those previews/tests are refactored.
  */
 data class Sleep(
-    val title: String = "",
     val score: Int = -1,
     val dateTime: LocalDateTime,
     val id: String,

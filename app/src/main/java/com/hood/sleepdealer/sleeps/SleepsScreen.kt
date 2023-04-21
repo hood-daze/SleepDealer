@@ -16,9 +16,7 @@
 
 package com.hood.sleepdealer.sleeps
 
-import android.os.Build
 import androidx.annotation.DrawableRes
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -208,31 +206,26 @@ private fun TasksContentPreview() {
                 loading = false,
                 sleeps = listOf(
                     Sleep(
-                        title = "Title 1",
                         score = 10,
                         id = "ID 1",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
-                        title = "Title 2",
                         score = 20,
                         id = "ID 2",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
-                        title = "Title 3",
                         score = 30,
                         id = "ID 3",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
-                        title = "Title 4",
                         score = 40,
                         id = "ID 4",
                         dateTime = LocalDateTime.now()
                     ),
                     Sleep(
-                        title = "Title 5",
                         score = 50,
                         id = "ID 5",
                         dateTime = LocalDateTime.now()
@@ -250,7 +243,7 @@ private fun TasksContentPreview() {
 
 @Preview
 @Composable
-private fun TasksContentEmptyPreview() {
+private fun SleepsContentEmptyPreview() {
     AppCompatTheme {
         Surface {
             SleepsContent(
@@ -268,7 +261,7 @@ private fun TasksContentEmptyPreview() {
 
 @Preview
 @Composable
-private fun TasksEmptyContentPreview() {
+private fun SleepsEmptyContentPreview() {
     AppCompatTheme {
         Surface {
             TasksEmptyContent(
@@ -287,7 +280,6 @@ private fun SleepItemPreview() {
         Surface {
             TaskItem(
                 sleep = Sleep(
-                    title = "Title",
                     score = 90,
                     id = "ID",
                     dateTime = LocalDateTime.now()

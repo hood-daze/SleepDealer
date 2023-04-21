@@ -32,13 +32,11 @@ class SleepNetworkDataSource @Inject constructor() : NetworkDataSource {
     private var sleeps = listOf(
         NetworkSleep(
             id = "PISA",
-            title = "Build tower in Pisa",
             score = 20,
             dateTime = LocalDateTime.now()
         ),
         NetworkSleep(
             id = "TACOMA",
-            title = "Finish bridge in Tacoma",
             score = 30,
             dateTime = LocalDateTime.now()
         )

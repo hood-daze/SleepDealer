@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
  * UiState for the Add/Edit screen
  */
 data class AddSleepUiState(
-    val title: String = "",
     val score: Int = -1,
     val isLoading: Boolean = false,
     val userMessage: Int? = null,
@@ -60,7 +59,7 @@ class AddSleepViewModel @Inject constructor(
 
     // Called when clicking on fab.
     fun saveTask() {
-        if (uiState.value.title.isEmpty() || uiState.value.score == -1) {
+        if (uiState.value.score == -1) {
             _uiState.update {
                 it.copy(userMessage = R.string.empty_task_message)
             }
@@ -78,11 +77,6 @@ class AddSleepViewModel @Inject constructor(
         }
     }
 
-    fun updateTitle(newTitle: String) {
-        _uiState.update {
-            it.copy(title = newTitle)
-        }
-    }
 
     fun updateScore(newScore: Int) {
         _uiState.update {
@@ -91,7 +85,7 @@ class AddSleepViewModel @Inject constructor(
     }
 
     private fun createSleep() = viewModelScope.launch {
-        sleepRepository.createSleep(uiState.value.title, uiState.value.score)
+        sleepRepository.createSleep(uiState.value.score)
         _uiState.update {
             it.copy(isSleepSaved = true)
         }

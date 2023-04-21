@@ -16,8 +16,6 @@
 
 package com.hood.sleepdealer.data
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -27,20 +25,21 @@ interface SleepRepository {
 
     fun getSleepsStream(): Flow<List<Sleep>>
 
-    suspend fun getTasks(forceUpdate: Boolean = false): List<Sleep>
+    suspend fun getSleeps(forceUpdate: Boolean = false): List<Sleep>
 
     suspend fun refresh()
 
-    fun getSleepStream(taskId: String): Flow<Sleep?>
+    fun getSleepStream(sleepId: String): Flow<Sleep?>
 
-    suspend fun getSleep(taskId: String, forceUpdate: Boolean = false): Sleep?
+    suspend fun getSleep(sleepId: String, forceUpdate: Boolean = false): Sleep?
 
-    suspend fun refreshTask(taskId: String)
+    suspend fun refreshSleep(sleepId: String)
 
     suspend fun deleteAllSleeps()
 
-    suspend fun deleteSleep(taskId: String)
+    suspend fun deleteSleep(sleepId: String)
 
-    suspend fun createSleep(title: String, score: Int): String
-    suspend fun updateSleep(sleepId: String, title: String, score: Int)
+    suspend fun createSleep(score: Int): String
+
+    suspend fun updateSleep(sleepId: String, score: Int)
 }

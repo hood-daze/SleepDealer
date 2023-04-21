@@ -106,7 +106,7 @@ class AddSleepScreenTest {
             .performClick()
 
         // THEN - Verify that the repository saved the sleep
-        val tasks = repository.getTasks(true)
+        val tasks = repository.getSleeps(true)
         assertEquals(1, tasks.size)
         assertEquals("title", tasks[0].title)
         assertEquals("description", tasks[0].score)

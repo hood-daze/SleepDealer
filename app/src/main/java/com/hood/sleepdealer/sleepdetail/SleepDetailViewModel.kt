@@ -100,7 +100,7 @@ class SleepDetailViewModel @Inject constructor(
     fun refresh() {
         _isLoading.value = true
         viewModelScope.launch {
-            sleepRepository.refreshTask(sleepId)
+            sleepRepository.refreshSleep(sleepId)
             _isLoading.value = false
         }
     }

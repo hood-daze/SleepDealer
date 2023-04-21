@@ -79,9 +79,7 @@ fun AddSleepScreen(
 
         AddSleepContent(
             loading = uiState.isLoading,
-            title = uiState.title,
             score = uiState.score,
-            onTitleChanged = viewModel::updateTitle,
             onScoreChanged = viewModel::updateScore,
             modifier = Modifier.padding(paddingValues)
         )
@@ -107,9 +105,7 @@ fun AddSleepScreen(
 @Composable
 private fun AddSleepContent(
     loading: Boolean,
-    title: String,
     score: Int,
-    onTitleChanged: (String) -> Unit,
     onScoreChanged: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -127,36 +123,6 @@ private fun AddSleepContent(
                 .padding(all = dimensionResource(id = R.dimen.horizontal_margin))
                 .verticalScroll(rememberScrollState())
         ) {
-            val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                cursorColor = MaterialTheme.colors.secondary.copy(alpha = ContentAlpha.high)
-            )
-            OutlinedTextField(
-                value = title,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = onTitleChanged,
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.title_hint),
-                        style = MaterialTheme.typography.h6
-                    )
-                },
-                textStyle = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold),
-                maxLines = 1,
-                colors = textFieldColors
-            )
-
-//            OutlinedTextField(
-//                value = score,
-//                onValueChange = onScoreChanged,
-//                placeholder = { Text(stringResource(id = R.string.description_hint)) },
-//                modifier = Modifier
-//                    .height(350.dp)
-//                    .fillMaxWidth(),
-//                colors = textFieldColors
-//            )
-
             Button(
                 onClick = { onScoreChanged((0..100).random()) },
                 modifier = Modifier.padding(bottom = 16.dp)

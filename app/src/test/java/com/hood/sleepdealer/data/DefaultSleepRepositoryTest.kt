@@ -75,19 +75,19 @@ class DefaultSleepRepositoryTest {
         networkDataSource.tasks?.clear()
         localDataSource.deleteAll()
 
-        assertThat(taskRepository.getTasks().size).isEqualTo(0)
+        assertThat(taskRepository.getSleeps().size).isEqualTo(0)
     }
 
     @Test
     fun getTasks_repositoryCachesAfterFirstApiCall() = testScope.runTest {
         // Trigger the repository to load tasks from the remote data source
-        val initial = taskRepository.getTasks(forceUpdate = true)
+        val initial = taskRepository.getSleeps(forceUpdate = true)
 
         // Change the remote data source
         networkDataSource.tasks = newTasks.toNetwork().toMutableList()
 
         // Load the tasks again without forcing a refresh
-        val second = taskRepository.getTasks()
+        val second = taskRepository.getSleeps()
 
         // Initial and second should match because we didn't force a refresh (no tasks were loaded
         // from the remote data source)
@@ -97,7 +97,7 @@ class DefaultSleepRepositoryTest {
     @Test
     fun getTasks_requestsAllTasksFromRemoteDataSource() = testScope.runTest {
         // When tasks are requested from the tasks repository
-        val tasks = taskRepository.getTasks(true)
+        val tasks = taskRepository.getSleeps(true)
 
         // Then tasks are loaded from the remote data source
         assertThat(tasks).isEqualTo(networkTasks.toExternal())
@@ -116,17 +116,17 @@ class DefaultSleepRepositoryTest {
     @Test
     fun getTasks_WithDirtyCache_tasksAreRetrievedFromRemote() = testScope.runTest {
         // First call returns from REMOTE
-        val tasks = taskRepository.getTasks()
+        val tasks = taskRepository.getSleeps()
 
         // Set a different list of tasks in REMOTE
         networkDataSource.tasks = newTasks.toNetwork().toMutableList()
 
         // But if tasks are cached, subsequent calls load from cache
-        val cachedTasks = taskRepository.getTasks()
+        val cachedTasks = taskRepository.getSleeps()
         assertThat(cachedTasks).isEqualTo(tasks)
 
         // Now force remote loading
-        val refreshedTasks = taskRepository.getTasks(true)
+        val refreshedTasks = taskRepository.getSleeps(true)
 
         // Tasks must be the recently updated in REMOTE
         assertThat(refreshedTasks).isEqualTo(newTasks)
@@ -138,7 +138,7 @@ class DefaultSleepRepositoryTest {
         networkDataSource.tasks = null
 
         // Load tasks forcing remote load
-        taskRepository.getTasks(true)
+        taskRepository.getSleeps(true)
 
         // Exception should be thrown
     }
@@ -150,7 +150,7 @@ class DefaultSleepRepositoryTest {
             networkDataSource.tasks = null
 
             // The repository fetches from the local source
-            assertThat(taskRepository.getTasks()).isEqualTo(localTasks.toExternal())
+            assertThat(taskRepository.getSleeps()).isEqualTo(localTasks.toExternal())
         }
 
     @Test(expected = Exception::class)
@@ -160,7 +160,7 @@ class DefaultSleepRepositoryTest {
         localDataSource.tasks = null
 
         // The repository throws an error
-        taskRepository.getTasks()
+        taskRepository.getSleeps()
     }
 
     @Test
@@ -168,7 +168,7 @@ class DefaultSleepRepositoryTest {
         // Forcing an update will fetch tasks from remote
         val expectedTasks = networkTasks.toExternal()
 
-        val newTasks = taskRepository.getTasks(true)
+        val newTasks = taskRepository.getSleeps(true)
 
         assertEquals(expectedTasks, newTasks)
         assertEquals(expectedTasks, localDataSource.tasks?.toExternal())
@@ -246,7 +246,7 @@ class DefaultSleepRepositoryTest {
         localDataSource.tasks = listOf(completedTask.toLocal(), sleep2.toLocal())
         taskRepository.clearCompletedTasks()
 
-        val tasks = taskRepository.getTasks(true)
+        val tasks = taskRepository.getSleeps(true)
 
         assertThat(tasks).hasSize(1)
         assertThat(tasks).contains(sleep2)
@@ -255,7 +255,7 @@ class DefaultSleepRepositoryTest {
 
     @Test
     fun deleteAllTasks() = testScope.runTest {
-        val initialTasks = taskRepository.getTasks()
+        val initialTasks = taskRepository.getSleeps()
 
         // Verify tasks are returned
         assertThat(initialTasks.size).isEqualTo(1)
@@ -264,19 +264,19 @@ class DefaultSleepRepositoryTest {
         taskRepository.deleteAllSleeps()
 
         // Verify tasks are empty now
-        val afterDeleteTasks = taskRepository.getTasks()
+        val afterDeleteTasks = taskRepository.getSleeps()
         assertThat(afterDeleteTasks).isEmpty()
     }
 
     @Test
     fun deleteSingleTask() = testScope.runTest {
-        val initialTasksSize = taskRepository.getTasks(true).size
+        val initialTasksSize = taskRepository.getSleeps(true).size
 
         // Delete first sleep
         taskRepository.deleteSleep(sleep1.id)
 
         // Fetch data again
-        val afterDeleteTasks = taskRepository.getTasks(true)
+        val afterDeleteTasks = taskRepository.getSleeps(true)
 
         // Verify only one sleep was deleted
         assertThat(afterDeleteTasks.size).isEqualTo(initialTasksSize - 1)
