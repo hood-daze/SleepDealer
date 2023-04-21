@@ -70,7 +70,7 @@ class SlepsScreenTest {
     @Test
     fun displaySleep_whenRepositoryHasData() = runTest {
         // GIVEN - One sleep already in the repository
-        repository.createSleep("TITLE1", "DESCRIPTION1")
+        repository.createSleep(40)
 
         // WHEN - On startup
         setContent()

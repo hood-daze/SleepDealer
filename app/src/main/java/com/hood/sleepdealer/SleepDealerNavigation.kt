@@ -19,7 +19,6 @@ package com.hood.sleepdealer
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.SLEEP_ID_ARG
-import com.hood.sleepdealer.SleepDealerDestinationsArgs.TITLE_ARG
 import com.hood.sleepdealer.SleepDealerDestinationsArgs.USER_MESSAGE_ARG
 import com.hood.sleepdealer.SleepDealerScreens.ADD_SLEEP_SCREEN
 import com.hood.sleepdealer.SleepDealerScreens.PROFILE_SCREEN
@@ -42,7 +41,6 @@ private object SleepDealerScreens {
 object SleepDealerDestinationsArgs {
     const val USER_MESSAGE_ARG = "userMessage"
     const val SLEEP_ID_ARG = "sleepId"
-    const val TITLE_ARG = "title"
 }
 
 /**
