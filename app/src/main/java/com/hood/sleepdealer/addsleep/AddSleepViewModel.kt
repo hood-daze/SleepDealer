@@ -61,7 +61,7 @@ class AddSleepViewModel @Inject constructor(
     fun saveTask() {
         if (uiState.value.score == -1) {
             _uiState.update {
-                it.copy(userMessage = R.string.empty_task_message)
+                it.copy(userMessage = R.string.empty_sleep_message)
             }
             return
         }

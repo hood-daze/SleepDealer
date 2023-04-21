@@ -123,7 +123,7 @@ private fun SleepsContent(
     LoadingContent(
         loading = loading,
         empty = sleeps.isEmpty() && !loading,
-        emptyContent = { TasksEmptyContent(noSleepsLabel, noSleepsIconRes, modifier) },
+        emptyContent = { SleepsEmptyContent(noSleepsLabel, noSleepsIconRes, modifier) },
         onRefresh = onRefresh
     ) {
         Column(
@@ -141,9 +141,9 @@ private fun SleepsContent(
             )
             LazyColumn {
                 items(sleeps) { task ->
-                    TaskItem(
+                    SleepItem(
                         sleep = task,
-                        onTaskClick = onSleepClick,
+                        onSleepClick = onSleepClick,
                     )
                 }
             }
@@ -152,9 +152,9 @@ private fun SleepsContent(
 }
 
 @Composable
-private fun TaskItem(
+private fun SleepItem(
     sleep: Sleep,
-    onTaskClick: (Sleep) -> Unit
+    onSleepClick: (Sleep) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -164,7 +164,7 @@ private fun TaskItem(
                 horizontal = dimensionResource(id = R.dimen.horizontal_margin),
                 vertical = dimensionResource(id = R.dimen.list_item_padding),
             )
-            .clickable { onTaskClick(sleep) }
+            .clickable { onSleepClick(sleep) }
     ) {
         Text(
             text = sleep.titleForList,
@@ -177,9 +177,9 @@ private fun TaskItem(
 }
 
 @Composable
-private fun TasksEmptyContent(
-    @StringRes noTasksLabel: Int,
-    @DrawableRes noTasksIconRes: Int,
+private fun SleepsEmptyContent(
+    @StringRes noSleepsLabel: Int,
+    @DrawableRes noSleepsIconRes: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -188,18 +188,18 @@ private fun TasksEmptyContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = noTasksIconRes),
-            contentDescription = stringResource(R.string.no_tasks_image_content_description),
+            painter = painterResource(id = noSleepsIconRes),
+            contentDescription = stringResource(R.string.no_sleeps_image_content_description),
             modifier = Modifier.size(96.dp)
         )
-        Text(stringResource(id = noTasksLabel))
+        Text(stringResource(id = noSleepsLabel))
     }
 }
 
 
 @Preview
 @Composable
-private fun TasksContentPreview() {
+private fun SleepsContentPreview() {
     AppCompatTheme {
         Surface {
             SleepsContent(
@@ -264,9 +264,9 @@ private fun SleepsContentEmptyPreview() {
 private fun SleepsEmptyContentPreview() {
     AppCompatTheme {
         Surface {
-            TasksEmptyContent(
-                noTasksLabel = R.string.no_sleeps_all,
-                noTasksIconRes = R.drawable.logo_no_fill
+            SleepsEmptyContent(
+                noSleepsLabel = R.string.no_sleeps_all,
+                noSleepsIconRes = R.drawable.logo_no_fill
             )
         }
     }
@@ -278,13 +278,13 @@ private fun SleepsEmptyContentPreview() {
 private fun SleepItemPreview() {
     AppCompatTheme {
         Surface {
-            TaskItem(
+            SleepItem(
                 sleep = Sleep(
                     score = 90,
                     id = "ID",
                     dateTime = LocalDateTime.now()
                 ),
-                onTaskClick = { }
+                onSleepClick = { }
             )
         }
     }

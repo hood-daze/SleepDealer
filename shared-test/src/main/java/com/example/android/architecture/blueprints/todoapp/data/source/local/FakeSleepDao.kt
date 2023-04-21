@@ -36,12 +36,12 @@ class FakeSleepDao(initialTasks: List<LocalSleep>? = emptyList()) : SleepDao {
 
     override suspend fun getById(sleepId: String): LocalSleep? = _tasks?.get(sleepId)
 
-    override suspend fun upsertAll(tasks: List<LocalSleep>) {
-        _tasks?.putAll(tasks.associateBy { it.id })
+    override suspend fun upsertAll(sleeps: List<LocalSleep>) {
+        _tasks?.putAll(sleeps.associateBy { it.id })
     }
 
-    override suspend fun upsert(task: LocalSleep) {
-        _tasks?.put(task.id, task)
+    override suspend fun upsert(sleep: LocalSleep) {
+        _tasks?.put(sleep.id, sleep)
     }
 
     override suspend fun updateCompleted(taskId: String, completed: Boolean) {

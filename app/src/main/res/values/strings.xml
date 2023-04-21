@@ -16,24 +16,21 @@
 -->
 <resources>
     <string name="app_name">Sleep Dealer</string>
-    <string name="add_sleep">New Task</string>
+    <string name="add_sleep">睡眠の追加。</string>
     <string name="task_details">睡眠環境詳細</string>
-    <string name="loading_tasks_error">Error while loading sleeps</string>
-    <string name="loading_task_error">Error while loading sleep</string>
+    <string name="loading_tasks_error">睡眠履歴のロードに失敗しました。</string>
+    <string name="loading_task_error">睡眠のロードに失敗しました。</string>
     <string name="task_not_found">Task not found</string>
-    <string name="completed_sleeps_cleared">Completed sleeps cleared</string>
-    <string name="menu_filter">Filter</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="menu_back">Back</string>
     <string name="menu_clear">Clear completed</string>
     <string name="menu_delete_task">Delete sleep</string>
     <string name="menu_more">More</string>
-    <string name="navigation_view_header_title">Todo</string>
-    <string name="title_hint">Title</string>
+    <string name="navigation_view_header_title">Sleep Dealer</string>
     <string name="description_hint">Enter your sleep here.</string>
-    <string name="cd_save_task">Save sleep</string>
-    <string name="empty_task_message">Tasks cannot be empty</string>
-    <string name="successfully_saved_sleep_message">Task saved</string>
+    <string name="cd_save_task">睡眠の記録</string>
+    <string name="empty_sleep_message">睡眠は空ではいけません。</string>
+    <string name="successfully_saved_sleep_message">睡眠の記録をしました。</string>
     <string name="list_title">履歴</string>
 
     <string name="no_data">No data</string>
@@ -48,8 +45,8 @@
     <string name="no_data_description" />
 
     <!-- Content Descriptions -->
-    <string name="tasks_header_image_content_description">Tasks header image</string>
-    <string name="no_tasks_image_content_description">No sleeps image</string>
+    <string name="sleeps_header_image_content_description">Sleeps header image</string>
+    <string name="no_sleeps_image_content_description">No sleeps image</string>
     <string name="add_sleep_title">測定</string>
     <string name="profile_title">プロフィール</string>
 

@@ -64,18 +64,18 @@ interface SleepDao {
     /**
      * Insert or update a sleep in the database. If a sleep already exists, replace it.
      *
-     * @param task the sleep to be inserted or updated.
+     * @param sleep the sleep to be inserted or updated.
      */
     @Upsert
-    suspend fun upsert(task: LocalSleep)
+    suspend fun upsert(sleep: LocalSleep)
 
     /**
      * Insert or update sleeps in the database. If a sleep already exists, replace it.
      *
-     * @param tasks the tasks to be inserted or updated.
+     * @param sleeps the tasks to be inserted or updated.
      */
     @Upsert
-    suspend fun upsertAll(tasks: List<LocalSleep>)
+    suspend fun upsertAll(sleeps: List<LocalSleep>)
 
 
     /**

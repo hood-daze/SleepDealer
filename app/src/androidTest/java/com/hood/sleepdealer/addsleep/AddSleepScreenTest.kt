@@ -93,7 +93,7 @@ class AddSleepScreenTest {
 
         // THEN - Entered Sleep is still displayed (a correct sleep would close it).
         composeTestRule
-            .onNodeWithText(activity.getString(R.string.empty_task_message))
+            .onNodeWithText(activity.getString(R.string.empty_sleep_message))
             .assertIsDisplayed()
     }
 

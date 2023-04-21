@@ -159,6 +159,6 @@ class AddSleepViewModelTest {
 
         assertThat(
             addSleepViewModel.uiState.value.userMessage
-        ).isEqualTo(string.empty_task_message)
+        ).isEqualTo(string.empty_sleep_message)
     }
 }
