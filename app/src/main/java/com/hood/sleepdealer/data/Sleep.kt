@@ -17,6 +17,7 @@
 package com.hood.sleepdealer.data
 
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Immutable model class for a Sleep.
@@ -36,7 +37,7 @@ data class Sleep(
 ) {
 
     val titleForList: String
-        get() = dateTime.toString()
+        get() = dateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
 
 
 }

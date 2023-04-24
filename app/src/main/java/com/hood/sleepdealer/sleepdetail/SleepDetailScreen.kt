@@ -45,6 +45,7 @@ import com.hood.sleepdealer.data.Sleep
 import com.hood.sleepdealer.util.LoadingContent
 import com.hood.sleepdealer.util.SleepDetailTopAppBar
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -126,7 +127,10 @@ private fun SleepDetailContent(
             ) {
                 if (sleep != null) {
                     Column {
-                        Text(text = sleep.dateTime.toString(), style = MaterialTheme.typography.h6)
+                        Text(
+                            text = sleep.dateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),
+                            style = MaterialTheme.typography.h6
+                        )
                         Text(text = sleep.score.toString(), style = MaterialTheme.typography.body1)
                     }
                 }
@@ -134,7 +138,6 @@ private fun SleepDetailContent(
         }
     }
 }
-
 
 @Preview
 @Composable

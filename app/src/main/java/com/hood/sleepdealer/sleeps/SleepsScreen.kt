@@ -140,9 +140,9 @@ private fun SleepsContent(
                 style = MaterialTheme.typography.h6
             )
             LazyColumn {
-                items(sleeps) { task ->
+                items(sleeps) { sleep ->
                     SleepItem(
-                        sleep = task,
+                        sleep = sleep,
                         onSleepClick = onSleepClick,
                     )
                 }
