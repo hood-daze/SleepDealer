@@ -16,36 +16,38 @@
 
 package com.hood.sleepdealer.addsleep
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -59,11 +61,11 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @Composable
 fun AddSleepScreen(
     @StringRes topBarTitle: Int,
-    onTaskUpdate: () -> Unit,
+    onSleepUpdate: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    viewModel: AddSleepViewModel = hiltViewModel()
+    viewModel: AddSleepViewModel = hiltViewModel(),
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -76,18 +78,18 @@ fun AddSleepScreen(
         }
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
         AddSleepContent(
             loading = uiState.isLoading,
             score = uiState.score,
             onScoreChanged = viewModel::updateScore,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            viewModel = viewModel
         )
 
         // Check if the sleep is saved and call onTaskUpdate event
         LaunchedEffect(uiState.isSleepSaved) {
             if (uiState.isSleepSaved) {
-                onTaskUpdate()
+                onSleepUpdate()
             }
         }
 
@@ -102,13 +104,44 @@ fun AddSleepScreen(
     }
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun AddSleepContent(
     loading: Boolean,
     score: Int,
     onScoreChanged: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AddSleepViewModel
 ) {
+    val tempatureUiState by viewModel.tempatureUiState.collectAsStateWithLifecycle()
+    val sensorManager = LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+
+    if (lightSensor == null) {
+       Log.d("errror","no light sensor")
+    } else {
+        val sensorEventListener = remember {
+            object : SensorEventListener {
+                override fun onSensorChanged(event: SensorEvent) {
+                    val c = event.values[0]
+                    viewModel.onSensorChanged(c)
+                }
+                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                }
+            }
+        }
+        DisposableEffect(Unit) {
+            sensorManager.registerListener(
+                sensorEventListener,
+                lightSensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+            onDispose {
+                sensorManager.unregisterListener(sensorEventListener)
+            }
+        }
+    }
+
     if (loading) {
         SwipeRefresh(
             // Show the loading spinner—`loading` is `true` in this code path
@@ -132,6 +165,17 @@ private fun AddSleepContent(
 
             Text(
                 text = score.toString(),
+                style = MaterialTheme.typography.h5
+            )
+
+            Button(
+                onClick = {},
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("測定開始")
+            }
+            Text(
+                text = tempatureUiState.tempature.toString(),
                 style = MaterialTheme.typography.h5
             )
         }

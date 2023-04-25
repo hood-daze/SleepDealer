@@ -75,7 +75,7 @@ class AddSleepScreenTest {
                     AddSleepScreen(
                         viewModel = AddSleepViewModel(repository, SavedStateHandle()),
                         topBarTitle = R.string.add_sleep,
-                        onTaskUpdate = { },
+                        onSleepUpdate = { },
                         openDrawer = { },
                     )
                 }

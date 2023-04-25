@@ -17,6 +17,7 @@
 package com.hood.sleepdealer
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.rememberDrawerState
@@ -66,10 +67,10 @@ fun SleepDealerNavGraph(
             AppModalDrawer(drawerState, currentRoute, navActions) {
                 AddSleepScreen(
                     topBarTitle = R.string.add_sleep_title,
-                    onTaskUpdate = {
+                    onSleepUpdate = {
                         navActions.navigateToSleeps(ADD_RESULT_OK)
                     },
-                    openDrawer = { coroutineScope.launch { drawerState.open() } }
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                 )
             }
         }

@@ -16,6 +16,10 @@
 
 package com.hood.sleepdealer.addsleep
 
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * UiState for the Add/Edit screen
@@ -39,6 +44,11 @@ data class AddSleepUiState(
     val userMessage: Int? = null,
     val isSleepSaved: Boolean = false
 )
+
+data class TempatureUiState(
+    val tempature: Float = 0F,
+)
+
 
 /**
  * ViewModel for the Add/Edit screen.
@@ -56,6 +66,9 @@ class AddSleepViewModel @Inject constructor(
     // `updateTitle` or `updateDescription`
     private val _uiState = MutableStateFlow(AddSleepUiState())
     val uiState: StateFlow<AddSleepUiState> = _uiState.asStateFlow()
+
+    val _tempatureUiState = MutableStateFlow(TempatureUiState())
+    val tempatureUiState: StateFlow<TempatureUiState> = _tempatureUiState.asStateFlow()
 
     // Called when clicking on fab.
     fun saveTask() {
@@ -84,11 +97,16 @@ class AddSleepViewModel @Inject constructor(
         }
     }
 
+    fun onSensorChanged(newTemp: Float) {
+        _tempatureUiState.update {
+            it.copy(tempature = newTemp)
+        }
+    }
+
     private fun createSleep() = viewModelScope.launch {
         sleepRepository.createSleep(uiState.value.score)
         _uiState.update {
             it.copy(isSleepSaved = true)
         }
     }
-
 }
